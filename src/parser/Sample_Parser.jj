@@ -1,0 +1,121 @@
+PARSER_BEGIN(Parser)
+
+package parser;
+
+import AST.*;
+import values.IntValue;
+
+
+public class Parser {}
+
+PARSER_END(Parser)
+
+SKIP :
+{
+  " "
+| "\t"
+| "\r"
+| "\n"
+}
+
+TOKEN :
+{
+  < Num: (["0"-"9"]) + >
+  |
+  < PLUS : "+" >
+  |
+  < MINUS : "-">
+  |
+  < TIMES : "*">
+  |
+  < DIV : "/">
+  |
+  < LPAR : "(" >
+  |
+  < RPAR : ")" >
+  | 	
+  < EL: ";;" >
+  |
+  < let: "let" >
+  |
+  < ASSIGNMENT: "=" >
+  |
+  < IN: "in" >
+  |
+  < END: "end" >
+  |
+  < Id: ["a"-"z","A"-"Z"] ( ["a"-"z","A"-"Z","0"-"9"] )* >
+  |
+  < function: "function" >
+}
+
+ASTNode Start():
+{ ASTNode t; }
+{
+   t = Exp() <EL> { return t; }
+}
+
+
+ASTNode Exp() :
+{ Token op;
+  ASTNode t1, t2; }
+{
+     t1=Term() ( ( op=<PLUS> | op=<MINUS> ) t2=Term() 
+                 { if (op.kind == PLUS) 
+                         t1 = new ASTPlus(t1,t2);
+                   else  t1 = new ASTSub(t1,t2);
+                 } 
+               ) *
+     { return t1; } 
+}
+
+ASTNode Term() :
+{ Token op;
+  ASTNode f1, f2;}
+{
+     f1 = Fact() ( ( op = <TIMES> | op = <DIV> ) 
+     f2 = Fact() 
+                  { if (op.kind == TIMES) 
+                         f1 = new ASTMul(f1,f2);
+                   else  f1 = new ASTDiv(f1,f2);
+                  } 
+     )*
+     { return f1; }
+}
+
+
+ASTNode Fact() :
+{ Token n;
+  ASTNode t, body, assignment;}
+{
+   n=<Num> { t = new ASTNum(Integer.parseInt(n.image)); return t; }
+   | 
+   <LPAR> t=Exp() <RPAR> { return t; }
+   |
+   <let> n=<Id> <ASSIGNMENT> assignment=Exp() <IN> body=Exp() <END> { return new ASTLet(n.image, assignment, body); }
+   |
+   n = <Id> { return new ASTId(n.image); }
+   |
+   <function>
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
