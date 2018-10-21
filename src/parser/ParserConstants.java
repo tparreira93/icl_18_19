@@ -29,13 +29,19 @@ public interface ParserConstants {
   /** RegularExpression Id. */
   int let = 13;
   /** RegularExpression Id. */
-  int ASSIGNMENT = 14;
+  int LAMBDA_OPERATOR = 14;
   /** RegularExpression Id. */
-  int IN = 15;
+  int ASSIGNMENT = 15;
   /** RegularExpression Id. */
-  int END = 16;
+  int IN = 16;
   /** RegularExpression Id. */
-  int Id = 17;
+  int END = 17;
+  /** RegularExpression Id. */
+  int function = 18;
+  /** RegularExpression Id. */
+  int Id = 19;
+  /** RegularExpression Id. */
+  int Comma = 20;
 
   /** Lexical state. */
   int DEFAULT = 0;
@@ -56,10 +62,13 @@ public interface ParserConstants {
     "\")\"",
     "\";;\"",
     "\"let\"",
+    "\"=>\"",
     "\"=\"",
     "\"in\"",
     "\"end\"",
+    "\"function\"",
     "<Id>",
+    "\",\"",
   };
 
 }

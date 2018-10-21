@@ -2,14 +2,15 @@ package values;
 
 import AST.ASTEnvironment;
 import AST.ASTNode;
+import java.util.List;
 
 public class FunctionValue implements IValue {
-    private String id_param;
+    private List<String> params;
     private ASTNode expression;
     private ASTEnvironment environment;
 
-    public FunctionValue(String id_param, ASTNode expression, ASTEnvironment environment) {
-        this.id_param = id_param;
+    public FunctionValue(List<String> params, ASTNode expression, ASTEnvironment environment) {
+        this.params = params;
         this.expression = expression;
         this.environment = environment;
     }
@@ -19,8 +20,8 @@ public class FunctionValue implements IValue {
         return null;
     }
 
-    public String getId_param() {
-        return id_param;
+    public List<String> getParams() {
+        return params;
     }
 
     public ASTNode getExpression() {

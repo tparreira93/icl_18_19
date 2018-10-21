@@ -12,4 +12,9 @@ public class ASTId implements ASTNode {
     public IValue eval(ASTEnvironment environment) {
         return environment.find(name);
     }
+
+    @Override
+    public String toString() {
+        return name;
+    }
 }

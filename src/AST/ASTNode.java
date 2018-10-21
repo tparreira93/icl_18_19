@@ -3,5 +3,5 @@ package AST;
 import values.IValue;
 
 public interface ASTNode {
-    IValue eval(ASTEnvironment environment);
+    IValue eval(ASTEnvironment environment) throws Exception;
 }
