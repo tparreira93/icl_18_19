@@ -192,7 +192,7 @@ ASTNode GetReference() :
     ASTNode ref;
 }
 {
-   <REFERENCE> ref = Exp() { return new ASTReference(ref); }
+   <REFERENCE> ref = Fact() { return new ASTReference(ref); }
 }
 
 ASTNode GetPAR() :

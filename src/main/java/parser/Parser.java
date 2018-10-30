@@ -164,8 +164,8 @@ public class Parser implements ParserConstants {
   final public ASTNode GetReference() throws ParseException {
     ASTNode ref;
     jj_consume_token(REFERENCE);
-    ref = Exp();
-                             {if (true) return new ASTReference(ref);}
+    ref = Fact();
+                              {if (true) return new ASTReference(ref);}
     throw new Error("Missing return statement in function");
   }
 
@@ -394,14 +394,14 @@ public class Parser implements ParserConstants {
     case LPAR:
     case ASSIGNMENT:
       switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
+      case ASSIGNMENT:
+        node = GetAssignment(node);
+        break;
       case LPAR:
         jj_consume_token(LPAR);
         arguments = FunctionArguments();
         jj_consume_token(RPAR);
                                                         node = new ASTApply(node, arguments);
-        break;
-      case ASSIGNMENT:
-        node = GetAssignment(node);
         break;
       default:
         jj_la1[12] = jj_gen;
@@ -479,21 +479,6 @@ public class Parser implements ParserConstants {
     try { return !jj_3_3(); }
     catch(LookaheadSuccess ls) { return true; }
     finally { jj_save(2, xla); }
-  }
-
-  private boolean jj_3R_24() {
-    if (jj_3R_34()) return true;
-    return false;
-  }
-
-  private boolean jj_3R_40() {
-    if (jj_scan_token(MINUS)) return true;
-    return false;
-  }
-
-  private boolean jj_3R_23() {
-    if (jj_3R_33()) return true;
-    return false;
   }
 
   private boolean jj_3R_39() {
@@ -752,6 +737,21 @@ public class Parser implements ParserConstants {
     return false;
   }
 
+  private boolean jj_3R_24() {
+    if (jj_3R_34()) return true;
+    return false;
+  }
+
+  private boolean jj_3R_40() {
+    if (jj_scan_token(MINUS)) return true;
+    return false;
+  }
+
+  private boolean jj_3R_23() {
+    if (jj_3R_33()) return true;
+    return false;
+  }
+
   /** Generated Token Manager. */
   public ParserTokenManager token_source;
   SimpleCharStream jj_input_stream;
@@ -876,7 +876,7 @@ public class Parser implements ParserConstants {
     throw generateParseException();
   }
 
-  static private final class LookaheadSuccess extends Error { }
+  static private final class LookaheadSuccess extends java.lang.Error { }
   final private LookaheadSuccess jj_ls = new LookaheadSuccess();
   private boolean jj_scan_token(int kind) {
     if (jj_scanpos == jj_lastpos) {
@@ -926,7 +926,7 @@ public class Parser implements ParserConstants {
       return (jj_ntk = jj_nt.kind);
   }
 
-  private List<int[]> jj_expentries = new ArrayList<int[]>();
+  private java.util.List<int[]> jj_expentries = new java.util.ArrayList<int[]>();
   private int[] jj_expentry;
   private int jj_kind = -1;
   private int[] jj_lasttokens = new int[100];
