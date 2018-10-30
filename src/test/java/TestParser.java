@@ -467,4 +467,43 @@ public class TestParser {
         Assert.assertTrue(result instanceof IntValue);
         Assert.assertEquals(-1, (int)result.getValue());
     }
+
+    @Test
+    public void test_while() throws Exception {
+        Parser parser = new Parser(new ByteArrayInputStream("-1;;".getBytes()));
+        ASTEnvironment env = new ASTEnvironment(null);
+        IValue result = parser.Start().eval(env);
+
+        Assert.assertTrue(result instanceof IntValue);
+        Assert.assertEquals(-1, (int)result.getValue());
+    }
+
+    String factorial = "let \n" +
+            "    factorial = function x =>\n" +
+            "        let \n" +
+            "            fact = new x,\n" +
+            "            result = new 1\n" +
+            "        in\n" +
+            "            while !fact > 0\n" +
+            "            do\n" +
+            "                result = !result * !fact;\n" +
+            "                fact = !fact - 1\n" +
+            "            end;\n" +
+            "            !result\n" +
+            "        end\n" +
+            "    end\n" +
+            "in\n" +
+            "    factorial(%s)\n" +
+            "end;;";
+
+
+    @Test
+    public void fact_10() throws Exception {
+        Parser parser = new Parser(new ByteArrayInputStream(String.format(factorial, 10).getBytes()));
+        ASTEnvironment env = new ASTEnvironment(null);
+        IValue result = parser.Start().eval(env);
+
+        Assert.assertTrue(result instanceof IntValue);
+        Assert.assertEquals(3628800, (int)result.getValue());
+    }
 }

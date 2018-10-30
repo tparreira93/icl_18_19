@@ -287,7 +287,11 @@ ASTNode GetSequence() :
 }
 {
     n = GetLogical() { sequence.add(n); } (<SEQUENCE> n = GetSequence() { sequence.add(n); })?
-    { return new ASTSequence(sequence); }
+    {
+        if (sequence.size() == 1)
+            return n;
+        return new ASTSequence(sequence);
+    }
 }
 
 ASTNode GetLogical() :
