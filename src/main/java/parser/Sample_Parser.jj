@@ -1,0 +1,384 @@
+// TODO: Fix function * function
+// TODO: Fix Logical operators precedence (|| and &&)
+// TODO: Remove warnings
+
+options
+{
+    //other options
+    //DEBUG_PARSER=true;
+    STATIC=false;
+}
+
+PARSER_BEGIN(Parser)
+
+package parser;
+
+import AST.*;
+import java.util.ArrayList;
+import java.util.List;
+
+
+public class Parser {}
+
+PARSER_END(Parser)
+
+SKIP :
+{
+  " "
+| "\t"
+| "\r"
+| "\n"
+}
+
+TOKEN :
+{
+  < Num: (["0"-"9"]) + >
+  |
+  < PLUS : "+" >
+  |
+  < MINUS : "-">
+  |
+  < TIMES : "*">
+  |
+  < DIV : "/">
+  |
+  < LPAR : "(" >
+  |
+  < RPAR : ")" >
+  | 	
+  < EL: ";;" >
+  |
+  < let: "let" >
+  |
+  < LAMBDA_OPERATOR: "=>" >
+  |
+  < ASSIGNMENT: "=" >
+  |
+  < IN: "in" >
+  |
+  < END: "end" >
+  |
+  < function: "function" >
+  |
+  < COMMA: "," >
+  |
+  < REFERENCE: "new" >
+  |
+  < DEREFERENCE: "!" >
+  |
+  < SEQUENCE: ";" >
+  |
+  < WHILE: "while" >
+  |
+  < DO: "do" >
+  |
+  < BOOL: ("true" | "false")>
+  |
+  < EQUAL: "==" >
+  |
+  < NOT_EQUAL: "<>" >
+  |
+  < GREATER: ">" >
+  |
+  < GREATEROREQUAL: ">=" >
+  |
+  < SMALLER: "<" >
+  |
+  < SMALLEROREQUAL: "<=" >
+  |
+  < AND: "&&" >
+  |
+  < OR: "||" >
+  |
+  < NOT: "~" >
+  |
+  < IF: "if" >
+  |
+  < THEN: "then" >
+  |
+  < ELSE: "else" >
+  |
+  < Id: ["a"-"z","A"-"Z"] ( ["a"-"z","A"-"Z","0"-"9"] )* >
+}
+
+List<ASTNode> FunctionArguments() : {
+  List<ASTNode> arguments = new ArrayList<ASTNode>();
+  List<ASTNode> tmp = new ArrayList<ASTNode>();
+  ASTNode arg;
+}
+{
+    ( (arg = Exp() { arguments.add(arg); }) (<COMMA> tmp = FunctionArguments() {arguments.addAll(tmp); })*)?
+    {
+        return arguments;
+    }
+}
+
+List<String> ArgumentList() :
+{
+    Token n;
+    List<String> arguments = new ArrayList<String>();
+}
+{
+    ( n = <Id> {arguments.add(n.image); } (<COMMA> n = <Id> {arguments.add(n.image); })* )?
+    {
+        return arguments;
+    }
+}
+
+List<Var> AssignmentList() :
+{
+    Token n;
+    List<Var> vars = new ArrayList<Var>();
+    ASTNode assignment;
+}
+{
+    n = <Id> <ASSIGNMENT> assignment = GetSequence() { vars.add(new Var(n.image, assignment)); }
+        (<COMMA> n = <Id> <ASSIGNMENT> assignment = GetSequence() { vars.add(new Var(n.image, assignment)); } )*
+    {
+        return vars;
+    }
+}
+
+ASTNode GetLet() :
+{
+  List<Var> vars = new ArrayList<Var>();
+  ASTNode body;
+}
+{
+   <let>
+        vars = AssignmentList()
+   <IN> body = GetSequence()
+   <END> { return new ASTLet(vars, body); }
+}
+
+ASTNode GetFunction() :
+{
+  List<String> arguments = new ArrayList<String>();
+  ASTNode body;
+}
+{
+   <function> arguments = ArgumentList()  <LAMBDA_OPERATOR>
+        body = GetSequence()
+    <END> { return new ASTFun(arguments, body); }
+}
+
+ASTNode GetId() :
+{
+    Token n;
+    ASTNode id, ass, node;
+}
+{
+    (
+        n = <Id> {
+                node = new ASTId(n.image);
+                id = node;
+            }
+    )
+    { return node; }
+}
+
+ASTNode GetNum() :
+{
+    Token n;
+}
+{
+   n = <Num> { return new ASTNum(Integer.parseInt(n.image)); }
+   |
+   <MINUS> n=<Num> { return new ASTSub(new ASTNum(0), new ASTNum(Integer.parseInt(n.image))); }
+}
+
+ASTNode GetReference() :
+{
+    ASTNode ref;
+}
+{
+   <REFERENCE> ref = Exp() { return new ASTReference(ref); }
+}
+
+ASTNode GetPAR() :
+{
+    ASTNode node;
+}
+{
+   <LPAR> node = GetSequence() <RPAR> { return node; }
+}
+
+ASTNode GetBool() :
+{
+    Token t;
+}
+{
+    t = <BOOL>
+    {
+        return new ASTBool(Boolean.parseBoolean(t.image));
+    }
+}
+
+ASTNode GetAssignment(ASTNode id) :
+{
+    ASTNode node;
+    Token t;
+}
+{
+    <ASSIGNMENT> node = Exp() { return new ASTAssignment(id, node); }
+}
+
+ASTNode GetDereference() :
+{
+    ASTNode node;
+}
+{
+    <DEREFERENCE> node = Fact() { return new ASTDereference(node); }
+}
+
+ASTNode GetComparison(ASTNode left) :
+{
+    ASTNode node;
+}
+{
+    (
+        <EQUAL> node = Term() { node = new ASTEqual(left, node); }
+        |
+        <NOT_EQUAL> node = Term() { node = new ASTNotEqual(left, node); }
+        |
+        <GREATER> node = Term() { node = new ASTGreater(left, node); }
+        |
+        <GREATEROREQUAL> node = Term() { node = new ASTGreaterOrEqual(left, node); }
+        |
+        <SMALLER> node = Term() { node = new ASTSmaller(left, node); }
+        |
+        <SMALLEROREQUAL> node = Term() { node = new ASTSmallerOrEqual(left, node); }
+    )
+    {
+        return node;
+    }
+}
+
+ASTNode GetIfThenElse() :
+{
+    ASTNode node_if = null, node_then = null, node_else = null;
+}
+{
+    <IF> node_if = GetSequence() <THEN> node_then = GetSequence() <ELSE> node_else = GetSequence() <END>
+    {
+        return new ASTIfThenElse(node_if, node_then, node_else);
+    }
+}
+
+ASTNode GetWhileDo() :
+{
+    ASTNode condition, action;
+}
+{
+    <WHILE> condition = GetSequence() <DO> action = GetSequence() <END>
+    {
+        return new ASTWhile(condition, action);
+    }
+}
+
+ASTNode Start():
+{ ASTNode t; }
+{
+   t = GetSequence() <EL> { return t; }
+}
+
+
+ASTNode GetSequence() :
+{
+    List<ASTNode> sequence = new ArrayList<ASTNode>();
+    ASTNode n;
+}
+{
+    n = Exp() { sequence.add(n); } (<SEQUENCE> n = GetSequence() { sequence.add(n); })?
+    { return new ASTSequence(sequence); }
+}
+
+ASTNode Exp() :
+{
+    Token op;
+    ASTNode t1, t2;
+}
+{
+     t1=Term()
+     (
+        LOOKAHEAD(2)
+        (
+            (
+                op=<PLUS>
+                |
+                op=<MINUS>
+            )
+            t2 = Term()
+            {
+                if (op.kind == PLUS)
+                    t1 = new ASTPlus(t1,t2);
+                else
+                    t1 = new ASTSub(t1,t2);
+            }
+            |
+            <OR> t2 = Term() { return new ASTOr(t1, t2); }
+        )
+     ) *
+     (
+        LOOKAHEAD(2)
+        t1 = GetComparison(t1)
+     )?
+    { return t1; }
+}
+
+ASTNode Term() :
+{ Token op;
+  ASTNode node, f2;
+  List<ASTNode> arguments = new ArrayList<ASTNode>();
+}
+{
+    node = Fact()
+    (
+        LOOKAHEAD(2)
+        (
+            ( op = <TIMES> | op = <DIV> )
+            f2 = Fact()
+            { if (op.kind == TIMES)
+                  node = new ASTMul(node,f2);
+              else  node = new ASTDiv(node,f2);
+            }
+            |
+            <AND> f2 = Fact() { node = new ASTAnd(node, f2); }
+        )
+    ) *
+    (
+        node = GetAssignment(node)
+        |
+        <LPAR> arguments = FunctionArguments() <RPAR> { node = new ASTApply(node, arguments); }
+    )?
+    { return node; }
+}
+
+ASTNode Fact() :
+{
+    ASTNode node;
+}
+{
+    (
+        node = GetDereference()
+        |
+        node = GetBool()
+        |
+        node = GetPAR()
+        |
+        node = GetIfThenElse()
+        |
+        node = GetWhileDo()
+        |
+        node = GetNum()
+        |
+        node = GetId()
+        |
+        node = GetReference()
+        |
+        node = GetLet()
+        |
+        node = GetFunction()
+    )
+    { return node; }
+}
