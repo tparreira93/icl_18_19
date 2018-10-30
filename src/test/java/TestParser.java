@@ -17,6 +17,15 @@ public class TestParser {
         Assert.assertTrue(result instanceof IntValue);
         Assert.assertEquals(2, (int) result.getValue());
     }
+    @Test
+    public void test_1_Plus_1_Plus_1() throws Exception {
+        Parser parser = new Parser(new ByteArrayInputStream("1+1+1;;".getBytes() ));
+        ASTEnvironment env = new ASTEnvironment(null);
+        IValue result = parser.Start().eval(env);
+
+        Assert.assertTrue(result instanceof IntValue);
+        Assert.assertEquals(3, (int) result.getValue());
+    }
 
 
     @Test
@@ -327,5 +336,135 @@ public class TestParser {
 
         Assert.assertTrue(result instanceof BoolValue);
         Assert.assertTrue((boolean) result.getValue());
+    }
+
+    @Test
+    public void test_true_or_true() throws Exception {
+        Parser parser = new Parser(new ByteArrayInputStream("true || true;;".getBytes()));
+        ASTEnvironment env = new ASTEnvironment(null);
+        IValue result = parser.Start().eval(env);
+
+        Assert.assertTrue(result instanceof BoolValue);
+        Assert.assertTrue((boolean) result.getValue());
+    }
+
+    @Test
+    public void test_true_or_false_and_true() throws Exception {
+        Parser parser = new Parser(new ByteArrayInputStream("true || false && true;;".getBytes()));
+        ASTEnvironment env = new ASTEnvironment(null);
+        IValue result = parser.Start().eval(env);
+
+        Assert.assertTrue(result instanceof BoolValue);
+        Assert.assertTrue((boolean) result.getValue());
+    }
+
+    @Test
+    public void test_false_and_true() throws Exception {
+        Parser parser = new Parser(new ByteArrayInputStream("false && true;;".getBytes()));
+        ASTEnvironment env = new ASTEnvironment(null);
+        IValue result = parser.Start().eval(env);
+
+        Assert.assertTrue(result instanceof BoolValue);
+        Assert.assertTrue(!(boolean) result.getValue());
+    }
+
+    @Test
+    public void test_true_and_true() throws Exception {
+        Parser parser = new Parser(new ByteArrayInputStream("true && true;;".getBytes()));
+        ASTEnvironment env = new ASTEnvironment(null);
+        IValue result = parser.Start().eval(env);
+
+        Assert.assertTrue(result instanceof BoolValue);
+        Assert.assertTrue((boolean) result.getValue());
+    }
+
+    @Test
+    public void test_reference_1_plus_1_IN_dereference_minus_1() throws Exception {
+        Parser parser = new Parser(new ByteArrayInputStream("let x = new (1 + 1) in !x - 1 end;;".getBytes()));
+        ASTEnvironment env = new ASTEnvironment(null);
+        IValue result = parser.Start().eval(env);
+
+        Assert.assertTrue(result instanceof IntValue);
+        Assert.assertEquals(1, (int) result.getValue());
+    }
+
+    @Test
+    public void test_function_1_IN_f_equals_1_equals_true() throws Exception {
+        Parser parser = new Parser(new ByteArrayInputStream("let f = function => 1 end in (f() == 1) == true end;;".getBytes()));
+        ASTEnvironment env = new ASTEnvironment(null);
+        IValue result = parser.Start().eval(env);
+
+        Assert.assertTrue(result instanceof BoolValue);
+        Assert.assertTrue((boolean) result.getValue());
+    }
+
+    @Test
+    public void test_function_argument_compare_5() throws Exception {
+        Parser parser = new Parser(new ByteArrayInputStream(("let \n" +
+                "    f = function f => f(5) end,\n" +
+                "    comp5 = function x => x == 5 end\n" +
+                "in \n" +
+                "    f(comp5)\n" +
+                "end;;").getBytes()));
+        ASTEnvironment env = new ASTEnvironment(null);
+        IValue result = parser.Start().eval(env);
+
+        Assert.assertTrue(result instanceof BoolValue);
+        Assert.assertTrue((boolean) result.getValue());
+    }
+
+    @Test
+    public void test_function_reference_passes_ref_function_as_argument_to_function_compare_5() throws Exception {
+        Parser parser = new Parser(new ByteArrayInputStream(("let \n" +
+                "    f = function f => !f(5) end,\n" +
+                "    comp5 = new function x => x == 5 end\n" +
+                "in \n" +
+                "    f(comp5)\n" +
+                "end;;").getBytes()));
+        ASTEnvironment env = new ASTEnvironment(null);
+        IValue result = parser.Start().eval(env);
+
+        Assert.assertTrue(result instanceof BoolValue);
+        Assert.assertTrue((boolean) result.getValue());
+    }
+
+    @Test
+    public void test_not_true() throws Exception {
+        Parser parser = new Parser(new ByteArrayInputStream("~true;;".getBytes()));
+        ASTEnvironment env = new ASTEnvironment(null);
+        IValue result = parser.Start().eval(env);
+
+        Assert.assertTrue(result instanceof BoolValue);
+        Assert.assertTrue(!(boolean) result.getValue());
+    }
+
+    @Test
+    public void test_not_false() throws Exception {
+        Parser parser = new Parser(new ByteArrayInputStream("~false;;".getBytes()));
+        ASTEnvironment env = new ASTEnvironment(null);
+        IValue result = parser.Start().eval(env);
+
+        Assert.assertTrue(result instanceof BoolValue);
+        Assert.assertTrue((boolean) result.getValue());
+    }
+
+    @Test
+    public void test_not_1_equal_1() throws Exception {
+        Parser parser = new Parser(new ByteArrayInputStream("~(1 == 1);;".getBytes()));
+        ASTEnvironment env = new ASTEnvironment(null);
+        IValue result = parser.Start().eval(env);
+
+        Assert.assertTrue(result instanceof BoolValue);
+        Assert.assertTrue(!(boolean) result.getValue());
+    }
+
+    @Test
+    public void test_negative() throws Exception {
+        Parser parser = new Parser(new ByteArrayInputStream("-1;;".getBytes()));
+        ASTEnvironment env = new ASTEnvironment(null);
+        IValue result = parser.Start().eval(env);
+
+        Assert.assertTrue(result instanceof IntValue);
+        Assert.assertEquals(-1, (int)result.getValue());
     }
 }

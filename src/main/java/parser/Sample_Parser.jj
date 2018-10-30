@@ -1,6 +1,5 @@
-// TODO: Fix function * function
-// TODO: Fix Logical operators precedence (|| and &&)
-// TODO: Remove warnings
+// Resources
+// http://www.craftinginterpreters.com/parsing-expressions.html
 
 options
 {
@@ -103,11 +102,10 @@ TOKEN :
 
 List<ASTNode> FunctionArguments() : {
   List<ASTNode> arguments = new ArrayList<ASTNode>();
-  List<ASTNode> tmp = new ArrayList<ASTNode>();
   ASTNode arg;
 }
 {
-    ( (arg = Exp() { arguments.add(arg); }) (<COMMA> tmp = FunctionArguments() {arguments.addAll(tmp); })*)?
+    ( (arg = Exp() { arguments.add(arg); }) (<COMMA> arg = Exp() {arguments.add(arg); })*)?
     {
         return arguments;
     }
@@ -183,8 +181,6 @@ ASTNode GetNum() :
 }
 {
    n = <Num> { return new ASTNum(Integer.parseInt(n.image)); }
-   |
-   <MINUS> n=<Num> { return new ASTSub(new ASTNum(0), new ASTNum(Integer.parseInt(n.image))); }
 }
 
 ASTNode GetReference() :
@@ -231,29 +227,6 @@ ASTNode GetDereference() :
     <DEREFERENCE> node = Fact() { return new ASTDereference(node); }
 }
 
-ASTNode GetComparison(ASTNode left) :
-{
-    ASTNode node;
-}
-{
-    (
-        <EQUAL> node = Term() { node = new ASTEqual(left, node); }
-        |
-        <NOT_EQUAL> node = Term() { node = new ASTNotEqual(left, node); }
-        |
-        <GREATER> node = Term() { node = new ASTGreater(left, node); }
-        |
-        <GREATEROREQUAL> node = Term() { node = new ASTGreaterOrEqual(left, node); }
-        |
-        <SMALLER> node = Term() { node = new ASTSmaller(left, node); }
-        |
-        <SMALLEROREQUAL> node = Term() { node = new ASTSmallerOrEqual(left, node); }
-    )
-    {
-        return node;
-    }
-}
-
 ASTNode GetIfThenElse() :
 {
     ASTNode node_if = null, node_then = null, node_else = null;
@@ -276,6 +249,30 @@ ASTNode GetWhileDo() :
     }
 }
 
+ASTNode GetOr(ASTNode e1) :
+{
+    ASTNode e2;
+}
+{
+    <OR> e2 = GetLogical() { return new ASTOr(e1, e2); }
+}
+
+ASTNode GetAnd(ASTNode e1) :
+{
+    ASTNode e2;
+}
+{
+    <AND> e2 = GetLogical() { return new ASTAnd(e1, e2); }
+}
+
+ASTNode GetFunctionApply(ASTNode id) :
+{
+    List<ASTNode> arguments;
+}
+{
+    <LPAR> arguments = FunctionArguments() <RPAR> { return new ASTApply(id, arguments); }
+}
+
 ASTNode Start():
 { ASTNode t; }
 {
@@ -289,8 +286,66 @@ ASTNode GetSequence() :
     ASTNode n;
 }
 {
-    n = Exp() { sequence.add(n); } (<SEQUENCE> n = GetSequence() { sequence.add(n); })?
+    n = GetLogical() { sequence.add(n); } (<SEQUENCE> n = GetSequence() { sequence.add(n); })?
     { return new ASTSequence(sequence); }
+}
+
+ASTNode GetLogical() :
+{
+    ASTNode e1, e2;
+}
+{
+    e1 = GetEquality()
+    (
+        LOOKAHEAD(2)
+        (
+            e1 = GetOr(e1)
+            |
+            e1 = GetAnd(e1)
+        )
+    ) *
+    {
+        return e1;
+    }
+}
+
+ASTNode GetEquality() :
+{
+    ASTNode left, node;
+}
+{
+    left = GetComparison()
+    (
+        LOOKAHEAD(2)
+        (
+            <EQUAL> node = GetEquality() { left = new ASTEqual(left, node); }
+            |
+            <NOT_EQUAL> node = GetEquality() { left = new ASTNotEqual(left, node); }
+        )
+    ) *
+    {
+        return left;
+    }
+}
+
+ASTNode GetComparison() :
+{
+    ASTNode left, node;
+}
+{
+    left = Exp()
+    (
+        <GREATER> node = Exp() { left = new ASTGreater(left, node); }
+        |
+        <GREATEROREQUAL> node = Exp() { left = new ASTGreaterOrEqual(left, node); }
+        |
+        <SMALLER> node = Exp() { left = new ASTSmaller(left, node); }
+        |
+        <SMALLEROREQUAL> node = Exp() { left = new ASTSmallerOrEqual(left, node); }
+    )*
+    {
+        return left;
+    }
 }
 
 ASTNode Exp() :
@@ -315,43 +370,76 @@ ASTNode Exp() :
                 else
                     t1 = new ASTSub(t1,t2);
             }
-            |
-            <OR> t2 = Term() { return new ASTOr(t1, t2); }
         )
      ) *
-     (
-        LOOKAHEAD(2)
-        t1 = GetComparison(t1)
-     )?
     { return t1; }
 }
-
 ASTNode Term() :
 { Token op;
   ASTNode node, f2;
-  List<ASTNode> arguments = new ArrayList<ASTNode>();
 }
 {
-    node = Fact()
+    node = Unary()
     (
         LOOKAHEAD(2)
         (
             ( op = <TIMES> | op = <DIV> )
-            f2 = Fact()
-            { if (op.kind == TIMES)
-                  node = new ASTMul(node,f2);
-              else  node = new ASTDiv(node,f2);
+            f2 = Unary()
+            {
+                if (op.kind == TIMES)
+                    node = new ASTMul(node,f2);
+                else
+                    node = new ASTDiv(node,f2);
             }
-            |
-            <AND> f2 = Fact() { node = new ASTAnd(node, f2); }
         )
     ) *
+    { return node; }
+}
+
+ASTNode Unary() :
+{
+    Token op;
+    ASTNode node;
+}
+{
+    (
+        (
+            (
+                op = <NOT>
+                |
+                op = <MINUS>
+            )
+            node = Binary()
+            {
+                if (op.kind == NOT)
+                    node = new ASTNot(node);
+                else
+                    node = new ASTSub(new ASTNum(0), node);
+            }
+        )
+        |
+        node = Binary()
+    )
+    {
+        return node;
+    }
+}
+
+ASTNode Binary() :
+{
+    ASTNode node;
+    List<ASTNode> arguments;
+}
+{
+    node = Fact()
     (
         node = GetAssignment(node)
         |
-        <LPAR> arguments = FunctionArguments() <RPAR> { node = new ASTApply(node, arguments); }
+        node = GetFunctionApply(node)
     )?
-    { return node; }
+    {
+        return node;
+    }
 }
 
 ASTNode Fact() :
@@ -380,5 +468,7 @@ ASTNode Fact() :
         |
         node = GetFunction()
     )
-    { return node; }
+    {
+        return node;
+    }
 }
