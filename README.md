@@ -2,6 +2,8 @@
 
 Still in development.
 
+Examples in src/main/java/resources.
+
 # Already supported:
 - Variables
 - Functions
