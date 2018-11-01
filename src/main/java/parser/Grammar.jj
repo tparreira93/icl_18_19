@@ -53,6 +53,8 @@ TOKEN :
   |
   < ASSIGNMENT: "=" >
   |
+  < COLON: ":" >
+  |
   < IN: "in" >
   |
   < END: "end" >
@@ -216,7 +218,7 @@ ASTNode GetAssignment(ASTNode id) :
     Token t;
 }
 {
-    <ASSIGNMENT> node = Exp() { return new ASTAssignment(id, node); }
+    <COLON> <ASSIGNMENT> node = Exp() { return new ASTAssignment(id, node); }
 }
 
 ASTNode GetDereference() :

@@ -62,6 +62,6 @@ public class IntValue extends NumericValue {
 
     @Override
     public String toString() {
-        return String.valueOf(value);
+        return "int(" + String.valueOf(value) + ")";
     }
 }

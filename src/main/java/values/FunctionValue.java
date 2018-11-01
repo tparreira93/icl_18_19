@@ -56,7 +56,7 @@ public class FunctionValue implements IValue {
 
     @Override
     public String toString() {
-        return expression.toString() + " - " + String.join(", ", params);
+        return "function(" + expression.toString() + " - " + String.join(", ", params) + ")";
 
     }
 }

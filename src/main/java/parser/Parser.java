@@ -175,9 +175,10 @@ public class Parser implements ParserConstants {
   final public ASTNode GetAssignment(ASTNode id) throws ParseException {
     ASTNode node;
     Token t;
+    jj_consume_token(COLON);
     jj_consume_token(ASSIGNMENT);
     node = Exp();
-                                {if (true) return new ASTAssignment(id, node);}
+                                        {if (true) return new ASTAssignment(id, node);}
     throw new Error("Missing return statement in function");
   }
 
@@ -489,9 +490,9 @@ public class Parser implements ParserConstants {
     node = Fact();
     switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
     case LPAR:
-    case ASSIGNMENT:
+    case COLON:
       switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
-      case ASSIGNMENT:
+      case COLON:
         node = GetAssignment(node);
         break;
       case LPAR:
@@ -579,11 +580,6 @@ public class Parser implements ParserConstants {
     try { return !jj_3_4(); }
     catch(LookaheadSuccess ls) { return true; }
     finally { jj_save(3, xla); }
-  }
-
-  private boolean jj_3R_30() {
-    if (jj_3R_40()) return true;
-    return false;
   }
 
   private boolean jj_3R_40() {
@@ -753,7 +749,7 @@ public class Parser implements ParserConstants {
   private boolean jj_3R_18() {
     Token xsp;
     xsp = jj_scanpos;
-    if (jj_scan_token(34)) {
+    if (jj_scan_token(35)) {
     jj_scanpos = xsp;
     if (jj_scan_token(7)) return true;
     }
@@ -846,6 +842,11 @@ public class Parser implements ParserConstants {
     return false;
   }
 
+  private boolean jj_3R_30() {
+    if (jj_3R_40()) return true;
+    return false;
+  }
+
   /** Generated Token Manager. */
   public ParserTokenManager token_source;
   SimpleCharStream jj_input_stream;
@@ -865,10 +866,10 @@ public class Parser implements ParserConstants {
       jj_la1_init_1();
    }
    private static void jj_la1_init_0() {
-      jj_la1_0 = new int[] {0x80000,0x2b424a0,0x80000,0x0,0x80000,0x400000,0x0,0xc000000,0xf0000000,0xf0000000,0xc0,0x300,0x80,0x2b424a0,0x8400,0x8400,0x2b42420,};
+      jj_la1_0 = new int[] {0x100000,0x56824a0,0x100000,0x0,0x100000,0x800000,0x0,0x18000000,0xe0000000,0xe0000000,0xc0,0x300,0x80,0x56824a0,0x10400,0x10400,0x5682420,};
    }
    private static void jj_la1_init_1() {
-      jj_la1_1 = new int[] {0x0,0x4c,0x0,0x40,0x0,0x0,0x3,0x0,0x0,0x0,0x0,0x0,0x4,0x4c,0x0,0x0,0x48,};
+      jj_la1_1 = new int[] {0x0,0x98,0x0,0x80,0x0,0x0,0x6,0x0,0x1,0x1,0x0,0x0,0x8,0x98,0x0,0x0,0x90,};
    }
   final private JJCalls[] jj_2_rtns = new JJCalls[4];
   private boolean jj_rescan = false;
@@ -1054,7 +1055,7 @@ public class Parser implements ParserConstants {
   /** Generate ParseException. */
   public ParseException generateParseException() {
     jj_expentries.clear();
-    boolean[] la1tokens = new boolean[39];
+    boolean[] la1tokens = new boolean[40];
     if (jj_kind >= 0) {
       la1tokens[jj_kind] = true;
       jj_kind = -1;
@@ -1071,7 +1072,7 @@ public class Parser implements ParserConstants {
         }
       }
     }
-    for (int i = 0; i < 39; i++) {
+    for (int i = 0; i < 40; i++) {
       if (la1tokens[i]) {
         jj_expentry = new int[1];
         jj_expentry[0] = i;

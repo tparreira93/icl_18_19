@@ -36,6 +36,6 @@ public class ReferenceValue implements IValue {
 
     @Override
     public String toString() {
-        return "Reference: " + value.toString();
+        return "reference(" + value.toString() + ")";
     }
 }

@@ -32,6 +32,6 @@ public class BoolValue implements IValue {
 
     @Override
     public String toString() {
-        return value ? "true" : "false";
+        return "bool(" + (value ? "true" : "false") + ")";
     }
 }

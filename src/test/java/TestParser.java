@@ -486,8 +486,8 @@ public class TestParser {
             "        in\n" +
             "            while !fact > 0\n" +
             "            do\n" +
-            "                result = !result * !fact;\n" +
-            "                fact = !fact - 1\n" +
+            "                result := !result * !fact;\n" +
+            "                fact := !fact - 1\n" +
             "            end;\n" +
             "            !result\n" +
             "        end\n" +
