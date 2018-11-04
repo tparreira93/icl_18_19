@@ -2,7 +2,7 @@
 
 Still in development.
 
-Examples in src/main/java/resources.
+Examples in src/main/resources.
 
 # Already supported:
 - Variables
