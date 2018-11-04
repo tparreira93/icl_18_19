@@ -29,9 +29,9 @@ public class ReferenceValue implements IValue {
     @Override
     public boolean equals(IValue v) throws Exception {
         if (!(v instanceof ReferenceValue))
-            throw new Exception("Can't compare " + this + " with " + v + ". (" + v + " is not an int value).");
+            throw new Exception("Can't compare " + this + " with " + v + ". (" + v + " is not a reference).");
 
-        return value.equals(v);
+        return this == v;
     }
 
     @Override

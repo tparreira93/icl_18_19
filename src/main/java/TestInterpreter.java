@@ -4,11 +4,12 @@ import parser.Parser;
 
 
 
-public class Test {  /** Main entry point. */
+public class TestInterpreter {  /** Main entry point. */
     public static void main(String args[]) {
         Parser parser = new Parser(System.in);
         ASTNode exp;
 
+        //noinspection InfiniteLoopStatement
         while (true) {
             try {
                 ASTEnvironment environment = new ASTEnvironment(null);

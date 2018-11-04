@@ -468,17 +468,7 @@ public class TestParser {
         Assert.assertEquals(-1, (int)result.getValue());
     }
 
-    @Test
-    public void test_while() throws Exception {
-        Parser parser = new Parser(new ByteArrayInputStream("-1;;".getBytes()));
-        ASTEnvironment env = new ASTEnvironment(null);
-        IValue result = parser.Start().eval(env);
-
-        Assert.assertTrue(result instanceof IntValue);
-        Assert.assertEquals(-1, (int)result.getValue());
-    }
-
-    String factorial = "let \n" +
+    private String factorial = "let \n" +
             "    factorial = function x =>\n" +
             "        let \n" +
             "            fact = new x,\n" +
