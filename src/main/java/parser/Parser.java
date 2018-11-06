@@ -79,14 +79,14 @@ public class Parser implements ParserConstants {
     throw new Error("Missing return statement in function");
   }
 
-  final public List<Var> AssignmentList() throws ParseException {
+  final public List<Binding> AssignmentList() throws ParseException {
     Token n;
-    List<Var> vars = new ArrayList<Var>();
+    List<Binding> bindings = new ArrayList<Binding>();
     ASTNode assignment;
     n = jj_consume_token(Id);
     jj_consume_token(ASSIGNMENT);
     assignment = GetSequence();
-                                                       vars.add(new Var(n.image, assignment));
+                                                       bindings.add(new Binding(n.image, assignment));
     label_3:
     while (true) {
       switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
@@ -101,21 +101,21 @@ public class Parser implements ParserConstants {
       n = jj_consume_token(Id);
       jj_consume_token(ASSIGNMENT);
       assignment = GetSequence();
-                                                                    vars.add(new Var(n.image, assignment));
+                                                                    bindings.add(new Binding(n.image, assignment));
     }
-        {if (true) return vars;}
+        {if (true) return bindings;}
     throw new Error("Missing return statement in function");
   }
 
   final public ASTNode GetLet() throws ParseException {
-  List<Var> vars = new ArrayList<Var>();
+  List<Binding> bindings = new ArrayList<Binding>();
   ASTNode body;
     jj_consume_token(let);
-    vars = AssignmentList();
+    bindings = AssignmentList();
     jj_consume_token(IN);
     body = GetSequence();
     jj_consume_token(END);
-           {if (true) return new ASTLet(vars, body);}
+           {if (true) return new ASTLet(bindings, body);}
     throw new Error("Missing return statement in function");
   }
 

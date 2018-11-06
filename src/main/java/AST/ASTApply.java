@@ -1,5 +1,7 @@
 package AST;
 
+import AST.Exceptions.ASTInvalidNumberOfArguments;
+import AST.Exceptions.ASTNotFunction;
 import values.FunctionValue;
 import values.IValue;
 
@@ -20,13 +22,13 @@ public class ASTApply implements ASTNode {
         IValue value = function.eval(environment);
 
         if (!(value instanceof FunctionValue))
-            throw new Exception(value + " is not a function!");
+            throw new ASTNotFunction(value + " is not a function!");
 
         FunctionValue functionValue = (FunctionValue) value;
         ASTEnvironment localEnvironment = functionValue.getEnvironment();
 
         if (functionValue.getParams().size() != arguments.size())
-            throw new Exception("Number of arguments does not match the function definition.");
+            throw new ASTInvalidNumberOfArguments("Number of arguments does not match the function definition.");
 
         ASTEnvironment functionEnvironment = localEnvironment.beginScope();
 
@@ -41,6 +43,6 @@ public class ASTApply implements ASTNode {
 
     @Override
     public String toString() {
-        return this.getClass().getCanonicalName() + ": " + function + "-" + String.join(", ", arguments.toString());
+        return this.getClass().getSimpleName() + ": " + function + "-" + String.join(", ", arguments.toString());
     }
 }

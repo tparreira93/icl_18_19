@@ -125,30 +125,30 @@ List<String> ArgumentList() :
     }
 }
 
-List<Var> AssignmentList() :
+List<Binding> AssignmentList() :
 {
     Token n;
-    List<Var> vars = new ArrayList<Var>();
+    List<Binding> bindings = new ArrayList<Binding>();
     ASTNode assignment;
 }
 {
-    n = <Id> <ASSIGNMENT> assignment = GetSequence() { vars.add(new Var(n.image, assignment)); }
-        (<COMMA> n = <Id> <ASSIGNMENT> assignment = GetSequence() { vars.add(new Var(n.image, assignment)); } )*
+    n = <Id> <ASSIGNMENT> assignment = GetSequence() { bindings.add(new Binding(n.image, assignment)); }
+        (<COMMA> n = <Id> <ASSIGNMENT> assignment = GetSequence() { bindings.add(new Binding(n.image, assignment)); } )*
     {
-        return vars;
+        return bindings;
     }
 }
 
 ASTNode GetLet() :
 {
-  List<Var> vars = new ArrayList<Var>();
+  List<Binding> bindings = new ArrayList<Binding>();
   ASTNode body;
 }
 {
    <let>
-        vars = AssignmentList()
+        bindings = AssignmentList()
    <IN> body = GetSequence()
-   <END> { return new ASTLet(vars, body); }
+   <END> { return new ASTLet(bindings, body); }
 }
 
 ASTNode GetFunction() :

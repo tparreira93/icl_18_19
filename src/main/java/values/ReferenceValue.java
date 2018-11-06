@@ -1,6 +1,6 @@
 package values;
 
-public class ReferenceValue implements IValue {
+public class ReferenceValue implements IValue<IValue> {
     private IValue value;
 
     public ReferenceValue(IValue value) {
@@ -17,7 +17,7 @@ public class ReferenceValue implements IValue {
     }
 
     @Override
-    public Object getValue() {
+    public IValue getValue() {
         return value;
     }
 

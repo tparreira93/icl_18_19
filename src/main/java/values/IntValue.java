@@ -1,6 +1,6 @@
 package values;
 
-public class IntValue extends NumericValue {
+public class IntValue extends NumericValue<Integer> {
 
     private int value;
 
@@ -14,7 +14,7 @@ public class IntValue extends NumericValue {
     }
 
     @Override
-    public Object getValue() {
+    public Integer getValue() {
         return value;
     }
 

@@ -1,5 +1,7 @@
 package AST;
 
+import AST.Exceptions.ASTNonLogical;
+import com.sun.org.apache.xpath.internal.operations.Bool;
 import values.BoolValue;
 import values.IValue;
 
@@ -19,9 +21,10 @@ public class ASTIfThenElse implements ASTNode {
         IValue if_value = node_if.eval(environment);
         IValue result;
         if (!(if_value instanceof BoolValue))
-            throw new Exception("If condition should be a boolean value! " + "(it is " + if_value.getName() + ")");
+            throw new ASTNonLogical("If condition should be a boolean value! " + "(it is " + if_value.getName() + ")");
+        BoolValue ifb = (BoolValue) if_value;
 
-        if ((Boolean) if_value.getValue())
+        if (ifb.getValue())
         {
             ASTEnvironment localScope = environment.beginScope();
             result = node_then.eval(localScope);
@@ -35,5 +38,10 @@ public class ASTIfThenElse implements ASTNode {
         }
 
         return result;
+    }
+
+    @Override
+    public String toString() {
+        return this.getClass().getSimpleName() + " If=" + node_if + " Then=" + node_else + " Else" + node_else;
     }
 }

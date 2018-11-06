@@ -1,4 +1,5 @@
 import AST.ASTEnvironment;
+import AST.Exceptions.ASTException;
 import parser.ParseException;
 import parser.Parser;
 
@@ -34,8 +35,14 @@ public class FileParser {
                 Parser parser = new Parser(new FileInputStream(new File(f)));
                 System.out.println(parser.Start().eval(new ASTEnvironment(null)));
                 System.out.println();
+            } catch (ParseException e) {
+                System.out.println("Syntax Error!");
+                System.out.println(e.getMessage());
+            } catch (ASTException e) {
+                System.out.println("Runtime error!");
+                System.out.println(e.getMessage());
             } catch (Exception e) {
-                e.printStackTrace();
+                System.out.println(e.getMessage());
             }
         }
 

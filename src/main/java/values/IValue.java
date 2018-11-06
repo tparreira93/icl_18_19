@@ -1,8 +1,8 @@
 package values;
 
-public interface IValue {
+public interface IValue<T> {
     String getName();
-    Object getValue();
+    T getValue();
     int compareTo(IValue v) throws Exception;
     boolean equals(IValue v) throws Exception;
 }

@@ -16,6 +16,6 @@ public class ASTReference implements ASTNode {
 
     @Override
     public String toString() {
-        return this.getClass().getCanonicalName() + ": " + value;
+        return this.getClass().getSimpleName() + ": " + value;
     }
 }

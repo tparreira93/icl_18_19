@@ -17,6 +17,6 @@ public class ASTBool implements ASTNode {
 
     @Override
     public String toString() {
-        return this.getClass().getCanonicalName() + ": " + (value ? "true" : "false");
+        return this.getClass().getSimpleName() + ": " + (value ? "true" : "false");
     }
 }

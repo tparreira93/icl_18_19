@@ -1,10 +1,10 @@
 package AST;
 
-public class Var {
+public class Binding {
     private String id;
     private ASTNode expression;
 
-    public Var(String id, ASTNode expression) {
+    public Binding(String id, ASTNode expression) {
         this.id = id;
         this.expression = expression;
     }
@@ -19,6 +19,6 @@ public class Var {
 
     @Override
     public String toString() {
-        return id + " - " + expression;
+        return id + "=" + expression;
     }
 }

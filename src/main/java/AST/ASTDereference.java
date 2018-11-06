@@ -1,5 +1,6 @@
 package AST;
 
+import AST.Exceptions.ASTNotReference;
 import values.IValue;
 import values.ReferenceValue;
 
@@ -14,13 +15,13 @@ public class ASTDereference implements ASTNode {
     public IValue eval(ASTEnvironment environment) throws Exception {
         IValue value = reference.eval(environment);
         if (!(value instanceof ReferenceValue))
-            throw new Exception(value + " is not a reference.");
-
-        return (IValue) value.getValue();
+            throw new ASTNotReference(value + " is not a reference.");
+        ReferenceValue ref = (ReferenceValue) value;
+        return ref.getValue();
     }
 
     @Override
     public String toString() {
-        return this.getClass().getCanonicalName() + ": " + reference.toString();
+        return this.getClass().getSimpleName() + ": " + reference.toString();
     }
 }

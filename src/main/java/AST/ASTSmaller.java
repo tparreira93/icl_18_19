@@ -19,4 +19,9 @@ public class ASTSmaller implements  ASTNode {
 
         return new BoolValue(l.compareTo(r) < 0);
     }
+
+    @Override
+    public String toString() {
+        return this.getClass().getSimpleName() + " Left=" + left + " Right=" + right;
+    }
 }

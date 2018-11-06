@@ -1,6 +1,6 @@
 package values;
 
-public class BoolValue implements IValue {
+public class BoolValue implements IValue<Boolean> {
     private boolean value;
 
     public BoolValue(boolean value) {
@@ -13,7 +13,7 @@ public class BoolValue implements IValue {
     }
 
     @Override
-    public Object getValue() {
+    public Boolean getValue() {
         return value;
     }
 

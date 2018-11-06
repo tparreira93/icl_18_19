@@ -19,4 +19,9 @@ public class ASTEqual implements ASTNode {
 
         return new BoolValue(l.equals(r));
     }
+
+    @Override
+    public String toString() {
+        return this.getClass().getSimpleName() + " Left=" + left + " Right=" + right;
+    }
 }

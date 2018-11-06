@@ -1,5 +1,6 @@
 package AST;
 
+import AST.Exceptions.ASTNonLogical;
 import values.BoolValue;
 import values.IValue;
 
@@ -19,7 +20,7 @@ public class ASTWhile implements ASTNode {
         boolean cond = (boolean) condition_value.getValue();
 
         if (!(condition_value instanceof BoolValue))
-            throw new Exception("While condition should be a boolean value! " + "(it is " + condition_value.getName() + ")");
+            throw new ASTNonLogical("While condition should be a boolean value! " + "(it is " + condition_value.getName() + ")");
 
         if (!cond)
             return condition_value;
@@ -33,5 +34,10 @@ public class ASTWhile implements ASTNode {
         localScope.endScope();
 
         return result;
+    }
+
+    @Override
+    public String toString() {
+        return this.getClass().getSimpleName() + " Condition=" + condition + " Body=" + action;
     }
 }

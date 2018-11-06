@@ -1,5 +1,6 @@
 package AST;
 
+import AST.Exceptions.ASTNonLogical;
 import values.BoolValue;
 import values.IValue;
 
@@ -19,10 +20,18 @@ public class ASTOr implements ASTNode {
         String msg = "Logical operators should evaluate to boolean values. (%s is not a boolean value).";
 
         if (!(l instanceof BoolValue))
-            throw new Exception(String.format(msg, l));
+            throw new ASTNonLogical(String.format(msg, l));
         if (!(r instanceof BoolValue))
-            throw new Exception(String.format(msg, r));
+            throw new ASTNonLogical(String.format(msg, r));
 
-        return new BoolValue((boolean)l.getValue() || (boolean)r.getValue());
+        BoolValue bl = (BoolValue) l;
+        BoolValue br = (BoolValue) r;
+
+        return new BoolValue(bl.getValue() || br.getValue());
+    }
+
+    @Override
+    public String toString() {
+        return this.getClass().getSimpleName() + " Left=" + left + " Right=" + right;
     }
 }

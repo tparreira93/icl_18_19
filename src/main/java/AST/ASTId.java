@@ -1,5 +1,6 @@
 package AST;
 
+import AST.Exceptions.ASTInvalidIdentifier;
 import values.IValue;
 
 public class ASTId implements ASTNode {
@@ -13,7 +14,7 @@ public class ASTId implements ASTNode {
 
         IValue value = environment.find(name);
         if (value == null)
-            throw new Exception("Unable to find definition for identifier \"" + name + "\".");
+            throw new ASTInvalidIdentifier("Unable to find definition for identifier \"" + name + "\".");
         return value;
     }
 

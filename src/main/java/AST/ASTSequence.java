@@ -22,11 +22,11 @@ public class ASTSequence implements ASTNode{
     @Override
     public String toString() {
         StringBuilder str = new StringBuilder();
-        for (int i = 0; i < sequence.size(); i++) {
+        for (ASTNode aSequence : sequence) {
             if (str.length() == 0)
                 str.append("->");
-            str.append(sequence.get(i));
+            str.append(aSequence);
         }
-        return this.getClass().getCanonicalName() + ": " +  str.toString();
+        return this.getClass().getSimpleName() + ": " +  str.toString();
     }
 }

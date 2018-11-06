@@ -1,5 +1,6 @@
 package AST;
 
+import AST.Exceptions.ASTNotReference;
 import values.IValue;
 import values.ReferenceValue;
 
@@ -22,11 +23,11 @@ public class ASTAssignment implements ASTNode {
 
             return reference;
         }
-        throw new Exception(ref + " is not a reference!");
+        throw new ASTNotReference(ref + " is not a reference!");
     }
 
     @Override
     public String toString() {
-        return this.getClass().getCanonicalName() + ": " + id.toString() + " := " + value.toString();
+        return this.getClass().getSimpleName() + ": " + id.toString() + " := " + value.toString();
     }
 }

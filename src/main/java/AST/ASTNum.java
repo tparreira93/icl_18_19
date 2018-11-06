@@ -16,6 +16,6 @@ public class ASTNum implements ASTNode {
 
     @Override
     public String toString() {
-        return this.getClass().getCanonicalName() + ": " + num;
+        return this.getClass().getSimpleName() + ": " + num;
     }
 }

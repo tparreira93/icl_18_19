@@ -1,5 +1,6 @@
 package AST;
 
+import AST.Exceptions.ASTNotNumber;
 import values.IValue;
 import values.NumericValue;
 
@@ -19,11 +20,11 @@ public class ASTSub implements ASTNode {
         if (v1 instanceof NumericValue && v2 instanceof NumericValue)
             return ((NumericValue) v1).Subtract((NumericValue)v2);
         else
-            throw new Exception("Subtract operation is not supported between " + v1.getName() + " and " + v2.getName() + ".");
+            throw new ASTNotNumber("Subtract operation is not supported between " + v1.getName() + " and " + v2.getName() + ".");
     }
 
     @Override
     public String toString() {
-        return this.getClass().getCanonicalName() + ": " + left + " - " + right;
+        return this.getClass().getSimpleName() + ": " + left + " - " + right;
     }
 }
