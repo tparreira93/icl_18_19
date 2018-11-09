@@ -1,12 +1,17 @@
 # ICL 18/19
+## Developers
+- Thales Parreira 41835
+- Eduardo Silva 41798
 
+# Development
 Still in development.
 
 Examples in src/main/resources.
 
-# Already supported:
+## Already supported:
 - Variables
 - Functions
+- Recursive functions
 - Arithmetic (+, -, *, /)
 - Identifiers
 - Numeric and boolean values
@@ -18,22 +23,43 @@ Examples in src/main/resources.
 - Dereference (!)
 - Logical operators (||, && and ~)
 
-## Variables
-Example:
+## Example:
+- Fibonacci:
+```
+		let
+			fibonacci = function x ->
+				let
+					result = new 1
+				in
+					if x <= 1 then
+						result := x
+					else
+						result := fibonacci(x - 1) + fibonacci(x - 2)
+					end;
+					!result
+				end
+			end
+		in
+			fibonacci(10)
+		end;;
+```
 
-- let x = 1, y = 2 in x + y end;;
-	- Result: 3
- 
-## Functions
-- let f = function => 1 end in f() end;;
-	 - Result: 1
-- let f = function x, y => x * y end in f(5, 5) end;;
-	 - Result: 25
-
-## References
-- let x = new 5 in x end;;
-	 - Result: Reference of 5
-
-## Dereference
-- let x = new 6 in !x end;;
-	 - Result: 6
+- Factorial:
+```
+		let
+			factorial = function x ->
+				let
+					result = new 1
+				in
+					if x > 1 then
+						result := x * factorial(x - 1)
+					else
+						x
+					end;
+					!result
+				end
+			end
+		in
+			factorial(12)
+		end;;
+```
