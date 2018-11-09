@@ -5,8 +5,8 @@ import values.BoolValue;
 import values.IValue;
 
 public class ASTOr implements ASTNode {
-    private ASTNode left;
-    private ASTNode right;
+    private final ASTNode left;
+    private final ASTNode right;
 
     public ASTOr(ASTNode left, ASTNode right) {
         this.left = left;
@@ -17,7 +17,7 @@ public class ASTOr implements ASTNode {
     public IValue eval(ASTEnvironment environment) throws Exception {
         IValue l = left.eval(environment);
         IValue r = right.eval(environment);
-        String msg = "Logical operators should evaluate to boolean values. (%s is not a boolean value).";
+        String msg = "Logical operators can only be applied on boolean values. (%s is not a boolean value).";
 
         if (!(l instanceof BoolValue))
             throw new ASTNonLogical(String.format(msg, l));
@@ -32,6 +32,6 @@ public class ASTOr implements ASTNode {
 
     @Override
     public String toString() {
-        return this.getClass().getSimpleName() + " Left=" + left + " Right=" + right;
+        return this.getClass().getSimpleName();
     }
 }

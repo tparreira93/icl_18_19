@@ -5,8 +5,8 @@ import values.BoolValue;
 import values.IValue;
 
 public class ASTWhile implements ASTNode {
-    private ASTNode condition;
-    private ASTNode action;
+    private final ASTNode condition;
+    private final ASTNode action;
 
     public ASTWhile(ASTNode condition, ASTNode action) {
         this.condition = condition;
@@ -38,6 +38,6 @@ public class ASTWhile implements ASTNode {
 
     @Override
     public String toString() {
-        return this.getClass().getSimpleName() + " Condition=" + condition + " Body=" + action;
+        return this.getClass().getSimpleName();
     }
 }

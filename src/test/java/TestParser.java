@@ -90,7 +90,7 @@ public class TestParser {
 
     @Test
     public void test_Let_f_function_1() throws Exception {
-        Parser parser = new Parser(new ByteArrayInputStream("let f = function => 1 end in f() end;;".getBytes()));
+        Parser parser = new Parser(new ByteArrayInputStream("let f = function -> 1 end in f() end;;".getBytes()));
         ASTEnvironment env = new ASTEnvironment(null);
         IValue result = parser.Start().eval(env);
 
@@ -100,7 +100,7 @@ public class TestParser {
 
     @Test
     public void test_Let_f_function_x_in_1() throws Exception {
-        Parser parser = new Parser(new ByteArrayInputStream("let f = function x => x end in f(1) end;;".getBytes()));
+        Parser parser = new Parser(new ByteArrayInputStream("let f = function x -> x end in f(1) end;;".getBytes()));
         ASTEnvironment env = new ASTEnvironment(null);
         IValue result = parser.Start().eval(env);
 
@@ -110,7 +110,7 @@ public class TestParser {
 
     @Test
     public void test_Let_f_function_x_y___x_Plus_y__IN_f_1_1() throws Exception {
-        Parser parser = new Parser(new ByteArrayInputStream("let f = function x, y => x + y end in f(1, 1) end;;".getBytes()));
+        Parser parser = new Parser(new ByteArrayInputStream("let f = function x, y -> x + y end in f(1, 1) end;;".getBytes()));
         ASTEnvironment env = new ASTEnvironment(null);
         IValue result = parser.Start().eval(env);
 
@@ -120,7 +120,7 @@ public class TestParser {
 
     @Test
     public void test_Let_f_function_x_y_z___x_Plus_y_Times_z_IN_f_2_3_4() throws Exception {
-        Parser parser = new Parser(new ByteArrayInputStream("let f = function x, y, z => x + y * z end in f(2, 3, 4) end;;".getBytes()));
+        Parser parser = new Parser(new ByteArrayInputStream("let f = function x, y, z -> x + y * z end in f(2, 3, 4) end;;".getBytes()));
         ASTEnvironment env = new ASTEnvironment(null);
         IValue result = parser.Start().eval(env);
 
@@ -130,7 +130,7 @@ public class TestParser {
 
     @Test
     public void test_Let_f_function_1_f_Plus_f() throws Exception {
-        Parser parser = new Parser(new ByteArrayInputStream("let f = function => 1 end in f() + f() end;;".getBytes()));
+        Parser parser = new Parser(new ByteArrayInputStream("let f = function -> 1 end in f() + f() end;;".getBytes()));
         ASTEnvironment env = new ASTEnvironment(null);
         IValue result = parser.Start().eval(env);
 
@@ -140,7 +140,7 @@ public class TestParser {
 
     @Test
     public void test_Let_f_function_5_f_Times_f() throws Exception {
-        Parser parser = new Parser(new ByteArrayInputStream("let f = function => 5 end in f() * f() end;;".getBytes()));
+        Parser parser = new Parser(new ByteArrayInputStream("let f = function -> 5 end in f() * f() end;;".getBytes()));
         ASTEnvironment env = new ASTEnvironment(null);
         IValue result = parser.Start().eval(env);
 
@@ -390,7 +390,7 @@ public class TestParser {
 
     @Test
     public void test_function_1_IN_f_equals_1_equals_true() throws Exception {
-        Parser parser = new Parser(new ByteArrayInputStream("let f = function => 1 end in (f() == 1) == true end;;".getBytes()));
+        Parser parser = new Parser(new ByteArrayInputStream("let f = function -> 1 end in (f() == 1) == true end;;".getBytes()));
         ASTEnvironment env = new ASTEnvironment(null);
         IValue result = parser.Start().eval(env);
 
@@ -401,8 +401,8 @@ public class TestParser {
     @Test
     public void test_function_argument_compare_5() throws Exception {
         Parser parser = new Parser(new ByteArrayInputStream(("let \n" +
-                "    f = function f => f(5) end,\n" +
-                "    comp5 = function x => x == 5 end\n" +
+                "    f = function f -> f(5) end,\n" +
+                "    comp5 = function x -> x == 5 end\n" +
                 "in \n" +
                 "    f(comp5)\n" +
                 "end;;").getBytes()));
@@ -416,8 +416,8 @@ public class TestParser {
     @Test
     public void test_function_reference_passes_ref_function_as_argument_to_function_compare_5() throws Exception {
         Parser parser = new Parser(new ByteArrayInputStream(("let \n" +
-                "    f = function f => !f(5) end,\n" +
-                "    comp5 = new function x => x == 5 end\n" +
+                "    f = function f -> !f(5) end,\n" +
+                "    comp5 = new function x -> x == 5 end\n" +
                 "in \n" +
                 "    f(comp5)\n" +
                 "end;;").getBytes()));
@@ -468,27 +468,26 @@ public class TestParser {
         Assert.assertEquals(-1, (int)result.getValue());
     }
 
-    private String factorial = "let \n" +
-            "    factorial = function x =>\n" +
-            "        let \n" +
-            "            fact = new x,\n" +
-            "            result = new 1\n" +
-            "        in\n" +
-            "            while !fact > 0\n" +
-            "            do\n" +
-            "                result := !result * !fact;\n" +
-            "                fact := !fact - 1\n" +
-            "            end;\n" +
-            "            !result\n" +
-            "        end\n" +
-            "    end\n" +
-            "in\n" +
-            "    factorial(%s)\n" +
-            "end;;";
-
 
     @Test
     public void fact_10() throws Exception {
+        String factorial = "let \n" +
+                "    factorial = function x ->\n" +
+                "        let \n" +
+                "            fact = new x,\n" +
+                "            result = new 1\n" +
+                "        in\n" +
+                "            while !fact > 0\n" +
+                "            do\n" +
+                "                result := !result * !fact;\n" +
+                "                fact := !fact - 1\n" +
+                "            end;\n" +
+                "            !result\n" +
+                "        end\n" +
+                "    end\n" +
+                "in\n" +
+                "    factorial(%s)\n" +
+                "end;;";
         Parser parser = new Parser(new ByteArrayInputStream(String.format(factorial, 10).getBytes()));
         ASTEnvironment env = new ASTEnvironment(null);
         IValue result = parser.Start().eval(env);

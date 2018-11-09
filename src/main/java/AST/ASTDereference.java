@@ -5,7 +5,7 @@ import values.IValue;
 import values.ReferenceValue;
 
 public class ASTDereference implements ASTNode {
-    private ASTNode reference;
+    private final ASTNode reference;
 
     public ASTDereference(ASTNode reference) {
         this.reference = reference;
@@ -22,6 +22,6 @@ public class ASTDereference implements ASTNode {
 
     @Override
     public String toString() {
-        return this.getClass().getSimpleName() + ": " + reference.toString();
+        return this.getClass().getSimpleName();
     }
 }

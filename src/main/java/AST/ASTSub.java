@@ -5,8 +5,8 @@ import values.IValue;
 import values.NumericValue;
 
 public class ASTSub implements ASTNode {
-    private ASTNode left;
-    private ASTNode right;
+    private final ASTNode left;
+    private final ASTNode right;
 
     public ASTSub(ASTNode left, ASTNode right) {
         this.left = left;
@@ -25,6 +25,6 @@ public class ASTSub implements ASTNode {
 
     @Override
     public String toString() {
-        return this.getClass().getSimpleName() + ": " + left + " - " + right;
+        return this.getClass().getSimpleName();
     }
 }

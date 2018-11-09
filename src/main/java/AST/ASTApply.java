@@ -4,13 +4,11 @@ import AST.Exceptions.ASTInvalidNumberOfArguments;
 import AST.Exceptions.ASTNotFunction;
 import values.FunctionValue;
 import values.IValue;
-
-import java.util.ArrayList;
 import java.util.List;
 
 public class ASTApply implements ASTNode {
-    private ASTNode function;
-    private List<ASTNode> arguments;
+    private final ASTNode function;
+    private final List<ASTNode> arguments;
 
     public ASTApply(ASTNode function, List<ASTNode> arguments) {
         this.function = function;
@@ -43,6 +41,6 @@ public class ASTApply implements ASTNode {
 
     @Override
     public String toString() {
-        return this.getClass().getSimpleName() + ": " + function + "-" + String.join(", ", arguments.toString());
+        return this.getClass().getSimpleName();
     }
 }

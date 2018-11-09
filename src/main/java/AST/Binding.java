@@ -1,8 +1,8 @@
 package AST;
 
 public class Binding {
-    private String id;
-    private ASTNode expression;
+    private final String id;
+    private final ASTNode expression;
 
     public Binding(String id, ASTNode expression) {
         this.id = id;

@@ -2,12 +2,14 @@ package values;
 
 import AST.ASTEnvironment;
 import AST.ASTNode;
+import AST.Exceptions.ASTNonComparable;
+
 import java.util.List;
 
 public class FunctionValue implements IValue {
-    private List<String> params;
-    private ASTNode expression;
-    private ASTEnvironment environment;
+    private final List<String> params;
+    private final ASTNode expression;
+    private final ASTEnvironment environment;
 
     public FunctionValue(List<String> params, ASTNode expression, ASTEnvironment environment) {
         this.params = params;
@@ -27,13 +29,13 @@ public class FunctionValue implements IValue {
 
     @Override
     public int compareTo(IValue v) throws Exception {
-        throw new Exception(this + " is not comparable!");
+        throw new ASTNonComparable(this + " is not comparable!");
     }
 
     @Override
     public boolean equals(IValue v) throws Exception {
         if (!(v instanceof FunctionValue))
-            throw new Exception("Can't compare " + this + " with " + v + ". (" + v + " is not a function).");
+            throw new ASTNonComparable("Can't compare " + this + " with " + v + ". (" + v + " is not a function).");
 
         FunctionValue f = (FunctionValue) v;
 
@@ -56,7 +58,7 @@ public class FunctionValue implements IValue {
 
     @Override
     public String toString() {
-        return "function(" + expression.toString() + " - " + String.join(", ", params) + ")";
+        return "function(" + expression.toString() + ")";
 
     }
 }

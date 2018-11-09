@@ -1,5 +1,5 @@
 let
-    factorial = function x =>
+    factorial = function x ->
         let
             fact = new x,
             result = new 1

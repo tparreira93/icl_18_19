@@ -1,5 +1,5 @@
 let
-    fibonacci = function x =>
+    fibonacci = function x ->
         let
             i = new 2,
             first = new 0,

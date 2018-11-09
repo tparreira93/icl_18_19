@@ -84,9 +84,9 @@ public class Parser implements ParserConstants {
     List<Binding> bindings = new ArrayList<Binding>();
     ASTNode assignment;
     n = jj_consume_token(Id);
-    jj_consume_token(ASSIGNMENT);
+    jj_consume_token(BINDING);
     assignment = GetSequence();
-                                                       bindings.add(new Binding(n.image, assignment));
+                                                    bindings.add(new Binding(n.image, assignment));
     label_3:
     while (true) {
       switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
@@ -99,9 +99,9 @@ public class Parser implements ParserConstants {
       }
       jj_consume_token(COMMA);
       n = jj_consume_token(Id);
-      jj_consume_token(ASSIGNMENT);
+      jj_consume_token(BINDING);
       assignment = GetSequence();
-                                                                    bindings.add(new Binding(n.image, assignment));
+                                                                 bindings.add(new Binding(n.image, assignment));
     }
         {if (true) return bindings;}
     throw new Error("Missing return statement in function");
@@ -175,10 +175,9 @@ public class Parser implements ParserConstants {
   final public ASTNode GetAssignment(ASTNode id) throws ParseException {
     ASTNode node;
     Token t;
-    jj_consume_token(COLON);
     jj_consume_token(ASSIGNMENT);
     node = Exp();
-                                        {if (true) return new ASTAssignment(id, node);}
+                                {if (true) return new ASTAssignment(id, node);}
     throw new Error("Missing return statement in function");
   }
 
@@ -490,9 +489,9 @@ public class Parser implements ParserConstants {
     node = Fact();
     switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
     case LPAR:
-    case COLON:
+    case ASSIGNMENT:
       switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
-      case COLON:
+      case ASSIGNMENT:
         node = GetAssignment(node);
         break;
       case LPAR:

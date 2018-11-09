@@ -5,7 +5,7 @@ import values.IValue;
 import java.util.List;
 
 public class ASTSequence implements ASTNode{
-    private List<ASTNode> sequence;
+    private final List<ASTNode> sequence;
 
     public ASTSequence(List<ASTNode> sequence) {
         this.sequence = sequence;
@@ -21,12 +21,6 @@ public class ASTSequence implements ASTNode{
 
     @Override
     public String toString() {
-        StringBuilder str = new StringBuilder();
-        for (ASTNode aSequence : sequence) {
-            if (str.length() == 0)
-                str.append("->");
-            str.append(aSequence);
-        }
-        return this.getClass().getSimpleName() + ": " +  str.toString();
+        return this.getClass().getSimpleName();
     }
 }

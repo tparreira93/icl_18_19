@@ -1,14 +1,13 @@
 package AST;
 
 import AST.Exceptions.ASTDuplicateNameException;
-import values.FunctionValue;
 import values.IValue;
 
 import java.util.List;
 
 public class ASTLet implements ASTNode {
-    private List<Binding> identifiers;
-    private ASTNode body;
+    private final List<Binding> identifiers;
+    private final ASTNode body;
 
     public ASTLet(List<Binding> identifiers, ASTNode body) {
         this.identifiers = identifiers;
@@ -20,13 +19,12 @@ public class ASTLet implements ASTNode {
 
         for (Binding identifier : identifiers) {
             ASTNode n = identifier.getExpression();
-            IValue v = null;
 
             if (localScope.find(identifier.getId()) != null)
                 throw new ASTDuplicateNameException("More than one identifier with the same name is not allowed.");
 
             ASTEnvironment bindingScope = environment.beginScope();
-            v = n.eval(bindingScope);
+            IValue v = n.eval(bindingScope);
             bindingScope.assoc(identifier.getId(), v);
             bindingScope.endScope();
 
@@ -41,6 +39,6 @@ public class ASTLet implements ASTNode {
 
     @Override
     public String toString() {
-        return this.getClass().getSimpleName() + ": " + " - " + String.join(", ", identifiers.toString());
+        return this.getClass().getSimpleName();
     }
 }

@@ -1,5 +1,5 @@
 let
-    fibonacci = function x =>
+    fibonacci = function x ->
         let
             result = new 1
         in

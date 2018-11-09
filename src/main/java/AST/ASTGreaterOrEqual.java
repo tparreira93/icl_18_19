@@ -4,8 +4,8 @@ import values.BoolValue;
 import values.IValue;
 
 public class ASTGreaterOrEqual implements ASTNode {
-    private ASTNode left;
-    private ASTNode right;
+    private final ASTNode left;
+    private final ASTNode right;
 
     public ASTGreaterOrEqual(ASTNode left, ASTNode right) {
         this.left = left;
@@ -22,6 +22,6 @@ public class ASTGreaterOrEqual implements ASTNode {
 
     @Override
     public String toString() {
-        return this.getClass().getSimpleName() + " Left=" + left + " Right=" + right;
+        return this.getClass().getSimpleName();
     }
 }

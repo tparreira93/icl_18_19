@@ -8,8 +8,8 @@ import java.util.HashSet;
 import java.util.List;
 
 public class ASTFun implements ASTNode {
-    private List<String> params;
-    private ASTNode expression;
+    private final List<String> params;
+    private final ASTNode expression;
     public ASTFun(List<String> params, ASTNode expression) {
         this.params = params;
         this.expression = expression;
@@ -29,6 +29,6 @@ public class ASTFun implements ASTNode {
 
     @Override
     public String toString() {
-        return this.getClass().getSimpleName() + ": " + expression + " - " + String.join(", ", params);
+        return this.getClass().getSimpleName();
     }
 }

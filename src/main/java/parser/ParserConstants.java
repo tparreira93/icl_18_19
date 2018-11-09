@@ -31,9 +31,9 @@ public interface ParserConstants {
   /** RegularExpression Id. */
   int LAMBDA_OPERATOR = 14;
   /** RegularExpression Id. */
-  int ASSIGNMENT = 15;
+  int BINDING = 15;
   /** RegularExpression Id. */
-  int COLON = 16;
+  int ASSIGNMENT = 16;
   /** RegularExpression Id. */
   int IN = 17;
   /** RegularExpression Id. */
@@ -100,9 +100,9 @@ public interface ParserConstants {
     "\")\"",
     "\";;\"",
     "\"let\"",
-    "\"=>\"",
+    "\"->\"",
     "\"=\"",
-    "\":\"",
+    "\":=\"",
     "\"in\"",
     "\"end\"",
     "\"function\"",

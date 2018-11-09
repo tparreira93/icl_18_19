@@ -6,11 +6,11 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class ASTEnvironment {
-    private HashMap<String, IValue> env;
-    private ASTEnvironment previousScope;
+    private final HashMap<String, IValue> env;
+    private final ASTEnvironment previousScope;
 
     public ASTEnvironment(ASTEnvironment previousScope){
-        env = new HashMap<String, IValue>();
+        env = new HashMap<>();
         this.previousScope = previousScope;
     }
 
@@ -24,9 +24,7 @@ public class ASTEnvironment {
 
     public ASTEnvironment beginScope() {
         ASTEnvironment environment = new ASTEnvironment(this);
-        for (Map.Entry<String, IValue> entry : env.entrySet()) {
-            environment.assoc(entry.getKey(), entry.getValue());
-        }
+        env.forEach(environment::assoc);
         return environment;
     }
 

@@ -49,11 +49,11 @@ TOKEN :
   |
   < let: "let" >
   |
-  < LAMBDA_OPERATOR: "=>" >
+  < LAMBDA_OPERATOR: "->" >
   |
-  < ASSIGNMENT: "=" >
+  < BINDING: "=" >
   |
-  < COLON: ":" >
+  < ASSIGNMENT: ":=" >
   |
   < IN: "in" >
   |
@@ -132,8 +132,8 @@ List<Binding> AssignmentList() :
     ASTNode assignment;
 }
 {
-    n = <Id> <ASSIGNMENT> assignment = GetSequence() { bindings.add(new Binding(n.image, assignment)); }
-        (<COMMA> n = <Id> <ASSIGNMENT> assignment = GetSequence() { bindings.add(new Binding(n.image, assignment)); } )*
+    n = <Id> <BINDING> assignment = GetSequence() { bindings.add(new Binding(n.image, assignment)); }
+        (<COMMA> n = <Id> <BINDING> assignment = GetSequence() { bindings.add(new Binding(n.image, assignment)); } )*
     {
         return bindings;
     }
@@ -218,7 +218,7 @@ ASTNode GetAssignment(ASTNode id) :
     Token t;
 }
 {
-    <COLON> <ASSIGNMENT> node = Exp() { return new ASTAssignment(id, node); }
+    <ASSIGNMENT> node = Exp() { return new ASTAssignment(id, node); }
 }
 
 ASTNode GetDereference() :

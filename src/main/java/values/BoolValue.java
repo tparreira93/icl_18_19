@@ -1,7 +1,9 @@
 package values;
 
+import AST.Exceptions.ASTNonComparable;
+
 public class BoolValue implements IValue<Boolean> {
-    private boolean value;
+    private final boolean value;
 
     public BoolValue(boolean value) {
         this.value = value;
@@ -19,13 +21,13 @@ public class BoolValue implements IValue<Boolean> {
 
     @Override
     public int compareTo(IValue v) throws Exception {
-        throw new Exception(this + " is not comparable!");
+        throw new ASTNonComparable(this + " is not comparable!");
     }
 
     @Override
     public boolean equals(IValue v) throws Exception {
         if (!(v instanceof BoolValue))
-            throw new Exception("Can't compare " + this + " with " + v + ". (" + v + " is not a boolean value).");
+            throw new ASTNonComparable("Can't compare " + this + " with " + v + ". (" + v + " is not a boolean value).");
 
         return value == (boolean)v.getValue();
     }

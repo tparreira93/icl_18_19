@@ -5,8 +5,8 @@ import values.IValue;
 import values.ReferenceValue;
 
 public class ASTAssignment implements ASTNode {
-    private ASTNode id;
-    private ASTNode value;
+    private final ASTNode id;
+    private final ASTNode value;
 
     public ASTAssignment(ASTNode id, ASTNode value) {
         this.id = id;
@@ -28,6 +28,6 @@ public class ASTAssignment implements ASTNode {
 
     @Override
     public String toString() {
-        return this.getClass().getSimpleName() + ": " + id.toString() + " := " + value.toString();
+        return this.getClass().getSimpleName();
     }
 }

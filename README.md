@@ -3,7 +3,19 @@
 - Thales Parreira 41835
 - Eduardo Silva 41798
 
-# Development
+## Usage
+To build execute the following command:
+```
+mvn verify
+```
+
+There is a interpreter and a file parser.
+
+To execute the interpreter run *TestInterpreter*, commands are interpreted directly from console.
+
+The file parser searches for files that are in the folder *src/main/java/resources*, just add new files and they will be interpreted when the *FileParser* is executed .
+
+## Development
 Still in development.
 
 Examples in src/main/resources.

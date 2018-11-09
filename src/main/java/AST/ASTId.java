@@ -4,7 +4,7 @@ import AST.Exceptions.ASTInvalidIdentifier;
 import values.IValue;
 
 public class ASTId implements ASTNode {
-    private String name;
+    private final String name;
 
     public ASTId(String name) {
         this.name = name;

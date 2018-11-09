@@ -5,7 +5,7 @@ import values.BoolValue;
 import values.IValue;
 
 public class ASTNot implements ASTNode {
-    private ASTNode node;
+    private final ASTNode node;
 
     public ASTNot(ASTNode node) {
         this.node = node;
@@ -14,7 +14,7 @@ public class ASTNot implements ASTNode {
     @Override
     public IValue eval(ASTEnvironment environment) throws Exception {
         IValue value = node.eval(environment);
-        String msg = "Logical operators should evaluate to boolean values. (%s is not a boolean value).";
+        String msg = "Logical operators can only be applied on boolean values. (%s is not a boolean value).";
 
         if (!(value instanceof BoolValue))
             throw new ASTNonLogical(String.format(msg, value));
@@ -26,6 +26,6 @@ public class ASTNot implements ASTNode {
 
     @Override
     public String toString() {
-        return this.getClass().getSimpleName() + " Not=" + node;
+        return this.getClass().getSimpleName();
     }
 }

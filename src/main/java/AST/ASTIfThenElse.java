@@ -1,14 +1,13 @@
 package AST;
 
 import AST.Exceptions.ASTNonLogical;
-import com.sun.org.apache.xpath.internal.operations.Bool;
 import values.BoolValue;
 import values.IValue;
 
 public class ASTIfThenElse implements ASTNode {
-    private ASTNode node_if;
-    private ASTNode node_then;
-    private ASTNode node_else;
+    private final ASTNode node_if;
+    private final ASTNode node_then;
+    private final ASTNode node_else;
 
     public ASTIfThenElse(ASTNode node_if, ASTNode node_then, ASTNode node_else) {
         this.node_if = node_if;
@@ -42,6 +41,6 @@ public class ASTIfThenElse implements ASTNode {
 
     @Override
     public String toString() {
-        return this.getClass().getSimpleName() + " If=" + node_if + " Then=" + node_else + " Else" + node_else;
+        return this.getClass().getSimpleName();
     }
 }

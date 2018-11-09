@@ -4,7 +4,7 @@ import values.IValue;
 import values.IntValue;
 
 public class ASTNum implements ASTNode {
-    private IntValue num;
+    private final IntValue num;
 
     public ASTNum(int num) {
         this.num = new IntValue(num);
@@ -16,6 +16,6 @@ public class ASTNum implements ASTNode {
 
     @Override
     public String toString() {
-        return this.getClass().getSimpleName() + ": " + num;
+        return this.getClass().getSimpleName();
     }
 }

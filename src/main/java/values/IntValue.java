@@ -1,8 +1,10 @@
 package values;
 
+import AST.Exceptions.ASTNonComparable;
+
 public class IntValue extends NumericValue<Integer> {
 
-    private int value;
+    private final int value;
 
     public IntValue(int value) {
         this.value = value;
@@ -21,7 +23,7 @@ public class IntValue extends NumericValue<Integer> {
     @Override
     public int compareTo(IValue v) throws Exception {
         if (!(v instanceof IntValue))
-            throw new Exception("Can't compare " + this + " with " + v + ". (" + v + " is not an int value).");
+            throw new ASTNonComparable("Can't compare " + this + " with " + v + ". (" + v + " is not an int value).");
 
         int other = (int) v.getValue();
 
