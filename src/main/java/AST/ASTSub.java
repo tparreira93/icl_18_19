@@ -1,8 +1,9 @@
 package AST;
 
-import AST.Exceptions.ASTNotNumber;
-import values.IValue;
-import values.NumericValue;
+import AST.types.IType;
+import AST.types.NumericType;
+import AST.values.IValue;
+import AST.values.NumericValue;
 
 public class ASTSub implements ASTNode {
     private final ASTNode left;
@@ -13,14 +14,16 @@ public class ASTSub implements ASTNode {
         this.right = right;
     }
 
-    public IValue eval(ASTEnvironment environment) throws Exception {
+    public IValue eval(ASTEnvironment<IValue> environment) throws Exception {
         IValue v1 = left.eval(environment);
         IValue v2 = right.eval(environment);
 
-        if (v1 instanceof NumericValue && v2 instanceof NumericValue)
-            return ((NumericValue) v1).Subtract((NumericValue)v2);
-        else
-            throw new ASTNotNumber("Subtract operation is not supported between " + v1.getName() + " and " + v2.getName() + ".");
+        return ((NumericValue) v1).Subtract((NumericValue)v2);
+    }
+
+    @Override
+    public IType typecheck(ASTEnvironment<IType> environment) throws Exception {
+        return NumericType.typecheck(environment, left, right);
     }
 
     @Override

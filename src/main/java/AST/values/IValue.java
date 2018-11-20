@@ -1,4 +1,4 @@
-package values;
+package AST.values;
 
 public interface IValue<T> {
     String getName();

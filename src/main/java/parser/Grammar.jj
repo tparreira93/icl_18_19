@@ -13,6 +13,7 @@ PARSER_BEGIN(Parser)
 package parser;
 
 import AST.*;
+import AST.types.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -49,11 +50,15 @@ TOKEN :
   |
   < let: "let" >
   |
-  < LAMBDA_OPERATOR: "->" >
+  < LAMBDA: "=>" >
+  |
+  < FUNCTION_ARROW: "->" >
   |
   < BINDING: "=" >
   |
-  < ASSIGNMENT: ":=" >
+  < COLON: ":" >
+  |
+  < ASSIGNMENT: <COLON> "=" >
   |
   < IN: "in" >
   |
@@ -73,7 +78,13 @@ TOKEN :
   |
   < DO: "do" >
   |
-  < BOOL: ("true" | "false")>
+  < BOOLVALUE: ("true" | "false")>
+  |
+  < INT: "int" >
+  |
+  < BOOL: "bool" >
+  |
+  < REF: "ref" >
   |
   < EQUAL: "==" >
   |
@@ -113,16 +124,70 @@ List<ASTNode> FunctionArguments() : {
     }
 }
 
-List<String> ArgumentList() :
+List<Parameter> ArgumentList() :
 {
     Token n;
-    List<String> arguments = new ArrayList<String>();
+    IType t;
+    List<Parameter> arguments = new ArrayList<Parameter>();
 }
 {
-    ( n = <Id> {arguments.add(n.image); } (<COMMA> n = <Id> {arguments.add(n.image); })* )?
+    (
+        n = <Id> <COLON> t = GetType() {arguments.add(new Parameter(n.image, t)); }
+        ( <COMMA> {arguments.addAll(ArgumentList()); })*
+    )?
     {
         return arguments;
     }
+}
+
+IType GetType() :
+{
+    List<IType> typeList = new ArrayList<IType>();
+    IType t = null;
+}
+{
+    (
+        t = GetBaseType()
+        |
+        (<LPAR> typeList = GetTypeList() <RPAR>  t = GetType() { return new FunctionType(typeList, t); } )?
+    )
+    {
+        if (typeList.size() == 1)
+            t = typeList.get(0);
+
+        return t;
+    }
+
+}
+
+List<IType> GetTypeList() :
+{
+    List<IType> typeList = new ArrayList<IType>();
+    IType t;
+}
+{
+
+    (
+        t = GetBaseType() { typeList.add(t); }
+        (
+            <COMMA>
+            t = GetType() { typeList.add(t); }
+        )*
+    )?
+
+    { return typeList; }
+}
+
+IType GetBaseType() :
+{
+    IType t;
+}
+{
+    < INT > { return IntType.getInstance(); }
+    |
+    < BOOL > { return BoolType.getInstance(); }
+    |
+    < REF > t = GetType() { return new RefType(t); }
 }
 
 List<Binding> AssignmentList() :
@@ -130,10 +195,11 @@ List<Binding> AssignmentList() :
     Token n;
     List<Binding> bindings = new ArrayList<Binding>();
     ASTNode assignment;
+    IType t;
 }
 {
-    n = <Id> <BINDING> assignment = GetSequence() { bindings.add(new Binding(n.image, assignment)); }
-        (<COMMA> n = <Id> <BINDING> assignment = GetSequence() { bindings.add(new Binding(n.image, assignment)); } )*
+    n = <Id> <COLON> t = GetType() <BINDING> assignment = GetSequence() { bindings.add(new Binding(n.image, assignment, t)); }
+        (<COMMA> { bindings.addAll(AssignmentList()); } )*
     {
         return bindings;
     }
@@ -153,11 +219,11 @@ ASTNode GetLet() :
 
 ASTNode GetFunction() :
 {
-  List<String> arguments = new ArrayList<String>();
+  List<Parameter> arguments = new ArrayList<Parameter>();
   ASTNode body;
 }
 {
-   <function> arguments = ArgumentList()  <LAMBDA_OPERATOR>
+   <function> arguments = ArgumentList()  <LAMBDA>
         body = GetSequence()
     <END> { return new ASTFun(arguments, body); }
 }
@@ -206,7 +272,7 @@ ASTNode GetBool() :
     Token t;
 }
 {
-    t = <BOOL>
+    t = <BOOLVALUE>
     {
         return new ASTBool(Boolean.parseBoolean(t.image));
     }

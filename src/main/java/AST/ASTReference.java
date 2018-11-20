@@ -1,7 +1,9 @@
 package AST;
 
-import values.IValue;
-import values.ReferenceValue;
+import AST.types.IType;
+import AST.types.RefType;
+import AST.values.IValue;
+import AST.values.ReferenceValue;
 
 public class ASTReference implements ASTNode {
     private final ASTNode value;
@@ -10,8 +12,14 @@ public class ASTReference implements ASTNode {
         this.value = value;
     }
     @Override
-    public IValue eval(ASTEnvironment environment) throws Exception {
+    public IValue eval(ASTEnvironment<IValue> environment) throws Exception {
         return new ReferenceValue(value.eval(environment));
+    }
+
+    @Override
+    public IType typecheck(ASTEnvironment<IType> environment) throws Exception {
+        IType t = value.typecheck(environment);
+        return new RefType(t);
     }
 
     @Override

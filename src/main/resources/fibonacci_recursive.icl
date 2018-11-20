@@ -1,14 +1,13 @@
 let
-    fibonacci = function x ->
+    fibonacci:(int)int = function x:int =>
         let
-            result = new 1
+            result:ref int = new 1
         in
             if x <= 1 then
-                result := x
+                x
             else
-                result := fibonacci(x - 1) + fibonacci(x - 2)
-            end;
-            !result
+                fibonacci(x - 1) + fibonacci(x - 2)
+            end
         end
     end
 in

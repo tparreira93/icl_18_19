@@ -1,8 +1,8 @@
 let
-    factorial = function x ->
+    factorial:(int)int = function x:int =>
         let
-            fact = new x,
-            result = new 1
+            fact:ref int = new x,
+            result: ref int = new 1
         in
             while !fact > 0
             do

@@ -1,4 +1,4 @@
-package values;
+package AST.values;
 
 public abstract class NumericValue<T> implements IValue<T> {
     public abstract NumericValue Sum(NumericValue value);

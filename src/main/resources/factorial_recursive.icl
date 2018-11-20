@@ -1,14 +1,13 @@
 let
-    factorial = function x ->
+    factorial:(int)int = function x:int =>
         let
-            result = new 1
+            result:ref int = new 1
         in
             if x > 1 then
-                result := x * factorial(x - 1)
+                x * factorial(x - 1)
             else
                 x
-            end;
-            !result
+            end
         end
     end
 in

@@ -1,7 +1,8 @@
 package AST;
 
-import AST.Exceptions.ASTInvalidIdentifier;
-import values.IValue;
+import AST.Exceptions.ASTInvalidIdentifierException;
+import AST.types.IType;
+import AST.values.IValue;
 
 public class ASTId implements ASTNode {
     private final String name;
@@ -10,11 +11,15 @@ public class ASTId implements ASTNode {
         this.name = name;
     }
 
-    public IValue eval(ASTEnvironment environment) throws Exception {
+    public IValue eval(ASTEnvironment<IValue> environment) {
+        return environment.find(name);
+    }
 
-        IValue value = environment.find(name);
+    @Override
+    public IType typecheck(ASTEnvironment<IType> environment) throws Exception {
+        IType value = environment.find(name);
         if (value == null)
-            throw new ASTInvalidIdentifier("Unable to find definition for identifier \"" + name + "\".");
+            throw new ASTInvalidIdentifierException("Invalid identifier \"" + name + "\".");
         return value;
     }
 

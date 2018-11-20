@@ -1,34 +1,34 @@
 package AST;
-
-import values.IValue;
-
 import java.util.HashMap;
-import java.util.Map;
 
-public class ASTEnvironment {
-    private final HashMap<String, IValue> env;
-    private final ASTEnvironment previousScope;
+public class ASTEnvironment<T> {
+    private final HashMap<String, T> env;
+    private final ASTEnvironment<T> previousScope;
 
-    public ASTEnvironment(ASTEnvironment previousScope){
+    private ASTEnvironment(ASTEnvironment<T> previousScope){
         env = new HashMap<>();
         this.previousScope = previousScope;
     }
+    public ASTEnvironment(){
+        env = new HashMap<>();
+        this.previousScope = null;
+    }
 
-    public void assoc(String identifier, IValue value) {
+    public void assoc(String identifier, T value) {
         env.put(identifier, value);
     }
 
-    public IValue find(String identifier) {
+    public T find(String identifier) {
         return env.get(identifier);
     }
 
-    public ASTEnvironment beginScope() {
-        ASTEnvironment environment = new ASTEnvironment(this);
+    public ASTEnvironment<T> beginScope() {
+        ASTEnvironment<T> environment = new ASTEnvironment<>(this);
         env.forEach(environment::assoc);
         return environment;
     }
 
-    public ASTEnvironment endScope() {
+    public ASTEnvironment<T> endScope() {
         return previousScope;
     }
 }

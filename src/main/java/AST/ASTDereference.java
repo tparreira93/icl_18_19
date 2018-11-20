@@ -1,8 +1,10 @@
 package AST;
 
-import AST.Exceptions.ASTNotReference;
-import values.IValue;
-import values.ReferenceValue;
+import AST.Exceptions.ASTNotReferenceException;
+import AST.types.IType;
+import AST.types.RefType;
+import AST.values.IValue;
+import AST.values.ReferenceValue;
 
 public class ASTDereference implements ASTNode {
     private final ASTNode reference;
@@ -12,12 +14,20 @@ public class ASTDereference implements ASTNode {
     }
 
     @Override
-    public IValue eval(ASTEnvironment environment) throws Exception {
-        IValue value = reference.eval(environment);
-        if (!(value instanceof ReferenceValue))
-            throw new ASTNotReference(value + " is not a reference.");
-        ReferenceValue ref = (ReferenceValue) value;
+    public IValue eval(ASTEnvironment<IValue> environment) throws Exception {
+        ReferenceValue ref = (ReferenceValue) reference.eval(environment);
         return ref.getValue();
+    }
+
+    @Override
+    public IType typecheck(ASTEnvironment<IType> environment) throws Exception {
+        IType t = reference.typecheck(environment);
+        if (!(t instanceof RefType))
+            throw new ASTNotReferenceException(t + " is not a reference.");
+
+        RefType ref = (RefType) t;
+
+        return ref.getReferenceType();
     }
 
     @Override

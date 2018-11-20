@@ -34,44 +34,43 @@ Examples in src/main/resources.
 - Reference (new)
 - Dereference (!)
 - Logical operators (||, && and ~)
+- Typechecking
 
 ## Example:
 - Fibonacci:
 ```
-		let
-			fibonacci = function x ->
-				let
-					result = new 1
-				in
-					if x <= 1 then
-						result := x
-					else
-						result := fibonacci(x - 1) + fibonacci(x - 2)
-					end;
-					!result
-				end
-			end
-		in
-			fibonacci(10)
-		end;;
+let
+    fibonacci:(int)int = function x:int =>
+        let
+            result:ref int = new 1
+        in
+            if x <= 1 then
+                x
+            else
+                fibonacci(x - 1) + fibonacci(x - 2)
+            end
+        end
+    end
+in
+    fibonacci(10)
+end;;
 ```
 
 - Factorial:
 ```
-		let
-			factorial = function x ->
-				let
-					result = new 1
-				in
-					if x > 1 then
-						result := x * factorial(x - 1)
-					else
-						x
-					end;
-					!result
-				end
-			end
-		in
-			factorial(12)
-		end;;
+let
+    factorial:(int)int = function x:int =>
+        let
+            result:ref int = new 1
+        in
+            if x > 1 then
+                x * factorial(x - 1)
+            else
+                x
+            end
+        end
+    end
+in
+    factorial(12)
+end;;
 ```

@@ -1,10 +1,10 @@
 package AST;
 
-import AST.Exceptions.ASTNonLogical;
-import values.BoolValue;
-import values.IValue;
+import AST.types.IType;
+import AST.values.BoolValue;
+import AST.values.IValue;
 
-public class ASTAnd implements ASTNode {
+public class ASTAnd extends ASTLogicalOperator implements ASTNode {
     private final ASTNode left;
     private final ASTNode right;
 
@@ -14,20 +14,16 @@ public class ASTAnd implements ASTNode {
     }
 
     @Override
-    public IValue eval(ASTEnvironment environment) throws Exception {
-        IValue l = left.eval(environment);
-        IValue r = right.eval(environment);
-        String msg = "Logical operators can only be applied on boolean values. (%s is not a boolean value).";
-
-        if (!(l instanceof BoolValue))
-            throw new ASTNonLogical(String.format(msg, l));
-        if (!(r instanceof BoolValue))
-            throw new ASTNonLogical(String.format(msg, r));
-
-        BoolValue bl = (BoolValue)l;
-        BoolValue br = (BoolValue)r;
+    public IValue eval(ASTEnvironment<IValue> environment) throws Exception {
+        BoolValue bl = (BoolValue)left.eval(environment);
+        BoolValue br = (BoolValue)right.eval(environment);
 
         return new BoolValue(bl.getValue() && br.getValue());
+    }
+
+    @Override
+    public IType typecheck(ASTEnvironment<IType> environment) throws Exception {
+        return this.typecheck(environment, left, right);
     }
 
     @Override

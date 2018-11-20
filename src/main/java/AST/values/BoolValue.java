@@ -1,6 +1,6 @@
-package values;
+package AST.values;
 
-import AST.Exceptions.ASTNonComparable;
+import AST.Exceptions.ASTNonComparableException;
 
 public class BoolValue implements IValue<Boolean> {
     private final boolean value;
@@ -21,13 +21,13 @@ public class BoolValue implements IValue<Boolean> {
 
     @Override
     public int compareTo(IValue v) throws Exception {
-        throw new ASTNonComparable(this + " is not comparable!");
+        throw new ASTNonComparableException(this + " is not comparable!");
     }
 
     @Override
     public boolean equals(IValue v) throws Exception {
         if (!(v instanceof BoolValue))
-            throw new ASTNonComparable("Can't compare " + this + " with " + v + ". (" + v + " is not a boolean value).");
+            throw new ASTNonComparableException("Can't compare " + this + " with " + v + ". (" + v + " is not a boolean value).");
 
         return value == (boolean)v.getValue();
     }

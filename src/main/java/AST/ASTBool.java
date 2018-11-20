@@ -1,7 +1,9 @@
 package AST;
 
-import values.BoolValue;
-import values.IValue;
+import AST.types.BoolType;
+import AST.types.IType;
+import AST.values.BoolValue;
+import AST.values.IValue;
 
 public class ASTBool implements ASTNode {
     private final boolean value;
@@ -11,8 +13,13 @@ public class ASTBool implements ASTNode {
     }
 
     @Override
-    public IValue eval(ASTEnvironment environment) {
+    public IValue eval(ASTEnvironment<IValue> environment) {
         return new BoolValue(value);
+    }
+
+    @Override
+    public IType typecheck(ASTEnvironment<IType> environment) {
+        return BoolType.getInstance();
     }
 
     @Override

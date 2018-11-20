@@ -1,4 +1,6 @@
 import AST.ASTEnvironment;
+import AST.ASTNode;
+import AST.Exceptions.ASTCompileException;
 import AST.Exceptions.ASTException;
 import parser.ParseException;
 import parser.Parser;
@@ -31,10 +33,17 @@ public class FileParser {
             try {
                 System.out.println("Parsing file " + f.substring(f.lastIndexOf('\\') + 1) + "...");
                 Parser parser = new Parser(new FileInputStream(new File(f)));
-                System.out.println(parser.Start().eval(new ASTEnvironment(null)));
-                System.out.println();
+
+                ASTNode exp = parser.Start();
+
+                System.out.println("Expected result type: " + exp.typecheck(new ASTEnvironment<>()));
+
+                System.out.println(exp.eval(new ASTEnvironment<>()));
             } catch (ParseException e) {
                 System.out.println("Syntax Error!");
+                System.out.println(e.getMessage());
+            } catch (ASTCompileException e) {
+                System.out.println("Typecheking error!");
                 System.out.println(e.getMessage());
             } catch (ASTException e) {
                 System.out.println("Runtime error!");
@@ -43,7 +52,5 @@ public class FileParser {
                 System.out.println(e.getMessage());
             }
         }
-
-
     }
 }

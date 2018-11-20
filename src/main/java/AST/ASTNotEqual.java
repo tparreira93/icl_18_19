@@ -1,7 +1,10 @@
 package AST;
 
-import values.BoolValue;
-import values.IValue;
+import AST.Exceptions.ASTDifferentTypeException;
+import AST.types.BoolType;
+import AST.types.IType;
+import AST.values.BoolValue;
+import AST.values.IValue;
 
 public class ASTNotEqual implements ASTNode {
     private final ASTNode left;
@@ -13,11 +16,22 @@ public class ASTNotEqual implements ASTNode {
     }
 
     @Override
-    public IValue eval(ASTEnvironment environment) throws Exception {
+    public IValue eval(ASTEnvironment<IValue> environment) throws Exception {
         IValue l = left.eval(environment);
         IValue r = right.eval(environment);
 
         return new BoolValue(!l.equals(r));
+    }
+
+    @Override
+    public IType typecheck(ASTEnvironment<IType> environment) throws Exception {
+        IType l = left.typecheck(environment);
+        IType r = right.typecheck(environment);
+
+        if (!(l.equals(r)))
+            throw new ASTDifferentTypeException(l + " and " + r + " should be of the same type.");
+
+        return BoolType.getInstance();
     }
 
     @Override

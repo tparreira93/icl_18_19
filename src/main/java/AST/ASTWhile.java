@@ -1,8 +1,9 @@
 package AST;
 
-import AST.Exceptions.ASTNonLogical;
-import values.BoolValue;
-import values.IValue;
+import AST.Exceptions.ASTNonLogicalException;
+import AST.types.BoolType;
+import AST.types.IType;
+import AST.values.IValue;
 
 public class ASTWhile implements ASTNode {
     private final ASTNode condition;
@@ -14,26 +15,34 @@ public class ASTWhile implements ASTNode {
     }
 
     @Override
-    public IValue eval(ASTEnvironment environment) throws Exception {
+    public IValue eval(ASTEnvironment<IValue> environment) throws Exception {
         IValue condition_value = condition.eval(environment);
-        IValue result = null;
-        boolean cond = (boolean) condition_value.getValue();
 
-        if (!(condition_value instanceof BoolValue))
-            throw new ASTNonLogical("While condition should be a boolean value! " + "(it is " + condition_value.getName() + ")");
-
-        if (!cond)
-            return condition_value;
-
-        ASTEnvironment localScope = environment.beginScope();
+        ASTEnvironment<IValue> localScope = environment.beginScope();
         while ((boolean)condition_value.getValue())
         {
-            result = action.eval(localScope);
+            action.eval(localScope);
             condition_value = condition.eval(environment);
         }
         localScope.endScope();
 
-        return result;
+        return condition_value;
+    }
+
+    @Override
+    public IType typecheck(ASTEnvironment<IType> environment) throws Exception {
+        IType condition_type = condition.typecheck(environment);
+
+        if (!(condition_type instanceof BoolType))
+            throw new ASTNonLogicalException("While condition should evaluate to a bool type! " + "(it is " + condition_type + ")");
+
+        ASTEnvironment<IType> localScope = environment.beginScope();
+
+        action.typecheck(localScope);
+
+        localScope.endScope();
+
+        return condition_type;
     }
 
     @Override

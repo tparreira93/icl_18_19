@@ -1,17 +1,18 @@
-package values;
+package AST.values;
 
 import AST.ASTEnvironment;
 import AST.ASTNode;
-import AST.Exceptions.ASTNonComparable;
+import AST.Exceptions.ASTNonComparableException;
+import AST.Parameter;
 
 import java.util.List;
 
-public class FunctionValue implements IValue {
-    private final List<String> params;
+public class ClosureValue implements IValue {
+    private final List<Parameter> params;
     private final ASTNode expression;
-    private final ASTEnvironment environment;
+    private final ASTEnvironment<IValue> environment;
 
-    public FunctionValue(List<String> params, ASTNode expression, ASTEnvironment environment) {
+    public ClosureValue(List<Parameter> params, ASTNode expression, ASTEnvironment<IValue> environment) {
         this.params = params;
         this.expression = expression;
         this.environment = environment;
@@ -29,22 +30,22 @@ public class FunctionValue implements IValue {
 
     @Override
     public int compareTo(IValue v) throws Exception {
-        throw new ASTNonComparable(this + " is not comparable!");
+        throw new ASTNonComparableException(this + " is not comparable!");
     }
 
     @Override
     public boolean equals(IValue v) throws Exception {
-        if (!(v instanceof FunctionValue))
-            throw new ASTNonComparable("Can't compare " + this + " with " + v + ". (" + v + " is not a function).");
+        if (!(v instanceof ClosureValue))
+            throw new ASTNonComparableException("Can't compare " + this + " with " + v + ". (" + v + " is not a function).");
 
-        FunctionValue f = (FunctionValue) v;
+        ClosureValue f = (ClosureValue) v;
 
         return this.getParams().equals(f.getParams())
                 && this.getExpression().equals(f.getExpression())
                 && this.getEnvironment().equals(f.getEnvironment());
     }
 
-    public List<String> getParams() {
+    public List<Parameter> getParams() {
         return params;
     }
 
@@ -52,7 +53,7 @@ public class FunctionValue implements IValue {
         return expression;
     }
 
-    public ASTEnvironment getEnvironment() {
+    public ASTEnvironment<IValue> getEnvironment() {
         return environment;
     }
 
