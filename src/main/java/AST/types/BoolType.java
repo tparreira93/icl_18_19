@@ -1,6 +1,6 @@
 package AST.types;
 
-public class BoolType implements IType {
+public class BoolType implements IType, IValueType {
     private static final BoolType instance = new BoolType();
 
     private BoolType() {

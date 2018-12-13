@@ -1,17 +1,16 @@
 package AST;
 
-import AST.types.IType;
-import AST.types.NumericType;
 import AST.values.IValue;
 import AST.values.NumericValue;
+import compiler.Code;
+import compiler.CompilerEnvironment;
 
-public class ASTDiv implements ASTNode {
-    private final ASTNode left;
-    private final ASTNode right;
+public class ASTDiv extends ASTArithmetic {
+
+    private static final String jasminDiv = "idiv";
 
     public ASTDiv(ASTNode left, ASTNode right) {
-        this.left = left;
-        this.right = right;
+        super(left, right);
     }
 
     public IValue eval(ASTEnvironment<IValue> environment) throws Exception {
@@ -22,12 +21,12 @@ public class ASTDiv implements ASTNode {
     }
 
     @Override
-    public IType typecheck(ASTEnvironment<IType> environment) throws Exception {
-        return NumericType.typecheck(environment, left, right);
+    public String toString() {
+        return this.getClass().getSimpleName();
     }
 
     @Override
-    public String toString() {
-        return this.getClass().getSimpleName();
+    public Code compile(CompilerEnvironment environment) {
+        return super.compile(environment, jasminDiv);
     }
 }

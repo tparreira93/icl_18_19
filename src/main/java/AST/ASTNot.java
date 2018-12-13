@@ -5,6 +5,8 @@ import AST.types.BoolType;
 import AST.types.IType;
 import AST.values.BoolValue;
 import AST.values.IValue;
+import compiler.Code;
+import compiler.CompilerEnvironment;
 
 public class ASTNot implements ASTNode {
     private final ASTNode node;
@@ -29,6 +31,11 @@ public class ASTNot implements ASTNode {
             throw new ASTNonLogicalException(String.format(msg, value));
 
         return BoolType.getInstance();
+    }
+
+    @Override
+    public Code compile(CompilerEnvironment environment) {
+        return null;
     }
 
     @Override

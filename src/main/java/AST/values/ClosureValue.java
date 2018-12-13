@@ -60,6 +60,5 @@ public class ClosureValue implements IValue {
     @Override
     public String toString() {
         return "function(" + expression.toString() + ")";
-
     }
 }

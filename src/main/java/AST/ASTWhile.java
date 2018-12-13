@@ -4,6 +4,8 @@ import AST.Exceptions.ASTNonLogicalException;
 import AST.types.BoolType;
 import AST.types.IType;
 import AST.values.IValue;
+import compiler.Code;
+import compiler.CompilerEnvironment;
 
 public class ASTWhile implements ASTNode {
     private final ASTNode condition;
@@ -43,6 +45,11 @@ public class ASTWhile implements ASTNode {
         localScope.endScope();
 
         return condition_type;
+    }
+
+    @Override
+    public Code compile(CompilerEnvironment environment) {
+        return null;
     }
 
     @Override

@@ -3,6 +3,8 @@ package AST;
 import AST.types.IType;
 import AST.values.BoolValue;
 import AST.values.IValue;
+import compiler.Code;
+import compiler.CompilerEnvironment;
 
 public class ASTSmallerOrEqual extends ASTCompare implements ASTNode {
     private final ASTNode left;
@@ -24,6 +26,11 @@ public class ASTSmallerOrEqual extends ASTCompare implements ASTNode {
     @Override
     public IType typecheck(ASTEnvironment<IType> environment) throws Exception {
         return this.typecheck(environment, left, right);
+    }
+
+    @Override
+    public Code compile(CompilerEnvironment environment) {
+        return null;
     }
 
     @Override

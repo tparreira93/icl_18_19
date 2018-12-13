@@ -5,6 +5,8 @@ import AST.types.IType;
 import AST.types.RefType;
 import AST.values.IValue;
 import AST.values.ReferenceValue;
+import compiler.Code;
+import compiler.CompilerEnvironment;
 
 public class ASTAssignment implements ASTNode {
     private final ASTNode id;
@@ -36,6 +38,11 @@ public class ASTAssignment implements ASTNode {
         refType.setReference(v_type);
 
         return refType;
+    }
+
+    @Override
+    public Code compile(CompilerEnvironment environment) {
+        return null;
     }
 
     @Override

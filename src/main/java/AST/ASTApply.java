@@ -7,6 +7,9 @@ import AST.types.FunctionType;
 import AST.types.IType;
 import AST.values.ClosureValue;
 import AST.values.IValue;
+import compiler.Code;
+import compiler.CompilerEnvironment;
+
 import java.util.List;
 
 public class ASTApply implements ASTNode {
@@ -57,6 +60,11 @@ public class ASTApply implements ASTNode {
         }
 
         return functionType.getReturnType();
+    }
+
+    @Override
+    public Code compile(CompilerEnvironment environment) {
+        return null;
     }
 
     @Override

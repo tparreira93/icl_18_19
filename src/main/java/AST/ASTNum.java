@@ -4,6 +4,8 @@ import AST.types.IType;
 import AST.types.IntType;
 import AST.values.IValue;
 import AST.values.IntValue;
+import compiler.Code;
+import compiler.CompilerEnvironment;
 
 public class ASTNum implements ASTNode {
     private final IntValue num;
@@ -24,5 +26,9 @@ public class ASTNum implements ASTNode {
     @Override
     public String toString() {
         return this.getClass().getSimpleName();
+    }
+
+    public Code compile(CompilerEnvironment environment) {
+        return new Code().addCode("; ASTNum").addCode("sipush " + num.getValue());
     }
 }

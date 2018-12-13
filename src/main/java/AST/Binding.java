@@ -2,23 +2,12 @@ package AST;
 
 import AST.types.IType;
 
-public class Binding {
-    private final String id;
-    private final ASTNode expression;
+public class Binding extends SimpleBinding<ASTNode> {
     private final IType type;
 
     public Binding(String id, ASTNode expression, IType type) {
-        this.id = id;
-        this.expression = expression;
+        super(id, expression);
         this.type = type;
-    }
-
-    public String getId() {
-        return id;
-    }
-
-    public ASTNode getExpression() {
-        return expression;
     }
 
     @Override

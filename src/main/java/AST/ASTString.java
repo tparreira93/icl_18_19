@@ -1,31 +1,27 @@
 package AST;
 
 import AST.types.IType;
-import AST.values.BoolValue;
+import AST.types.StringType;
 import AST.values.IValue;
+import AST.values.StringValue;
 import compiler.Code;
 import compiler.CompilerEnvironment;
 
-public class ASTGreaterOrEqual extends ASTCompare implements ASTNode {
-    private final ASTNode left;
-    private final ASTNode right;
+public class ASTString implements ASTNode {
+    private final String value;
 
-    public ASTGreaterOrEqual(ASTNode left, ASTNode right) {
-        this.left = left;
-        this.right = right;
+    public ASTString(String value) {
+        this.value = value;
     }
 
     @Override
     public IValue eval(ASTEnvironment<IValue> environment) throws Exception {
-        IValue l = left.eval(environment);
-        IValue r = right.eval(environment);
-
-        return new BoolValue(l.compareTo(r) >= 0);
+        return new StringValue(value);
     }
 
     @Override
     public IType typecheck(ASTEnvironment<IType> environment) throws Exception {
-        return this.typecheck(environment, left, right);
+        return StringType.getInstance();
     }
 
     @Override

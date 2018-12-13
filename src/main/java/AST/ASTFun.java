@@ -5,6 +5,8 @@ import AST.types.FunctionType;
 import AST.types.IType;
 import AST.values.ClosureValue;
 import AST.values.IValue;
+import compiler.Code;
+import compiler.CompilerEnvironment;
 
 import java.util.HashSet;
 import java.util.List;
@@ -43,6 +45,11 @@ public class ASTFun implements ASTNode {
         localScope.endScope();
 
         return functionType;
+    }
+
+    @Override
+    public Code compile(CompilerEnvironment environment) {
+        return null;
     }
 
     @Override

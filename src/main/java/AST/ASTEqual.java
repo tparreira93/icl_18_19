@@ -5,6 +5,8 @@ import AST.types.BoolType;
 import AST.types.IType;
 import AST.values.BoolValue;
 import AST.values.IValue;
+import compiler.Code;
+import compiler.CompilerEnvironment;
 
 public class ASTEqual implements ASTNode {
     private final ASTNode left;
@@ -29,9 +31,14 @@ public class ASTEqual implements ASTNode {
         IType r = right.typecheck(environment);
 
         if (!(l.equals(r)))
-            throw new ASTDifferentTypeException(l + " and " + r + " should be of the same type.");
+            throw new ASTDifferentTypeException(l + " and " + r + " are not of the same type.");
 
         return BoolType.getInstance();
+    }
+
+    @Override
+    public Code compile(CompilerEnvironment environment) {
+        return null;
     }
 
     @Override

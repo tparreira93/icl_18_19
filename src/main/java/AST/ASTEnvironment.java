@@ -19,13 +19,23 @@ public class ASTEnvironment<T> {
     }
 
     public T find(String identifier) {
-        return env.get(identifier);
+        ASTEnvironment<T> tmp = previousScope;
+        T value = env.get(identifier);
+
+        if (value != null)
+            return value;
+
+        while (tmp != null) {
+            value = tmp.find(identifier);
+            if (value != null)
+                break;
+            tmp = tmp.previousScope;
+        }
+        return value;
     }
 
     public ASTEnvironment<T> beginScope() {
-        ASTEnvironment<T> environment = new ASTEnvironment<>(this);
-        env.forEach(environment::assoc);
-        return environment;
+        return new ASTEnvironment<>(this);
     }
 
     public ASTEnvironment<T> endScope() {

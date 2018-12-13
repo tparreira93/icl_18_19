@@ -6,6 +6,8 @@ import AST.types.BoolType;
 import AST.types.IType;
 import AST.values.BoolValue;
 import AST.values.IValue;
+import compiler.Code;
+import compiler.CompilerEnvironment;
 
 public class ASTIfThenElse implements ASTNode {
     private final ASTNode node_if;
@@ -55,6 +57,11 @@ public class ASTIfThenElse implements ASTNode {
             throw new ASTDifferentTypeException("If-then-else return type should be the same for then and else clause. Then clauae is of type " + then_type + " and else clause else is of type " + else_type + ".");
 
         return then_type;
+    }
+
+    @Override
+    public Code compile(CompilerEnvironment environment) {
+        return null;
     }
 
     @Override

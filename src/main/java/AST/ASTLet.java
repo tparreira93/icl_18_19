@@ -4,6 +4,8 @@ import AST.Exceptions.ASTDifferentTypeException;
 import AST.Exceptions.ASTDuplicateNameException;
 import AST.types.IType;
 import AST.values.IValue;
+import compiler.Code;
+import compiler.CompilerEnvironment;
 
 import java.util.List;
 
@@ -64,6 +66,11 @@ public class ASTLet implements ASTNode {
         localScope.endScope();
 
         return bodyType;
+    }
+
+    @Override
+    public Code compile(CompilerEnvironment environment) {
+        return null;
     }
 
     @Override

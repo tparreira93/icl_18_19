@@ -5,6 +5,8 @@ import AST.types.IType;
 import AST.types.RefType;
 import AST.values.IValue;
 import AST.values.ReferenceValue;
+import compiler.Code;
+import compiler.CompilerEnvironment;
 
 public class ASTDereference implements ASTNode {
     private final ASTNode reference;
@@ -28,6 +30,11 @@ public class ASTDereference implements ASTNode {
         RefType ref = (RefType) t;
 
         return ref.getReferenceType();
+    }
+
+    @Override
+    public Code compile(CompilerEnvironment environment) {
+        return null;
     }
 
     @Override

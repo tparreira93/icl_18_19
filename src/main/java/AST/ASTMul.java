@@ -4,14 +4,14 @@ import AST.types.IType;
 import AST.types.NumericType;
 import AST.values.IValue;
 import AST.values.NumericValue;
+import compiler.Code;
+import compiler.CompilerEnvironment;
 
-public class ASTMul implements ASTNode {
-    private final ASTNode left;
-    private final ASTNode right;
+public class ASTMul extends ASTArithmetic {
+    private static final String jasminMult = "imul";
 
     public ASTMul(ASTNode left, ASTNode right) {
-        this.left = left;
-        this.right = right;
+        super(left, right);
     }
 
     public IValue eval(ASTEnvironment<IValue> environment) throws Exception {
@@ -22,12 +22,12 @@ public class ASTMul implements ASTNode {
     }
 
     @Override
-    public IType typecheck(ASTEnvironment<IType> environment) throws Exception {
-        return NumericType.typecheck(environment, left, right);
+    public String toString() {
+        return this.getClass().getSimpleName();
     }
 
     @Override
-    public String toString() {
-        return this.getClass().getSimpleName();
+    public Code compile(CompilerEnvironment environment) {
+        return super.compile(environment, jasminMult);
     }
 }

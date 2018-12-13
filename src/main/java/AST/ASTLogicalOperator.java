@@ -3,9 +3,10 @@ package AST;
 import AST.Exceptions.ASTNonLogicalException;
 import AST.types.BoolType;
 import AST.types.IType;
+import compiler.Code;
+import compiler.CompilerEnvironment;
 
 public abstract class ASTLogicalOperator implements ASTNode {
-
     public IType typecheck(ASTEnvironment<IType> environment, ASTNode left, ASTNode right) throws Exception {
         IType l = left.typecheck(environment);
         IType r = right.typecheck(environment);
@@ -18,5 +19,10 @@ public abstract class ASTLogicalOperator implements ASTNode {
             throw new ASTNonLogicalException(String.format(msg, r));
 
         return BoolType.getInstance();
+    }
+
+    @Override
+    public Code compile(CompilerEnvironment environment) {
+        return null;
     }
 }

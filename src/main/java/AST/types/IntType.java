@@ -1,6 +1,6 @@
 package AST.types;
 
-public class IntType extends NumericType implements IType {
+public class IntType extends NumericType implements IType, IValueType {
     private static final IntType instance = new IntType();
 
     private IntType() {

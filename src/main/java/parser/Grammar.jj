@@ -30,11 +30,43 @@ SKIP :
 | "\n"
 }
 
+//< WithinString >
+// TOKEN : {
+//    <STRING_CONTENT:
+//        (
+//             "\\" ~[]     //any escaped character
+//        |                 //or
+//            ~["\"","\\"]  //any character except quote or backslash
+//        )*
+//        >
+//}
+
 TOKEN :
 {
+  //< STRING_DELIMITER: "\"" >
+  //|
+  //< STRING_START: <STRING_DELIMITER> > : WithinString
+  //|
+  //< END_STRING: <STRING_DELIMITER> >
+  //|
+  < QUOTED:
+      "\""
+      (
+           "\\" ~[]     //any escaped character
+      |                 //or
+          ~["\"","\\"]  //any character except quote or backslash
+      )*
+      "\"" >
+  |
   < Num: (["0"-"9"]) + >
   |
+  < DOT: "." >
+  |
   < PLUS : "+" >
+  |
+  < RECORD_BEGIN : "[" >
+  |
+  < RECORD_END : "]" >
   |
   < MINUS : "-">
   |
@@ -49,6 +81,8 @@ TOKEN :
   < EL: ";;" >
   |
   < let: "let" >
+  |
+  < PRINTLN: "println" >
   |
   < LAMBDA: "=>" >
   |
@@ -85,6 +119,8 @@ TOKEN :
   < BOOL: "bool" >
   |
   < REF: "ref" >
+  |
+  < STRING: "string" >
   |
   < EQUAL: "==" >
   |
@@ -187,10 +223,12 @@ IType GetBaseType() :
     |
     < BOOL > { return BoolType.getInstance(); }
     |
+    < STRING > { return StringType.getInstance(); }
+    |
     < REF > t = GetType() { return new RefType(t); }
 }
 
-List<Binding> AssignmentList() :
+List<Binding> BindingList() :
 {
     Token n;
     List<Binding> bindings = new ArrayList<Binding>();
@@ -198,8 +236,11 @@ List<Binding> AssignmentList() :
     IType t;
 }
 {
-    n = <Id> <COLON> t = GetType() <BINDING> assignment = GetSequence() { bindings.add(new Binding(n.image, assignment, t)); }
-        (<COMMA> { bindings.addAll(AssignmentList()); } )*
+    n = <Id>
+        (
+            <COLON> t = GetType() <BINDING> assignment = GetSequence() { bindings.add(new Binding(n.image, assignment, t)); }
+        )
+        (<COMMA> { bindings.addAll(BindingList()); } )*
     {
         return bindings;
     }
@@ -212,7 +253,7 @@ ASTNode GetLet() :
 }
 {
    <let>
-        bindings = AssignmentList()
+        bindings = BindingList()
    <IN> body = GetSequence()
    <END> { return new ASTLet(bindings, body); }
 }
@@ -226,6 +267,32 @@ ASTNode GetFunction() :
    <function> arguments = ArgumentList()  <LAMBDA>
         body = GetSequence()
     <END> { return new ASTFun(arguments, body); }
+}
+
+ASTNode GetRecord() :
+{
+    ASTNode n;
+    Token t;
+    List<SimpleBinding<ASTNode>> binds = new ArrayList<SimpleBinding<ASTNode>>();
+}
+{
+    <RECORD_BEGIN>
+        t = <Id> <BINDING> n = GetLogical() { binds.add(new SimpleBinding<ASTNode>(t.image, n)); }
+        (
+            <COMMA> t = <Id> <BINDING> n = GetLogical() { binds.add(new SimpleBinding<ASTNode>(t.image, n)); }
+        )*
+    <RECORD_END>
+    {
+        return new ASTRecord(binds);
+    }
+}
+
+ASTNode GetPrintln() :
+{
+    ASTNode n;
+}
+{
+    <PRINTLN> n = Fact() { return new ASTPrintln(n); }
 }
 
 ASTNode GetId() :
@@ -249,6 +316,15 @@ ASTNode GetNum() :
 }
 {
    n = <Num> { return new ASTNum(Integer.parseInt(n.image)); }
+}
+
+ASTNode GetString() :
+{
+    Token str;
+}
+{
+    //<STRING_START> str = <STRING_CONTENT> <END_STRING> {return new ASTString(str.image); }
+    str = <QUOTED> {return new ASTString(str.image.substring(1,str.image.length() - 1)); }
 }
 
 ASTNode GetReference() :
@@ -331,6 +407,14 @@ ASTNode GetAnd(ASTNode e1) :
 }
 {
     <AND> e2 = GetLogical() { return new ASTAnd(e1, e2); }
+}
+
+ASTNode GetRecordApply(ASTNode record) :
+{
+    Token id;
+}
+{
+    <DOT> id = <Id> { return new ASTRecordApply(record, id.image); }
 }
 
 ASTNode GetFunctionApply(ASTNode id) :
@@ -508,6 +592,8 @@ ASTNode Binary() :
         node = GetAssignment(node)
         |
         node = GetFunctionApply(node)
+        |
+        node = GetRecordApply(node)
     )?
     {
         return node;
@@ -539,6 +625,12 @@ ASTNode Fact() :
         node = GetLet()
         |
         node = GetFunction()
+        |
+        node = GetString()
+        |
+        node = GetRecord()
+        |
+        node = GetPrintln()
     )
     {
         return node;

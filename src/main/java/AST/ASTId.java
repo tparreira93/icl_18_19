@@ -3,6 +3,8 @@ package AST;
 import AST.Exceptions.ASTInvalidIdentifierException;
 import AST.types.IType;
 import AST.values.IValue;
+import compiler.Code;
+import compiler.CompilerEnvironment;
 
 public class ASTId implements ASTNode {
     private final String name;
@@ -21,6 +23,11 @@ public class ASTId implements ASTNode {
         if (value == null)
             throw new ASTInvalidIdentifierException("Invalid identifier \"" + name + "\".");
         return value;
+    }
+
+    @Override
+    public Code compile(CompilerEnvironment environment) {
+        return null;
     }
 
     @Override
