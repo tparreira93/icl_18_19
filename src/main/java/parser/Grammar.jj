@@ -12,8 +12,8 @@ PARSER_BEGIN(Parser)
 
 package parser;
 
-import AST.*;
-import AST.types.*;
+import ast.*;
+import types.*;
 import java.util.ArrayList;
 import java.util.List;
 

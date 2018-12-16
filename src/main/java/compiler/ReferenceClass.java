@@ -1,6 +1,6 @@
 package compiler;
 
-import AST.types.RefType;
+import types.RefType;
 
 public class ReferenceClass extends ClassFile {
     private final RefType reference;

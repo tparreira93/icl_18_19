@@ -1,7 +1,7 @@
-import AST.ASTEnvironment;
-import AST.ASTNode;
-import AST.Exceptions.ASTCompileException;
-import AST.Exceptions.ASTException;
+import utils.Environment;
+import ast.ASTNode;
+import exceptions.ASTCompileException;
+import exceptions.ASTException;
 import parser.ParseException;
 import parser.Parser;
 
@@ -26,9 +26,9 @@ public class FileParser {
 
                 ASTNode exp = parser.Start();
 
-                System.out.println("Expected result type: " + exp.typecheck(new ASTEnvironment<>()));
+                System.out.println("Expected result type: " + exp.typecheck(new Environment<>()));
 
-                System.out.println(exp.eval(new ASTEnvironment<>()));
+                System.out.println(exp.eval(new Environment<>()));
             } catch (ParseException e) {
                 System.out.println("Syntax Error!");
                 System.out.println(e.getMessage());

@@ -1,6 +1,6 @@
 package compiler;
 
-import AST.types.IType;
+import types.IType;
 
 public class FrameField {
     private int id;

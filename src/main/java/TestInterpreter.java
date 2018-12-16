@@ -1,9 +1,9 @@
-import AST.ASTEnvironment;
-import AST.ASTNode;
-import AST.Exceptions.ASTCompileException;
-import AST.Exceptions.ASTException;
-import AST.types.IType;
-import AST.values.IValue;
+import utils.Environment;
+import ast.ASTNode;
+import exceptions.ASTCompileException;
+import exceptions.ASTException;
+import types.IType;
+import values.IValue;
 import parser.ParseException;
 import parser.Parser;
 
@@ -17,8 +17,8 @@ public class TestInterpreter {  /** Main entry point. */
         //noinspection InfiniteLoopStatement
         while (true) {
             try {
-                ASTEnvironment<IValue> runEnv = new ASTEnvironment<>();
-                ASTEnvironment<IType> compileEnv = new ASTEnvironment<>();
+                Environment<IValue> runEnv = new Environment<>();
+                Environment<IType> compileEnv = new Environment<>();
 
                 exp = parser.Start();
 

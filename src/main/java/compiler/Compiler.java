@@ -1,8 +1,8 @@
 package compiler;
 
-import AST.Exceptions.ASTCompileException;
-import AST.Exceptions.ASTCompilerError;
-import AST.Exceptions.ASTRuntimeException;
+import exceptions.ASTCompileException;
+import exceptions.ASTCompilerError;
+import exceptions.ASTRuntimeException;
 
 import java.io.*;
 import java.nio.charset.StandardCharsets;
@@ -10,7 +10,6 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 public class Compiler {
     private static Compiler instance = null;

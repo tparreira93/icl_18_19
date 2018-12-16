@@ -1,8 +1,8 @@
 package compiler;
 
-import AST.ASTEnvironment;
+import utils.Environment;
 
-public class CompilerEnvironment extends ASTEnvironment<MemoryLocation> {
+public class CompilerEnvironment extends Environment<MemoryLocation> {
     private String currentFrame;
 
     public CompilerEnvironment(){

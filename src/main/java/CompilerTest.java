@@ -1,8 +1,8 @@
-import AST.ASTEnvironment;
-import AST.ASTNode;
-import AST.Exceptions.ASTCompileException;
-import AST.Exceptions.ASTCompilerError;
-import AST.Exceptions.ASTException;
+import utils.Environment;
+import ast.ASTNode;
+import exceptions.ASTCompileException;
+import exceptions.ASTCompilerError;
+import exceptions.ASTException;
 import compiler.Code;
 import compiler.Compiler;
 import compiler.CompilerEnvironment;
@@ -39,7 +39,7 @@ public class CompilerTest {
                 ASTNode exp = parser.Start();
 
                 System.out.println("Typechecking " + file.getName() + "...");
-                exp.typecheck(new ASTEnvironment<>());
+                exp.typecheck(new Environment<>());
 
                 System.out.println("Assembling " + file.getName() + "...");
                 Code generatedCode = exp.compile(new CompilerEnvironment());
