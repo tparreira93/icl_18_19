@@ -1,6 +1,5 @@
-println(let x:int = 1 in x end);;
-/*
-println(!((new -10) := 1));
+//println(let x:int = 1 in x end);;
+println(!((new 10) := 1));
 println(!!!(new (new (new 1))));
 println(!!(new (new 1)));
 println(!(new 1));
@@ -28,6 +27,6 @@ println(0/1);
 println(true && false);
 println(false || false);
 println("Teste de strings");
-println(!(new "Teste referencia para string"));
-while(true) do println("Teste de ciclo") end;;
-*/
+println(!(new "Teste referencia para string"));;
+//while(true) do println("Teste de ciclo") end;;
+
