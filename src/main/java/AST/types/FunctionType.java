@@ -21,7 +21,7 @@ public class FunctionType implements IType {
 
     @Override
     public String toString() {
-        return "function";
+        return getTypeName();
     }
 
     @Override
@@ -42,5 +42,20 @@ public class FunctionType implements IType {
             return getReturnType().equals((functionType.getReturnType())) && equal;
         }
         return false;
+    }
+
+    @Override
+    public String getClassName() {
+        return getClassReference();
+    }
+
+    @Override
+    public String getClassReference() {
+        return null;
+    }
+
+    @Override
+    public String getTypeName() {
+        return "function";
     }
 }

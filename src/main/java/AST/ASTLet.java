@@ -4,10 +4,12 @@ import AST.Exceptions.ASTDifferentTypeException;
 import AST.Exceptions.ASTDuplicateNameException;
 import AST.types.IType;
 import AST.values.IValue;
-import compiler.Code;
-import compiler.CompilerEnvironment;
+import compiler.*;
+import compiler.Compiler;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.IntStream;
 
 public class ASTLet implements ASTNode {
     private final List<Binding> identifiers;
@@ -70,7 +72,43 @@ public class ASTLet implements ASTNode {
 
     @Override
     public Code compile(CompilerEnvironment environment) {
-        return null;
+        Compiler compiler = Compiler.getInstance();
+        int frameID = compiler.getNextFrameID();
+        Code finalCode = new Code();
+        FrameClass frame;
+        List<FrameField> frameFields = new ArrayList<>();
+        int SL = compiler.getSL();
+        String loadSL = "aload " + SL;
+        String storeSL = "astore " + SL;
+        IntStream.range(0, identifiers.size()).forEach(i -> {
+            Binding b = identifiers.get(i);
+            frameFields.add(new FrameField(i, b.getType()));
+        });
+
+        frame = new FrameClass(frameID, frameFields, compiler.getCurrentFrame());
+
+        finalCode.addCode("new " + frame.getClassName())
+                .addCode("dup")
+                .addCode("invokespecial " + frame.getClassName() + "/<init>()V")
+                .addCode("dup")
+                .addCode(loadSL)
+                .addCode("putfield " + frame.getClassName() + "/sl L" + compiler.getCurrentFrame())
+                .addCode(storeSL);
+
+        for (FrameField f : frameFields) {
+            finalCode.addCode(loadSL)
+                    .addCode(identifiers.get(f.getId()).getExpression().compile(environment))
+                    .addCode("putfield " + frame.getClassName() + "/" + f.getFieldName() + " " + f.getCompiledType());
+        }
+
+        finalCode.addCode(body.compile(environment))
+                .addCode(loadSL)
+                .addCode("getfield  " + frame.getClassName() + " /sl " + compiler.getCurrentFrame())
+                .addCode(storeSL);
+
+        compiler.addClassFile(frame);
+
+        return finalCode;
     }
 
     @Override

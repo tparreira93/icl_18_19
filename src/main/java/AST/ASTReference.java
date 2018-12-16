@@ -5,10 +5,13 @@ import AST.types.RefType;
 import AST.values.IValue;
 import AST.values.ReferenceValue;
 import compiler.Code;
+import compiler.Compiler;
 import compiler.CompilerEnvironment;
+import compiler.ReferenceClass;
 
 public class ASTReference implements ASTNode {
     private final ASTNode value;
+    private RefType value_type;
 
     public ASTReference(ASTNode value) {
         this.value = value;
@@ -20,13 +23,30 @@ public class ASTReference implements ASTNode {
 
     @Override
     public IType typecheck(ASTEnvironment<IType> environment) throws Exception {
-        IType t = value.typecheck(environment);
-        return new RefType(t);
+        value_type = new RefType(value.typecheck(environment));
+        return value_type;
     }
 
     @Override
     public Code compile(CompilerEnvironment environment) {
-        return null;
+        Compiler compiler = Compiler.getInstance();
+        ReferenceClass reference = new ReferenceClass(value_type);
+        String className = value_type.getClassName();
+        compiler.addClassFile(reference);
+        Code finalCode = new Code()
+                .addCode("; ASTReference")
+                .addCode("new " + className)
+                .addCode("dup")
+                .addCode("invokespecial " + className + "/<init>()V")
+                .addCode("dup")
+                .addCode(value.compile(environment));
+
+        if (value_type.getReferenceType() instanceof RefType)
+            finalCode.addCode("checkcast " + value_type.getClassReference());
+
+        finalCode.addCode("putfield " + className + "/" + ReferenceClass.getValueName() + " " + value_type.getClassReference());
+
+        return finalCode;
     }
 
     @Override

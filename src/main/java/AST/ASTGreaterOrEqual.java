@@ -7,12 +7,9 @@ import compiler.Code;
 import compiler.CompilerEnvironment;
 
 public class ASTGreaterOrEqual extends ASTCompare implements ASTNode {
-    private final ASTNode left;
-    private final ASTNode right;
 
     public ASTGreaterOrEqual(ASTNode left, ASTNode right) {
-        this.left = left;
-        this.right = right;
+        super(left, right);
     }
 
     @Override
@@ -25,12 +22,12 @@ public class ASTGreaterOrEqual extends ASTCompare implements ASTNode {
 
     @Override
     public IType typecheck(ASTEnvironment<IType> environment) throws Exception {
-        return this.typecheck(environment, left, right);
+        return super.typecheck(environment);
     }
 
     @Override
     public Code compile(CompilerEnvironment environment) {
-        return null;
+        return super.compile(environment, "ifge");
     }
 
     @Override

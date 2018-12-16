@@ -7,7 +7,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
-public class MainClassFile implements IClassFile {
+public class MainClassFile extends ClassFile {
     private final String templatePath;
     private final Code code;
     private final int stackSize;
@@ -24,30 +24,33 @@ public class MainClassFile implements IClassFile {
         return new Code(Files.readAllLines(path, charset));
     }
 
+    // TODO: IMPROVE STACK AND LOCALS
     @Override
     public Code getCode() {
-        Code finalCode = new Code();
-        try {
-            Code code = parseTemplate();
-            int sz = code.getCode().size();
-            for (int i = 0; i < sz; i++) {
-                String x = code.getCode().get(i);
-                if (x.contains("REPLACE_THIS_WITH_CODE"))
-                    x = x.replace("REPLACE_THIS_WITH_CODE", this.code.Dump(0));
-
-                else if (x.contains("STACK_SIZE"))
-                    x = x.replace("STACK_SIZE", String.valueOf(stackSize));
-
-                finalCode.addCode(x);
-            }
-        } catch (IOException ignored) {
-        }
-
-        return finalCode;
+        return new Code()
+                .addCode(".class public Main")
+                .addCode(".super java/lang/Object")
+                .addCode("")
+                .addCode(".method public <init>()V")
+                .addCode("aload_0")
+                .addCode("invokenonvirtual java/lang/Object/<init>()V")
+                .addCode("return")
+                .addCode(".end method")
+                .addCode("")
+                .addCode(".method public static main([Ljava/lang/String;)V")
+                .addCode("; set limits used by this method")
+                .addCode("; TODO: IMPROVE STACK AND LOCALS")
+                .addCode(".limit locals 10")
+                .addCode(".limit stack 256")
+                .addCode("")
+                .addCode(this.code)
+                .addCode("")
+                .addCode("return")
+                .addCode(".end method");
     }
 
     @Override
     public String getClassName() {
-        return "main";
+        return "Main";
     }
 }

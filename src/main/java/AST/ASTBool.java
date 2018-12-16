@@ -26,7 +26,7 @@ public class ASTBool implements ASTNode {
 
     @Override
     public Code compile(CompilerEnvironment environment) {
-        return null;
+        return new Code().addCode("sipush " + (value ? "1" : "0"));
     }
 
     @Override

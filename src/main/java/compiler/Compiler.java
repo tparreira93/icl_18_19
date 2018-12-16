@@ -1,39 +1,53 @@
 package compiler;
 
-import AST.ASTNode;
-import AST.ASTNum;
-import AST.ASTPlus;
-import parser.Parser;
+import AST.Exceptions.ASTCompileException;
+import AST.Exceptions.ASTCompilerError;
+import AST.Exceptions.ASTRuntimeException;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
+import java.io.*;
 import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Scanner;
+import java.util.stream.Collectors;
 
 public class Compiler {
-    private static final Compiler instance = new Compiler();
+    private static Compiler instance = null;
     private int nextFrameID;
     private String currentFrame;
     private int stackSize;
     private int SL;
+    private int nextLabel;
     private List<IClassFile> files;
+    private String jasminPath;
 
-    private static final Compiler getInstance() {
+    public static Compiler getInstance() {
         return instance;
     }
 
-    private Compiler() {
+    public static Compiler getInstance(String jasminPath) {
+        if (instance ==null)
+            reset(jasminPath);
+        return instance;
+    }
+
+    public static Compiler reset(String jasminPath) {
+        instance = new Compiler(jasminPath);
+        return instance;
+    }
+
+    private Compiler(String jasminPath) {
         files = new ArrayList<>();
         currentFrame = "";
-        stackSize = 1;
+        stackSize = 10;
         SL = 2;
+        this.jasminPath = jasminPath;
+        nextLabel = 0;
+    }
+
+    public String generateLabel() {
+        return "LABEL" + nextLabel++;
     }
 
     public int getNextFrameID() {
@@ -53,40 +67,91 @@ public class Compiler {
     }
 
     public void addClassFile(IClassFile file) {
+        for (IClassFile f : files) {
+            if (f.getFileName().equals(file.getFileName()))
+                return;
+        }
         this.files.add(file);
     }
 
+    public void addFrame(FrameClass file) {
+        addClassFile(file);
+        currentFrame = file.getClassName();
+    }
+
     public void addMainClass(String fileName, Code code) {
-        this.files.add(new MainClassFile(fileName, code, stackSize));
+        addClassFile(new MainClassFile(fileName, code, stackSize));
     }
 
-    public static void main(String[] args) {
-        Compiler compiler = Compiler.getInstance();
-        Parser parser = new Parser(System.in);
-        ASTNode exp;
-
-        //noinspection InfiniteLoopStatement
-        while (true) {
-            try {
-                exp = parser.Start();
-                Code generatedCode = exp.compile(new CompilerEnvironment());
-
-                compiler.addMainClass("src\\templates\\base.j", generatedCode);
-                compiler.generateFiles("D:\\libs\\jasmin-2.4");
-            } catch (Exception e) {
-                System.out.println(e.getMessage());
-            }
-        }
-    }
-
-    private void generateFiles(String path) throws IOException {
+    private List<String> generateFiles(String path) throws IOException {
+        List<String> filesPath = new ArrayList<>();
         for (IClassFile f : files){
             String content = f.getCode().Dump();
-            Path finalPath = Paths.get(path, f.getClassName() + ".j");
+            Path finalPath = Paths.get(path, f.getFileName());
             File file = new File(finalPath.toString());
+            file.getParentFile().mkdirs();
             FileOutputStream stream = new FileOutputStream(file, false);
             stream.write(content.getBytes(StandardCharsets.UTF_8));
             stream.close();
+
+            filesPath.add(finalPath.toString());
         }
+
+        return filesPath;
+    }
+
+    private MainClassFile findMain() {
+        for (IClassFile classFile : files) {
+            if (classFile instanceof MainClassFile)
+                return (MainClassFile) classFile;
+        }
+
+        return null;
+    }
+
+    public String assembleFiles(String path) throws IOException, InterruptedException, ASTRuntimeException {
+        File workingDirectory = new File(path);
+        List<String> filesPath = generateFiles(path);
+        Runtime rt = Runtime.getRuntime();
+
+        Process process = rt.exec("java -jar " + jasminPath + " " + String.join(" ", filesPath), null, workingDirectory);
+        process.waitFor();
+
+        return parseResult(process);
+    }
+
+    public String execute(String workingDirectory) throws ASTCompileException, IOException, InterruptedException, ASTRuntimeException {
+        MainClassFile main = findMain();
+        if (main == null)
+            throw new ASTCompilerError("Main class not found");
+
+        Process process = Runtime.getRuntime().exec("java " + main.getClassName(), null, new File(workingDirectory));
+        process.waitFor();
+
+        return parseResult(process);
+    }
+
+    private String parseResult(Process process) throws IOException, ASTRuntimeException {
+        BufferedReader stdInput = new BufferedReader(new InputStreamReader(process.getInputStream()));
+        BufferedReader stdError = new BufferedReader(new InputStreamReader(process.getErrorStream()));
+        StringBuilder strBuilder = new StringBuilder();
+        String tmp;
+
+        while ((tmp = stdError.readLine()) != null) {
+            if (strBuilder.length() != 0)
+                strBuilder.append(System.getProperty("line.separator"));
+            strBuilder.append("\t").append(tmp);
+        }
+
+        if (strBuilder.length() != 0)
+            throw new ASTRuntimeException(strBuilder.toString());
+
+        while ((tmp = stdInput.readLine()) != null) {
+            if (strBuilder.length() != 0)
+                strBuilder.append(System.getProperty("line.separator"));
+            strBuilder.append("\t").append(tmp);
+        }
+
+        return strBuilder.toString();
     }
 }

@@ -20,4 +20,9 @@ public abstract class ClassFile implements IClassFile{
         if (f.createNewFile())
             Files.write(Paths.get(f.getAbsolutePath()), content.getBytes(StandardCharsets.UTF_8));
     }
+
+    @Override
+    public String getFileName() {
+        return getClassName() + ".j";
+    }
 }

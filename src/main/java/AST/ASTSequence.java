@@ -32,7 +32,9 @@ public class ASTSequence implements ASTNode{
 
     @Override
     public Code compile(CompilerEnvironment environment) {
-        return null;
+        Code finalCode = new Code();
+        sequence.stream().map(node -> node.compile(environment)).forEach(finalCode::addCode);
+        return finalCode;
     }
 
     @Override

@@ -5,6 +5,7 @@ import AST.types.BoolType;
 import AST.types.IType;
 import AST.values.IValue;
 import compiler.Code;
+import compiler.Compiler;
 import compiler.CompilerEnvironment;
 
 public class ASTWhile implements ASTNode {
@@ -49,7 +50,17 @@ public class ASTWhile implements ASTNode {
 
     @Override
     public Code compile(CompilerEnvironment environment) {
-        return null;
+
+        Compiler compiler = Compiler.getInstance();
+        String l1 = compiler.generateLabel();
+        String l2 = compiler.generateLabel();
+        return new Code()
+                .addCode(l1 + ":")
+                .addCode(condition.compile(environment))
+                .addCode("ifeq " + l2)
+                .addCode(action.compile(environment))
+                .addCode("goto " + l1)
+                .addCode(l2 + ":");
     }
 
     @Override

@@ -12,22 +12,12 @@ import java.util.Arrays;
 import java.util.List;
 
 public class FileParser {
-
     public static void main(String[ ]args) {
         List<String> files = new ArrayList<>();
-        if (args.length > 0) {
+        if (args.length > 0)
             files.addAll(Arrays.asList(args));
-        }
-        else {
-            File folder = new File("src\\main\\resources");
-            File[] filesInFolder = folder.listFiles();
-
-            if (filesInFolder != null) {
-                for (File aFilesInFolder : filesInFolder)
-                    if (aFilesInFolder.isFile())
-                        files.add(aFilesInFolder.getPath());
-            }
-        }
+        else
+            files.addAll(getFiles("src\\main\\resources"));
 
         for (String f : files) {
             try {
@@ -52,5 +42,19 @@ public class FileParser {
                 System.out.println(e.getMessage());
             }
         }
+    }
+
+    public static List<String> getFiles(String pathname) {
+        List<String> files = new ArrayList<>();
+        File folder = new File(pathname);
+        File[] filesInFolder = folder.listFiles();
+
+        if (filesInFolder != null) {
+            for (File aFilesInFolder : filesInFolder)
+                if (aFilesInFolder.isFile())
+                    files.add(aFilesInFolder.getPath());
+        }
+
+        return files;
     }
 }

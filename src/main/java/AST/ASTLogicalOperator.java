@@ -7,7 +7,15 @@ import compiler.Code;
 import compiler.CompilerEnvironment;
 
 public abstract class ASTLogicalOperator implements ASTNode {
-    public IType typecheck(ASTEnvironment<IType> environment, ASTNode left, ASTNode right) throws Exception {
+    protected final ASTNode left;
+    protected final ASTNode right;
+
+    protected ASTLogicalOperator(ASTNode left, ASTNode right) {
+        this.left = left;
+        this.right = right;
+    }
+
+    public IType typecheck(ASTEnvironment<IType> environment) throws Exception {
         IType l = left.typecheck(environment);
         IType r = right.typecheck(environment);
 
@@ -21,8 +29,14 @@ public abstract class ASTLogicalOperator implements ASTNode {
         return BoolType.getInstance();
     }
 
+    abstract Code getCompiledOperator();
+
     @Override
     public Code compile(CompilerEnvironment environment) {
-        return null;
+        Code c = new Code();
+        c.addCode(left.compile(environment));
+        c.addCode(right.compile(environment));
+        c.addCode(getCompiledOperator());
+        return c;
     }
 }

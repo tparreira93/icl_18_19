@@ -4,7 +4,9 @@ import AST.Exceptions.ASTInvalidIdentifierException;
 import AST.types.IType;
 import AST.values.IValue;
 import compiler.Code;
+import compiler.Compiler;
 import compiler.CompilerEnvironment;
+import compiler.MemoryLocation;
 
 public class ASTId implements ASTNode {
     private final String name;
@@ -27,7 +29,17 @@ public class ASTId implements ASTNode {
 
     @Override
     public Code compile(CompilerEnvironment environment) {
-        return null;
+        Compiler compiler = Compiler.getInstance();
+        int SL = compiler.getSL();
+        Code code = new Code()
+                .addCode("aload_" + SL);
+        MemoryLocation location = environment.find(name);
+        String currentFrame = environment.getCurrentFrame();
+
+        for (String frame : location.getPreviousFrames()) {
+            code.addCode("getfield " + "/sl Lancestor_frame_id");
+        }
+        return code;
     }
 
     @Override

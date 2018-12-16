@@ -1,0 +1,33 @@
+println(let x:int = 1 in x end);;
+/*
+println(!((new -10) := 1));
+println(!!!(new (new (new 1))));
+println(!!(new (new 1)));
+println(!(new 1));
+println(!(new true));
+println(true);
+println(true && true);
+println(false || true);
+println(1 > 0);
+println(1 >= 0);
+println(if true then 1 else 0 end);
+println(if false then 0 else 1 end);
+println(1 == 1);
+println(true == true);
+println(false <> true);
+println(0 <> 1);
+println(false == true);
+println(0 == 1);
+println(1 < 0);
+println(1 <= 0);
+println(false);
+println(1+(-1));
+println(1-1);
+println(1*0);
+println(0/1);
+println(true && false);
+println(false || false);
+println("Teste de strings");
+println(!(new "Teste referencia para string"));
+while(true) do println("Teste de ciclo") end;;
+*/

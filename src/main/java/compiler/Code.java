@@ -7,7 +7,6 @@ import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 public class Code {
-
     private List<String> code;
     private static String[] tabStart = new String[] {
             ".method"
@@ -29,7 +28,9 @@ public class Code {
         return this;
     }
     public Code addCode(Code code) {
+        this.addCode("");
         this.code.addAll(code.getCode());
+        this.addCode("");
         return this;
     }
     public List<String> getCode() {
@@ -47,12 +48,13 @@ public class Code {
         //String tabs = "";
 
         for (String c : code) {
-            if (Arrays.stream(tabStart).anyMatch(c::contains))
-                tabs += "\t";
-            else if (Arrays.stream(tabEnd).anyMatch(c::contains))
+            if (Arrays.stream(tabEnd).anyMatch(c::contains))
                 tabs = tabs.replaceFirst(t, "");
 
             builder.append(tabs).append(c).append(System.getProperty("line.separator")).append(" ");
+
+            if (Arrays.stream(tabStart).anyMatch(c::contains))
+                tabs += "\t";
         }
 
         return builder.toString();

@@ -1,7 +1,6 @@
 package AST.types;
 
 public class RefType implements IType {
-
     private IType reference;
 
     public RefType(IType reference) {
@@ -18,7 +17,7 @@ public class RefType implements IType {
 
     @Override
     public String toString() {
-        return "ref(" + reference + ")";
+        return getTypeName() + "(" + reference + ")";
     }
 
     @Override
@@ -27,5 +26,24 @@ public class RefType implements IType {
             return ((RefType) obj).getReferenceType().equals(getReferenceType());
 
         return true;
+    }
+
+    @Override
+    public String getClassName() {
+        if (reference instanceof RefType)
+            return "Reference_reference";
+        return "Reference_" + reference.getTypeName();
+    }
+
+    @Override
+    public String getClassReference() {
+        if (reference instanceof RefType)
+            return "Ljava/lang/Object;";
+        return reference.getClassReference();
+    }
+
+    @Override
+    public String getTypeName() {
+        return "reference";
     }
 }

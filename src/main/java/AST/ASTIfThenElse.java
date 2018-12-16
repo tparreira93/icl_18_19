@@ -7,6 +7,7 @@ import AST.types.IType;
 import AST.values.BoolValue;
 import AST.values.IValue;
 import compiler.Code;
+import compiler.Compiler;
 import compiler.CompilerEnvironment;
 
 public class ASTIfThenElse implements ASTNode {
@@ -61,7 +62,17 @@ public class ASTIfThenElse implements ASTNode {
 
     @Override
     public Code compile(CompilerEnvironment environment) {
-        return null;
+        Compiler compiler = Compiler.getInstance();
+        String l1 = compiler.generateLabel();
+        String l2 = compiler.generateLabel();
+        return new Code()
+                .addCode(node_if.compile(environment))
+                .addCode("ifeq " + l1)
+                .addCode(node_then.compile(environment))
+                .addCode("goto " + l2)
+                .addCode(l1 + ": ")
+                .addCode(node_else.compile(environment))
+                .addCode(l2 + ": ");
     }
 
     @Override

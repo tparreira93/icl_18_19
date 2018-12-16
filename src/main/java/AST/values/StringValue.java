@@ -30,6 +30,6 @@ public class StringValue implements IValue {
 
     @Override
     public String toString() {
-        return "string(" + value.toString() + ")";
+        return "string(" + value + ")";
     }
 }

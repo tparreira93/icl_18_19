@@ -7,10 +7,13 @@ import AST.values.IValue;
 import AST.values.ReferenceValue;
 import compiler.Code;
 import compiler.CompilerEnvironment;
+import compiler.ReferenceClass;
 
 public class ASTAssignment implements ASTNode {
     private final ASTNode id;
     private final ASTNode value;
+    private RefType idType;
+    private IType valueType;
 
     public ASTAssignment(ASTNode id, ASTNode value) {
         this.id = id;
@@ -32,17 +35,23 @@ public class ASTAssignment implements ASTNode {
         if (!(ref instanceof RefType))
             throw new ASTNotReferenceException(ref + " is not a reference!");
 
-        RefType refType = (RefType) ref;
-        IType v_type = value.typecheck(environment);
+        idType = (RefType) ref;
+        valueType = value.typecheck(environment);
 
-        refType.setReference(v_type);
+        idType.setReference(valueType);
 
-        return refType;
+        return idType;
     }
 
     @Override
     public Code compile(CompilerEnvironment environment) {
-        return null;
+        return new Code()
+                .addCode(id.compile(environment))
+                .addCode("dup")
+                .addCode("checkcast " + idType.getClassName())
+                .addCode(value.compile(environment))
+                .addCode("putfield " + idType.getClassName() + "/" + ReferenceClass.getValueName()
+                    + " " + idType.getClassReference());
     }
 
     @Override

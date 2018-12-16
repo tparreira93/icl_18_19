@@ -7,9 +7,11 @@ import AST.values.IValue;
 import AST.values.ReferenceValue;
 import compiler.Code;
 import compiler.CompilerEnvironment;
+import compiler.ReferenceClass;
 
 public class ASTDereference implements ASTNode {
     private final ASTNode reference;
+    private RefType referenceType;
 
     public ASTDereference(ASTNode reference) {
         this.reference = reference;
@@ -27,14 +29,27 @@ public class ASTDereference implements ASTNode {
         if (!(t instanceof RefType))
             throw new ASTNotReferenceException(t + " is not a reference.");
 
-        RefType ref = (RefType) t;
-
-        return ref.getReferenceType();
+        referenceType = (RefType) t;
+        return referenceType.getReferenceType();
     }
 
     @Override
     public Code compile(CompilerEnvironment environment) {
-        return null;
+        Code finalCode = new Code()
+                .addCode("; --- Begin ASTDereference ---")
+                .addCode("")
+                .addCode(reference.compile(environment));
+
+        finalCode.addCode("getfield " + referenceType.getClassName()
+                        + "/" + ReferenceClass.getValueName()
+                        + " " + referenceType.getClassReference())
+                .addCode("")
+                .addCode("; --- End ASTDereference ---");
+
+        if (referenceType.getReferenceType() instanceof RefType)
+            finalCode.addCode("checkcast " + referenceType.getReferenceType().getClassName());
+
+        return finalCode;
     }
 
     @Override

@@ -6,11 +6,14 @@ import AST.types.IType;
 import AST.values.BoolValue;
 import AST.values.IValue;
 import compiler.Code;
+import compiler.Compiler;
 import compiler.CompilerEnvironment;
 
 public class ASTNotEqual implements ASTNode {
     private final ASTNode left;
     private final ASTNode right;
+    private IType leftType;
+    private IType rightType;
 
     public ASTNotEqual(ASTNode left, ASTNode right) {
         this.left = left;
@@ -27,18 +30,30 @@ public class ASTNotEqual implements ASTNode {
 
     @Override
     public IType typecheck(ASTEnvironment<IType> environment) throws Exception {
-        IType l = left.typecheck(environment);
-        IType r = right.typecheck(environment);
+        leftType = left.typecheck(environment);
+        rightType = right.typecheck(environment);
 
-        if (!(l.equals(r)))
-            throw new ASTDifferentTypeException(l + " and " + r + " are not of the same type.");
+        if (!(leftType.equals(rightType)))
+            throw new ASTDifferentTypeException(leftType + " and " + rightType + " are not of the same type.");
 
         return BoolType.getInstance();
     }
 
     @Override
     public Code compile(CompilerEnvironment environment) {
-        return null;
+        Compiler compiler = Compiler.getInstance();
+        String l1 = compiler.generateLabel();
+        String l2 = compiler.generateLabel();
+        return new Code()
+                .addCode(left.compile(environment))
+                .addCode(right.compile(environment))
+                .addCode("isub")
+                .addCode("ifeq " + l1)
+                .addCode(new ASTBool(true).compile(environment))
+                .addCode("goto " + l2)
+                .addCode(l1 + ":")
+                .addCode(new ASTBool(false).compile(environment))
+                .addCode(l2 + ":");
     }
 
     @Override

@@ -2,14 +2,14 @@ package compiler;
 
 import java.util.List;
 
-public class FrameClass implements IClassFile {
+public class FrameClass extends ClassFile {
     private int id;
-    private List<Field> fields;
+    private List<FrameField> frameFields;
     private String previousFrame;
 
-    public FrameClass(int id, List<Field> fields, String previousFrame) {
+    public FrameClass(int id, List<FrameField> frameFields, String previousFrame) {
         this.id = id;
-        this.fields = fields;
+        this.frameFields = frameFields;
         this.previousFrame = previousFrame;
     }
 
@@ -17,8 +17,8 @@ public class FrameClass implements IClassFile {
         return id;
     }
 
-    public List<Field> getFields() {
-        return fields;
+    public List<FrameField> getFrameFields() {
+        return frameFields;
     }
 
     public String getPreviousFrameClass() {
@@ -43,8 +43,8 @@ public class FrameClass implements IClassFile {
                 .addCode(".field public sl L" + previousFrame + ";")
                 .addCode(".field sl L" + getPreviousFrameClass());
 
-        getFields().stream().map(field -> String.format(".field public location_%d %s",
-                    field.getId(), field.getCompiledType())).forEach(c::addCode);
+        getFrameFields().stream().map(frameField -> ".frameField public " + frameField.getFieldName() + frameField.getCompiledType())
+                .forEach(c::addCode);
         c.addCode(".end");
 
         return c;

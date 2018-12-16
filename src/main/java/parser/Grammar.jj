@@ -24,10 +24,18 @@ PARSER_END(Parser)
 
 SKIP :
 {
-  " "
-| "\t"
-| "\r"
-| "\n"
+      " "
+    | "\t"
+    | "\r"
+    | "\n"
+    | < "//" (~["\r", "\n"])* >
+    | < "/*" > : ML_COMMENT_STATE
+}
+
+<ML_COMMENT_STATE> SKIP :
+{
+    < "*/" > : DEFAULT
+    | < ~[] >
 }
 
 //< WithinString >

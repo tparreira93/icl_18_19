@@ -1,6 +1,6 @@
 package AST.types;
 
-public class BoolType implements IType, IValueType {
+public class BoolType implements IType {
     private static final BoolType instance = new BoolType();
 
     private BoolType() {
@@ -12,11 +12,26 @@ public class BoolType implements IType, IValueType {
 
     @Override
     public String toString() {
-        return "bool";
+        return getTypeName();
     }
 
     @Override
     public boolean equals(Object obj) {
         return obj instanceof BoolType;
+    }
+
+    @Override
+    public String getClassName() {
+        return getClassReference();
+    }
+
+    @Override
+    public String getClassReference() {
+        return "I";
+    }
+
+    @Override
+    public String getTypeName() {
+        return "bool";
     }
 }

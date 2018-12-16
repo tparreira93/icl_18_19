@@ -1,12 +1,10 @@
 package AST.types;
 
 import AST.SimpleBinding;
-import AST.values.IValue;
-import AST.values.RecordValue;
 
 import java.util.List;
 
-public class RecordType implements IType, IValueType {
+public class RecordType implements IType {
     private List<SimpleBinding<IType>> bindingTypes;
 
     public RecordType(List<SimpleBinding<IType>> bindingTypes) {
@@ -45,4 +43,23 @@ public class RecordType implements IType, IValueType {
         return false;
     }
 
+    @Override
+    public String getClassName() {
+        return getClassReference();
+    }
+
+    @Override
+    public String getClassReference() {
+        return null;
+    }
+
+    @Override
+    public String getTypeName() {
+        return "record";
+    }
+
+    @Override
+    public String toString() {
+        return getTypeName();
+    }
 }
