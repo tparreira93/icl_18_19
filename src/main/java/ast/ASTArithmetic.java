@@ -17,19 +17,16 @@ public abstract class ASTArithmetic implements ASTNode {
 
     protected Code compile(CompilerEnvironment environment, String operation) {
         Code code = new Code();
-        code.addCode(left.compile(environment));
-        code.addCode(right.compile(environment));
-        code.addCode(operation);
+        code.addCode("; --- BEGIN ASTArithmetic ---")
+                .addCode(left.compile(environment))
+                .addCode(right.compile(environment))
+                .addCode(operation)
+                .addCode("; --- END ASTArithmetic ---");
         return code;
     }
 
     @Override
     public IType typecheck(Environment<IType> environment) throws Exception {
         return NumericType.typecheck(environment, left, right);
-    }
-
-    @Override
-    public Code compile(CompilerEnvironment environment) {
-        return null;
     }
 }

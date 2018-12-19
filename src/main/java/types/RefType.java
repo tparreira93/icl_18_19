@@ -25,7 +25,7 @@ public class RefType implements IType {
         if (obj instanceof RefType)
             return ((RefType) obj).getReferenceType().equals(getReferenceType());
 
-        return true;
+        return false;
     }
 
     @Override
@@ -35,11 +35,15 @@ public class RefType implements IType {
         return "Reference_" + reference.getTypeName();
     }
 
-    @Override
-    public String getClassReference() {
+    public String getContentClassReference() {
         if (reference instanceof RefType)
             return "Ljava/lang/Object;";
         return reference.getClassReference();
+    }
+
+    @Override
+    public String getClassReference() {
+        return "L" + getClassName() + ";";
     }
 
     @Override

@@ -67,13 +67,15 @@ public class ASTIfThenElse implements ASTNode {
         String l1 = compiler.generateLabel();
         String l2 = compiler.generateLabel();
         return new Code()
+                .addCode("; --- BEGIN ASTIfThenElse ---")
                 .addCode(node_if.compile(environment))
                 .addCode("ifeq " + l1)
                 .addCode(node_then.compile(environment))
                 .addCode("goto " + l2)
                 .addCode(l1 + ": ")
                 .addCode(node_else.compile(environment))
-                .addCode(l2 + ": ");
+                .addCode(l2 + ": ")
+                .addCode("; --- END ASTIfThenElse ---");
     }
 
     @Override

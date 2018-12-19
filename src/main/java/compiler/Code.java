@@ -59,4 +59,8 @@ public class Code {
 
         return builder.toString();
     }
+
+    public Code addCode() {
+        return this.addCode("");
+    }
 }

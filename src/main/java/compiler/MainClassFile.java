@@ -11,11 +11,13 @@ public class MainClassFile extends ClassFile {
     private final String templatePath;
     private final Code code;
     private final int stackSize;
+    private final int SL;
 
-    public MainClassFile(String templatePath, Code code, int stackSize) {
+    public MainClassFile(String templatePath, Code code, int stackSize, int SL) {
         this.templatePath = templatePath;
         this.code = code;
         this.stackSize = stackSize;
+        this.SL = SL;
     }
 
     private Code parseTemplate() throws IOException {
@@ -41,7 +43,10 @@ public class MainClassFile extends ClassFile {
                 .addCode("; set limits used by this method")
                 .addCode("; TODO: IMPROVE STACK AND LOCALS")
                 .addCode(".limit locals 10")
-                .addCode(".limit stack 256")
+                .addCode(".limit stack " + stackSize)
+                .addCode("")
+                .addCode("aconst_null")
+                .addCode("astore " + SL)
                 .addCode("")
                 .addCode(this.code)
                 .addCode("")

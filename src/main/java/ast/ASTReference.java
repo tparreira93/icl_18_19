@@ -35,7 +35,7 @@ public class ASTReference implements ASTNode {
         String className = value_type.getClassName();
         compiler.addClassFile(reference);
         Code finalCode = new Code()
-                .addCode("; ASTReference")
+                .addCode("; --- BEGIN ASTReference ---")
                 .addCode("new " + className)
                 .addCode("dup")
                 .addCode("invokespecial " + className + "/<init>()V")
@@ -43,11 +43,12 @@ public class ASTReference implements ASTNode {
                 .addCode(value.compile(environment));
 
         if (value_type.getReferenceType() instanceof RefType)
-            finalCode.addCode("checkcast " + value_type.getClassReference());
+            finalCode.addCode("checkcast " + value_type.getContentClassReference());
 
-        finalCode.addCode("putfield " + className + "/" + ReferenceClass.getValueName() + " " + value_type.getClassReference());
+        finalCode.addCode("putfield " + className + "/" + ReferenceClass.getValueName() + " " + value_type.getContentClassReference());
 
-        return finalCode;
+        return finalCode
+                .addCode("; --- END ASTReference ---");
     }
 
     @Override

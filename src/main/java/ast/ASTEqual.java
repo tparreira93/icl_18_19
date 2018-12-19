@@ -46,6 +46,7 @@ public class ASTEqual implements ASTNode {
         String l1 = compiler.generateLabel();
         String l2 = compiler.generateLabel();
         return new Code()
+                .addCode("; --- BEGIN ASTEqual ---")
                 .addCode(left.compile(environment))
                 .addCode(right.compile(environment))
                 .addCode("isub")
@@ -54,7 +55,8 @@ public class ASTEqual implements ASTNode {
                 .addCode("goto " + l2)
                 .addCode(l1 + ":")
                 .addCode(new ASTBool(true).compile(environment))
-                .addCode(l2 + ":");
+                .addCode(l2 + ":")
+                .addCode("; --- END ASTEqual ---");
     }
 
     @Override

@@ -18,7 +18,7 @@ public class ReferenceClass extends ClassFile {
         return new Code()
                 .addCode(".class public " + getClassName())
                 .addCode(".super Ljava/lang/Object;")
-                .addCode(".field public " + getValueName() + " " + reference.getClassReference())
+                .addCode(".field public " + getValueName() + " " + reference.getContentClassReference())
                 .addCode("")
                 .addCode(".method public <init>()V")
                 .addCode("aload_0")

@@ -47,12 +47,14 @@ public class ASTAssignment implements ASTNode {
     @Override
     public Code compile(CompilerEnvironment environment) {
         return new Code()
+                .addCode("; --- BEGIN ASTAssignment ---")
                 .addCode(id.compile(environment))
-                .addCode("dup")
                 .addCode("checkcast " + idType.getClassName())
                 .addCode(value.compile(environment))
+                .addCode("dup")
                 .addCode("putfield " + idType.getClassName() + "/" + ReferenceClass.getValueName()
-                    + " " + idType.getClassReference());
+                    + " " + idType.getContentClassReference())
+                .addCode("; --- END ASTAssignment ---");
     }
 
     @Override

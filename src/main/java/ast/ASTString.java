@@ -27,7 +27,10 @@ public class ASTString implements ASTNode {
 
     @Override
     public Code compile(CompilerEnvironment environment) {
-        return new Code().addCode("ldc \"" + value + "\"");
+        return new Code()
+                .addCode("; --- BEGIN ASTString ---")
+                .addCode("ldc \"" + value + "\"")
+                .addCode("; --- END ASTString ---");
     }
 
     @Override

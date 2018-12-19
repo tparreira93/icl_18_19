@@ -39,8 +39,8 @@ public class Compiler {
     private Compiler(String jasminPath) {
         files = new ArrayList<>();
         currentFrame = "";
-        stackSize = 10;
-        SL = 2;
+        stackSize = 256;
+        SL = 4;
         this.jasminPath = jasminPath;
         nextLabel = 0;
     }
@@ -79,7 +79,7 @@ public class Compiler {
     }
 
     public void addMainClass(String fileName, Code code) {
-        addClassFile(new MainClassFile(fileName, code, stackSize));
+        addClassFile(new MainClassFile(fileName, code, stackSize, SL));
     }
 
     private List<String> generateFiles(String path) throws IOException {

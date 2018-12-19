@@ -43,14 +43,13 @@ public class ASTDereference implements ASTNode {
 
         finalCode.addCode("getfield " + referenceType.getClassName()
                         + "/" + ReferenceClass.getValueName()
-                        + " " + referenceType.getClassReference())
-                .addCode("")
-                .addCode("; --- End ASTDereference ---");
+                        + " " + referenceType.getContentClassReference())
+                .addCode("");
 
         if (referenceType.getReferenceType() instanceof RefType)
             finalCode.addCode("checkcast " + referenceType.getReferenceType().getClassName());
 
-        return finalCode;
+        return finalCode.addCode("; --- End ASTDereference ---");
     }
 
     @Override

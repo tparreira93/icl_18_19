@@ -75,40 +75,50 @@ public class ASTLet implements ASTNode {
     public Code compile(CompilerEnvironment environment) {
         Compiler compiler = Compiler.getInstance();
         int frameID = compiler.getNextFrameID();
-        Code finalCode = new Code();
-        FrameClass frame;
+        Code finalCode = new Code().addCode("; --- ASTLet Begin ---");
         List<FrameField> frameFields = new ArrayList<>();
+        FrameClass frame = new FrameClass(frameID, frameFields, environment.getFrame());
         int SL = compiler.getSL();
         String loadSL = "aload " + SL;
         String storeSL = "astore " + SL;
+        CompilerEnvironment localScope = environment.beginScope(frame.getFrame());
+        
         IntStream.range(0, identifiers.size()).forEach(i -> {
             Binding b = identifiers.get(i);
-            frameFields.add(new FrameField(i, b.getType()));
+            FrameField field = new FrameField(i, b.getType());
+
+            frameFields.add(field);
+            localScope.assoc(b.id, new Address(field.getFieldName(), b.getType()));
         });
 
-        frame = new FrameClass(frameID, frameFields, compiler.getCurrentFrame());
-
-        finalCode.addCode("new " + frame.getClassName())
+        finalCode.addCode("; --- Create frame ---")
+                .addCode("new " + frame.getClassName())
                 .addCode("dup")
                 .addCode("invokespecial " + frame.getClassName() + "/<init>()V")
                 .addCode("dup")
                 .addCode(loadSL)
-                .addCode("putfield " + frame.getClassName() + "/sl L" + compiler.getCurrentFrame())
+                .addCode("putfield " + frame.getClassName() + "/sl " + frame.getPreviousFrameClass().getFrameReference())
                 .addCode(storeSL);
 
+        finalCode.addCode("; -- Initialize fields ---");
         for (FrameField f : frameFields) {
             finalCode.addCode(loadSL)
                     .addCode(identifiers.get(f.getId()).getExpression().compile(environment))
                     .addCode("putfield " + frame.getClassName() + "/" + f.getFieldName() + " " + f.getCompiledType());
         }
 
-        finalCode.addCode(body.compile(environment))
-                .addCode(loadSL)
-                .addCode("getfield  " + frame.getClassName() + " /sl " + compiler.getCurrentFrame())
+        finalCode.addCode("; -- ASTLet Body ---");
+        finalCode.addCode(body.compile(localScope));
+
+        finalCode.addCode("; --- END Body --")
+                .addCode("; --- Restore Static link");
+        finalCode.addCode(loadSL)
+                .addCode("getfield " + frame.getClassName() + "/sl " + environment.getFrame().getFrameReference())
                 .addCode(storeSL);
 
         compiler.addClassFile(frame);
-
+        
+        localScope.endScope();
         return finalCode;
     }
 

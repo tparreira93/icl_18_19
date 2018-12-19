@@ -4,10 +4,14 @@ import java.util.List;
 
 public class MemoryLocation {
     private int level;
-    private int offset;
-    private List<String> previousFrames;
+    private Address offset;
+    private List<Frame> previousFrames;
 
-    public MemoryLocation(int level, int offset, List<String> previousFrames) {
+    public MemoryLocation(){
+        
+    }
+
+    public MemoryLocation(int level, Address offset, List<Frame> previousFrames) {
         this.level = level;
         this.offset = offset;
         this.previousFrames = previousFrames;
@@ -17,11 +21,11 @@ public class MemoryLocation {
         return level;
     }
 
-    public int getOffset() {
+    public Address getOffset() {
         return offset;
     }
 
-    public List<String> getPreviousFrames() {
+    public List<Frame> getFrames() {
         return previousFrames;
     }
 }

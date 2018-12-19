@@ -56,12 +56,14 @@ public class ASTWhile implements ASTNode {
         String l1 = compiler.generateLabel();
         String l2 = compiler.generateLabel();
         return new Code()
+                .addCode("; --- BEGIN ASTWhile ---")
                 .addCode(l1 + ":")
                 .addCode(condition.compile(environment))
                 .addCode("ifeq " + l2)
                 .addCode(action.compile(environment))
                 .addCode("goto " + l1)
-                .addCode(l2 + ":");
+                .addCode(l2 + ":")
+                .addCode("; --- END ASTWhile ---");
     }
 
     @Override

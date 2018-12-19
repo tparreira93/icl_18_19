@@ -1,13 +1,11 @@
 package ast;
 
+import compiler.*;
+import compiler.Compiler;
 import exceptions.ASTInvalidIdentifierException;
 import types.IType;
 import utils.Environment;
 import values.IValue;
-import compiler.Code;
-import compiler.Compiler;
-import compiler.CompilerEnvironment;
-import compiler.MemoryLocation;
 
 public class ASTId implements ASTNode {
     private final String name;
@@ -32,14 +30,19 @@ public class ASTId implements ASTNode {
     public Code compile(CompilerEnvironment environment) {
         Compiler compiler = Compiler.getInstance();
         int SL = compiler.getSL();
-        Code code = new Code()
-                .addCode("aload_" + SL);
+        Code code = new Code();
         MemoryLocation location = environment.find(name);
-        String currentFrame = environment.getCurrentFrame();
-
-        for (String frame : location.getPreviousFrames()) {
-            code.addCode("getfield " + "/sl Lancestor_frame_id");
+        Frame previousFrame = location.getFrames().get(0);
+        Frame frame;
+        code.addCode("aload " + SL);
+        for (int i = 1; i < location.getFrames().size(); i++) {
+            frame = location.getFrames().get(i);
+            code.addCode("getfield " + frame.getFrameName() + "/sl " + previousFrame.getFrameReference());
+            if (i + 1 < location.getFrames().size())
+                previousFrame = frame;
         }
+        code.addCode("getfield " + previousFrame.getFrameName() + "/" + location.getOffset().getAddress() + " " + location.getOffset().getType().getClassReference());
+
         return code;
     }
 

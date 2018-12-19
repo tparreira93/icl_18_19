@@ -30,6 +30,9 @@ public class ASTNum implements ASTNode {
     }
 
     public Code compile(CompilerEnvironment environment) {
-        return new Code().addCode("; ASTNum").addCode("sipush " + num.getValue());
+        return new Code()
+                .addCode("; --- BEGIN ASTNum ---")
+                .addCode("sipush " + num.getValue())
+                .addCode("; --- END ASTNum ---");
     }
 }

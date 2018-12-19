@@ -1,5 +1,38 @@
-//println(let x:int = 1 in x end);;
-println(!((new 10) := 1));
+let
+    x:ref int = new 1
+in
+    while !x > 0
+    do
+        x := 0
+    end;
+    println(!x)
+end;;
+let
+    fact:ref int = new 12,
+    result: ref int = new 1
+in
+    println("Calulo do factorial de 12...");
+    while !fact > 0
+    do
+        result := !result * !fact;
+        fact := !fact - 1
+    end;
+    println(!result);
+    println("Fim do factorial de 12...")
+end;
+let
+    x:ref int = new 12,
+    y:ref int = new 7
+in
+    let
+        k:int = !x,
+        i:int = !y
+    in
+        !x + !y - k - i + 1
+    end
+end;;
+println(let x:int = 1 in x end);
+println(let k:int = 6 in (let x:int = 1, y:int = 2 in let z:int = 1 in x + y + z end end) + k end);
 println(!!!(new (new (new 1))));
 println(!!(new (new 1)));
 println(!(new 1));
@@ -28,5 +61,3 @@ println(true && false);
 println(false || false);
 println("Teste de strings");
 println(!(new "Teste referencia para string"));;
-//while(true) do println("Teste de ciclo") end;;
-
