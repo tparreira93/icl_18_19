@@ -4,6 +4,7 @@ import compiler.*;
 import compiler.Compiler;
 import exceptions.ASTInvalidIdentifierException;
 import types.IType;
+import types.RefType;
 import utils.Environment;
 import values.IValue;
 
@@ -42,6 +43,8 @@ public class ASTId implements ASTNode {
                 previousFrame = frame;
         }
         code.addCode("getfield " + previousFrame.getFrameName() + "/" + location.getOffset().getAddress() + " " + location.getOffset().getType().getClassReference());
+        if (location.getOffset().getType() instanceof RefType)
+            code.addCode("checkcast " + location.getOffset().getType().getClassName());
 
         return code;
     }

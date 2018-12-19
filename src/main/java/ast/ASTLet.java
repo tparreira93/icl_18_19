@@ -103,7 +103,7 @@ public class ASTLet implements ASTNode {
         finalCode.addCode("; -- Initialize fields ---");
         for (FrameField f : frameFields) {
             finalCode.addCode(loadSL)
-                    .addCode(identifiers.get(f.getId()).getExpression().compile(environment))
+                    .addCode(identifiers.get(f.getId()).getExpression().compile(localScope))
                     .addCode("putfield " + frame.getClassName() + "/" + f.getFieldName() + " " + f.getCompiledType());
         }
 

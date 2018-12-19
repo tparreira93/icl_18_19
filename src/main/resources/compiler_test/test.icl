@@ -3,10 +3,10 @@ let
 in
     while !x > 0
     do
-        x := 0
+        x := !x - 1
     end;
     println(!x)
-end;;
+end;
 let
     fact:ref int = new 12,
     result: ref int = new 1
@@ -28,9 +28,9 @@ in
         k:int = !x,
         i:int = !y
     in
-        !x + !y - k - i + 1
+        println(!x + !y - k - i + 1)
     end
-end;;
+end;
 println(let x:int = 1 in x end);
 println(let k:int = 6 in (let x:int = 1, y:int = 2 in let z:int = 1 in x + y + z end end) + k end);
 println(!!!(new (new (new 1))));

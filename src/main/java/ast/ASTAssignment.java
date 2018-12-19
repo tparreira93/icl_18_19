@@ -51,7 +51,6 @@ public class ASTAssignment implements ASTNode {
                 .addCode(id.compile(environment))
                 .addCode("checkcast " + idType.getClassName())
                 .addCode(value.compile(environment))
-                .addCode("dup")
                 .addCode("putfield " + idType.getClassName() + "/" + ReferenceClass.getValueName()
                     + " " + idType.getContentClassReference())
                 .addCode("; --- END ASTAssignment ---");
