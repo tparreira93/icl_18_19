@@ -42,7 +42,8 @@ public class CompilerTest {
                 exp.typecheck(new Environment<>());
 
                 System.out.println("Assembling " + file.getName() + "...");
-                Code generatedCode = exp.compile(new CompilerEnvironment());
+                CompilerEnvironment env = new CompilerEnvironment(compiler.getSL());
+                Code generatedCode = exp.compile(env);
                 //String workingDirectory = "D:\\jasmin\\" + name;
                 String workingDirectory = "D:\\libs\\jasmin-2.4";
                 compiler.addMainClass("src\\templates\\base.j", generatedCode);

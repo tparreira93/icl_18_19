@@ -50,4 +50,14 @@ public class RefType implements IType {
     public String getTypeName() {
         return "reference";
     }
+
+    @Override
+    public String getReturnKeywork() {
+        return "areturn";
+    }
+
+    @Override
+    public String getLoadKeyword() {
+        return "aload";
+    }
 }

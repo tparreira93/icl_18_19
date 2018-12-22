@@ -34,4 +34,14 @@ public class IntType extends NumericType implements IType {
     public String getTypeName() {
         return "int";
     }
+
+    @Override
+    public String getReturnKeywork() {
+        return "ireturn";
+    }
+
+    @Override
+    public String getLoadKeyword() {
+        return "iload";
+    }
 }

@@ -1,5 +1,5 @@
 let
-    factorial:(int)int = function x:int =>
+    factorial:(int)int = fun x:int ->
         let
             fact:ref int = new x,
             result: ref int = new 1

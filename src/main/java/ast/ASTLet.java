@@ -74,22 +74,20 @@ public class ASTLet implements ASTNode {
     @Override
     public Code compile(CompilerEnvironment environment) {
         Compiler compiler = Compiler.getInstance();
-        int frameID = compiler.getNextFrameID();
-        Code finalCode = new Code().addCode("; --- ASTLet Begin ---");
         List<FrameField> frameFields = new ArrayList<>();
-        FrameClass frame = new FrameClass(frameID, frameFields, environment.getFrame());
-        int SL = compiler.getSL();
-        String loadSL = "aload " + SL;
-        String storeSL = "astore " + SL;
+        FrameClass frame = compiler.newFrame("let", frameFields, environment.getFrame());
+        String loadSL = "aload " + environment.getSL();
+        String storeSL = "astore " + environment.getSL();
         CompilerEnvironment localScope = environment.beginScope(frame.getFrame());
-        
+
         IntStream.range(0, identifiers.size()).forEach(i -> {
             Binding b = identifiers.get(i);
             FrameField field = new FrameField(i, b.getType());
 
             frameFields.add(field);
-            localScope.assoc(b.id, new Address(field.getFieldName(), b.getType()));
+            localScope.assoc(b.id, new MemoryAddress(field.getFieldName(), b.getType()));
         });
+        Code finalCode = new Code().addCode("; --- ASTLet Begin ---");
 
         finalCode.addCode("; --- Create frame ---")
                 .addCode("new " + frame.getClassName())

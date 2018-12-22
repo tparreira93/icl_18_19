@@ -10,11 +10,11 @@ import values.RecordValue;
 import compiler.Code;
 import compiler.CompilerEnvironment;
 
-public class ASTRecordApply implements ASTNode {
+public class ASTRecordSelect implements ASTNode {
     private final ASTNode record;
     private final String id;
 
-    public ASTRecordApply(ASTNode record, String id) {
+    public ASTRecordSelect(ASTNode record, String id) {
         this.record = record;
         this.id = id;
     }

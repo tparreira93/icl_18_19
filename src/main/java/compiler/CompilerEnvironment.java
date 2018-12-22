@@ -5,27 +5,30 @@ import java.util.List;
 
 public class CompilerEnvironment {
     private final Frame frame;
-    private final HashMap<String, Address> env;
+    private final HashMap<String, MemoryAddress> env;
     private final CompilerEnvironment previousScope;
+    private final int localSL;
 
-    private CompilerEnvironment(CompilerEnvironment previousScope, Frame frame){
+    private CompilerEnvironment(CompilerEnvironment previousScope, Frame frame, int SL){
         this.env = new HashMap<>();
         this.frame = frame;
         this.previousScope = previousScope;
+        this.localSL = SL;
     }
-    public CompilerEnvironment(){
+    public CompilerEnvironment(int SL){
         env = new HashMap<>();
         this.previousScope = null;
         this.frame = new Frame("");
+        this.localSL = SL;
     }
 
-    public void assoc(String identifier, Address value) {
+    public void assoc(String identifier, MemoryAddress value) {
         env.put(identifier, value);
     }
 
-    public MemoryLocation find(String identifier) {
+    public FrameLocation find(String identifier) {
         CompilerEnvironment tmp = previousScope;
-        Address value = env.get(identifier);
+        MemoryAddress value = env.get(identifier);
         int level = 0;
         List<Frame> frames = new ArrayList<>();
         frames.add(getFrame());
@@ -40,7 +43,7 @@ public class CompilerEnvironment {
             }
         }
         
-        return new MemoryLocation(level, value, frames);
+        return new FrameLocation(level, value, frames);
     }
 
     public Frame getFrame() {
@@ -48,10 +51,18 @@ public class CompilerEnvironment {
     }
 
     public CompilerEnvironment beginScope(Frame frame){
-        return new CompilerEnvironment(this, frame);
+        return new CompilerEnvironment(this, frame, getSL());
+    }
+
+    public CompilerEnvironment beginScope(Frame frame, int SL){
+        return new CompilerEnvironment(this, frame, SL);
     }
 
     public CompilerEnvironment endScope() {
         return previousScope;
+    }
+
+    public int getSL() {
+        return localSL;
     }
 }

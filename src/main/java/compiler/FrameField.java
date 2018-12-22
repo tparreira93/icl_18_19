@@ -22,4 +22,8 @@ public class FrameField {
     public String getCompiledType() {
         return type.getClassReference();
     }
+
+    public IType getType() {
+        return type;
+    }
 }

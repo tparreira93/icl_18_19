@@ -1,5 +1,5 @@
 let
-    fibonacci:(int)int = function x:int =>
+    fibonacci:(int)int = fun x:int ->
         let
             result:ref int = new 1
         in

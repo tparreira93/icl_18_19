@@ -21,6 +21,16 @@ public abstract class ClassFile implements IClassFile{
             Files.write(Paths.get(f.getAbsolutePath()), content.getBytes(StandardCharsets.UTF_8));
     }
 
+    protected Code generateDefaultConstructor() {
+        return new Code()
+                .addCode(";default constructor")
+                .addCode(".method public <init>()V")
+                .addCode("aload_0 ; push this")
+                .addCode("invokespecial java/lang/Object/<init>()V ; call super")
+                .addCode("return")
+                .addCode(".end method");
+    }
+
     @Override
     public String getFileName() {
         return getClassName() + ".j";

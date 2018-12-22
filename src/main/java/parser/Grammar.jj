@@ -92,9 +92,7 @@ TOKEN :
   |
   < PRINTLN: "println" >
   |
-  < LAMBDA: "=>" >
-  |
-  < FUNCTION_ARROW: "->" >
+  < LAMBDA: "->" >
   |
   < BINDING: "=" >
   |
@@ -106,7 +104,7 @@ TOKEN :
   |
   < END: "end" >
   |
-  < function: "function" >
+  < function: "fun" >
   |
   < COMMA: "," >
   |
@@ -186,45 +184,8 @@ List<Parameter> ArgumentList() :
 
 IType GetType() :
 {
-    List<IType> typeList = new ArrayList<IType>();
-    IType t = null;
-}
-{
-    (
-        t = GetBaseType()
-        |
-        (<LPAR> typeList = GetTypeList() <RPAR>  t = GetType() { return new FunctionType(typeList, t); } )?
-    )
-    {
-        if (typeList.size() == 1)
-            t = typeList.get(0);
-
-        return t;
-    }
-
-}
-
-List<IType> GetTypeList() :
-{
-    List<IType> typeList = new ArrayList<IType>();
     IType t;
-}
-{
-
-    (
-        t = GetBaseType() { typeList.add(t); }
-        (
-            <COMMA>
-            t = GetType() { typeList.add(t); }
-        )*
-    )?
-
-    { return typeList; }
-}
-
-IType GetBaseType() :
-{
-    IType t;
+    List<IType> typeList = new ArrayList<IType>();
 }
 {
     < INT > { return IntType.getInstance(); }
@@ -234,6 +195,18 @@ IType GetBaseType() :
     < STRING > { return StringType.getInstance(); }
     |
     < REF > t = GetType() { return new RefType(t); }
+    |
+    (
+        <LPAR>
+        (
+            t = GetType() { typeList.add(t); }
+            (<COMMA> t = GetType() { typeList.add(t); } )*)
+        ?
+        <RPAR>  t = GetType()
+        {
+            return new FunctionType(typeList, t);
+        }
+    )
 }
 
 List<Binding> BindingList() :
@@ -422,7 +395,7 @@ ASTNode GetRecordApply(ASTNode record) :
     Token id;
 }
 {
-    <DOT> id = <Id> { return new ASTRecordApply(record, id.image); }
+    <DOT> id = <Id> { return new ASTRecordSelect(record, id.image); }
 }
 
 ASTNode GetFunctionApply(ASTNode id) :

@@ -1,5 +1,6 @@
 package ast;
 
+import compiler.*;
 import exceptions.ASTDifferentTypeException;
 import exceptions.ASTInvalidNumberOfArgumentsException;
 import exceptions.ASTNotFunctionException;
@@ -8,14 +9,14 @@ import types.IType;
 import utils.Environment;
 import values.ClosureValue;
 import values.IValue;
-import compiler.Code;
-import compiler.CompilerEnvironment;
 
 import java.util.List;
 
 public class ASTApply implements ASTNode {
     private final ASTNode function;
     private final List<ASTNode> arguments;
+    private FunctionType functionType;
+    private IType returnType;
 
     public ASTApply(ASTNode function, List<ASTNode> arguments) {
         this.function = function;
@@ -47,7 +48,7 @@ public class ASTApply implements ASTNode {
         if (!(f instanceof FunctionType))
             throw new ASTNotFunctionException(f + " is not a function!");
 
-        FunctionType functionType = (FunctionType)f;
+        functionType = (FunctionType)f;
 
         if (functionType.getArguments().size() != arguments.size())
             throw new ASTInvalidNumberOfArgumentsException("Number of arguments does not match the function definition.");
@@ -59,13 +60,21 @@ public class ASTApply implements ASTNode {
             if (!(argType.equals(expected)))
                 throw new ASTDifferentTypeException("Argument type does not match the expected type. Expected " + expected + " but got " + argType + ").");
         }
-
-        return functionType.getReturnType();
+        returnType = functionType.getReturnType();
+        return returnType;
     }
 
     @Override
     public Code compile(CompilerEnvironment environment) {
-        return null;
+        Code finalCode = function.compile(environment);
+        for (ASTNode arg : arguments) {
+            finalCode.addCode(arg.compile(environment));
+        }
+
+        finalCode.addCode("invokeinterface " + ClosureInterfaceClass.getInterfaceName(functionType)
+                + "/" + ClosureInterfaceClass.getCallSignature(functionType) + " " + (functionType.getArguments().size() + 1));
+
+        return finalCode;
     }
 
     @Override

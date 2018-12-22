@@ -29,25 +29,11 @@ public class ASTId implements ASTNode {
 
     @Override
     public Code compile(CompilerEnvironment environment) {
-        Compiler compiler = Compiler.getInstance();
-        int SL = compiler.getSL();
-        Code code = new Code();
-        MemoryLocation location = environment.find(name);
-        Frame previousFrame = location.getFrames().get(0);
-        Frame frame;
-        code.addCode("aload " + SL);
-        for (int i = 1; i < location.getFrames().size(); i++) {
-            frame = location.getFrames().get(i);
-            code.addCode("getfield " + frame.getFrameName() + "/sl " + previousFrame.getFrameReference());
-            if (i + 1 < location.getFrames().size())
-                previousFrame = frame;
-        }
-        code.addCode("getfield " + previousFrame.getFrameName() + "/" + location.getOffset().getAddress() + " " + location.getOffset().getType().getClassReference());
-        if (location.getOffset().getType() instanceof RefType)
-            code.addCode("checkcast " + location.getOffset().getType().getClassName());
-
-        return code;
+        FrameLocation location = environment.find(name);
+        return location.generatePath(environment.getSL());
     }
+
+
 
     @Override
     public String toString() {

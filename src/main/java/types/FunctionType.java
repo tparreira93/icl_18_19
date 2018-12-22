@@ -1,5 +1,7 @@
 package types;
 
+import compiler.ClosureInterfaceClass;
+
 import java.util.List;
 
 public class FunctionType implements IType {
@@ -39,23 +41,33 @@ public class FunctionType implements IType {
             else
                 equal = false;
 
-            return getReturnType().equals((functionType.getReturnType())) && equal;
+            return getReturnKeywork().equals((functionType.getReturnKeywork())) && equal;
         }
         return false;
     }
 
     @Override
     public String getClassName() {
-        return getClassReference();
+        return ClosureInterfaceClass.getInterfaceName(this);
     }
 
     @Override
     public String getClassReference() {
-        return null;
+        return "L" + getClassName() + ";";
     }
 
     @Override
     public String getTypeName() {
         return "function";
+    }
+
+    @Override
+    public String getReturnKeywork() {
+        return "areturn";
+    }
+
+    @Override
+    public String getLoadKeyword() {
+        return "aload";
     }
 }

@@ -31,7 +31,7 @@ public class ASTReference implements ASTNode {
     @Override
     public Code compile(CompilerEnvironment environment) {
         Compiler compiler = Compiler.getInstance();
-        ReferenceClass reference = new ReferenceClass(value_type);
+        ReferenceClass reference = compiler.newReference(value_type);
         String className = value_type.getClassName();
         compiler.addClassFile(reference);
         Code finalCode = new Code()

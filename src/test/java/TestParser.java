@@ -89,8 +89,8 @@ public class TestParser {
     }
 
     @Test
-    public void test_Let_f_function_1() throws Exception {
-        Parser parser = new Parser(new ByteArrayInputStream("let f:()int = function => 1 end in f() end;;".getBytes()));
+    public void test_Let_f_fun_1() throws Exception {
+        Parser parser = new Parser(new ByteArrayInputStream("let f:()int = fun -> 1 end in f() end;;".getBytes()));
         Environment<IValue> env = new Environment<>();
         IValue result = parser.Start().eval(env);
 
@@ -99,8 +99,8 @@ public class TestParser {
     }
 
     @Test
-    public void test_Let_f_function_x_in_1() throws Exception {
-        Parser parser = new Parser(new ByteArrayInputStream("let f:(int)int = function x:int => x end in f(1) end;;".getBytes()));
+    public void test_Let_f_fun_x_in_1() throws Exception {
+        Parser parser = new Parser(new ByteArrayInputStream("let f:(int)int = fun x:int -> x end in f(1) end;;".getBytes()));
         Environment<IValue> env = new Environment<>();
         IValue result = parser.Start().eval(env);
 
@@ -109,8 +109,8 @@ public class TestParser {
     }
 
     @Test
-    public void test_Let_f_function_x_y___x_Plus_y__IN_f_1_1() throws Exception {
-        Parser parser = new Parser(new ByteArrayInputStream("let f:(int,int)int = function x:int, y:int => x + y end in f(1, 1) end;;".getBytes()));
+    public void test_Let_f_fun_x_y___x_Plus_y__IN_f_1_1() throws Exception {
+        Parser parser = new Parser(new ByteArrayInputStream("let f:(int,int)int = fun x:int, y:int -> x + y end in f(1, 1) end;;".getBytes()));
         Environment<IValue> env = new Environment<>();
         IValue result = parser.Start().eval(env);
 
@@ -119,8 +119,8 @@ public class TestParser {
     }
 
     @Test
-    public void test_Let_f_function_x_y_z___x_Plus_y_Times_z_IN_f_2_3_4() throws Exception {
-        Parser parser = new Parser(new ByteArrayInputStream("let f:(int,int,int)int = function x:int, y:int, z:int => x + y * z end in f(2, 3, 4) end;;".getBytes()));
+    public void test_Let_f_fun_x_y_z___x_Plus_y_Times_z_IN_f_2_3_4() throws Exception {
+        Parser parser = new Parser(new ByteArrayInputStream("let f:(int,int,int)int = fun x:int, y:int, z:int -> x + y * z end in f(2, 3, 4) end;;".getBytes()));
         Environment<IValue> env = new Environment<>();
         IValue result = parser.Start().eval(env);
 
@@ -129,8 +129,8 @@ public class TestParser {
     }
 
     @Test
-    public void test_Let_f_function_1_f_Plus_f() throws Exception {
-        Parser parser = new Parser(new ByteArrayInputStream("let f:()int = function => 1 end in f() + f() end;;".getBytes()));
+    public void test_Let_f_fun_1_f_Plus_f() throws Exception {
+        Parser parser = new Parser(new ByteArrayInputStream("let f:()int = fun -> 1 end in f() + f() end;;".getBytes()));
         Environment<IValue> env = new Environment<>();
         IValue result = parser.Start().eval(env);
 
@@ -139,8 +139,8 @@ public class TestParser {
     }
 
     @Test
-    public void test_Let_f_function_5_f_Times_f() throws Exception {
-        Parser parser = new Parser(new ByteArrayInputStream("let f:()int = function => 5 end in f() * f() end;;".getBytes()));
+    public void test_Let_f_fun_5_f_Times_f() throws Exception {
+        Parser parser = new Parser(new ByteArrayInputStream("let f:()int = fun -> 5 end in f() * f() end;;".getBytes()));
         Environment<IValue> env = new Environment<>();
         IValue result = parser.Start().eval(env);
 
@@ -389,8 +389,8 @@ public class TestParser {
     }
 
     @Test
-    public void test_function_1_IN_f_equals_1_equals_true() throws Exception {
-        Parser parser = new Parser(new ByteArrayInputStream("let f:()int = function => 1 end in (f() == 1) == true end;;".getBytes()));
+    public void test_fun_1_IN_f_equals_1_equals_true() throws Exception {
+        Parser parser = new Parser(new ByteArrayInputStream("let f:()int = fun -> 1 end in (f() == 1) == true end;;".getBytes()));
         Environment<IValue> env = new Environment<>();
         IValue result = parser.Start().eval(env);
 
@@ -399,10 +399,10 @@ public class TestParser {
     }
 
     @Test
-    public void test_function_argument_compare_5() throws Exception {
+    public void test_fun_argument_compare_5() throws Exception {
         Parser parser = new Parser(new ByteArrayInputStream(("let \n" +
-                "    f:()int = function f:(int)bool => f(5) end,\n" +
-                "    comp5:(int)bool = function x:int => x == 5 end\n" +
+                "    f:()int = fun f:(int)bool -> f(5) end,\n" +
+                "    comp5:(int)bool = fun x:int -> x == 5 end\n" +
                 "in \n" +
                 "    f(comp5)\n" +
                 "end;;").getBytes()));
@@ -414,10 +414,10 @@ public class TestParser {
     }
 
     @Test
-    public void test_function_reference_passes_ref_function_as_argument_to_function_compare_5() throws Exception {
+    public void test_fun_reference_passes_ref_fun_as_argument_to_fun_compare_5() throws Exception {
         Parser parser = new Parser(new ByteArrayInputStream(("let \n" +
-                "    f:(ref (int)bool)bool = function f:ref (int)bool => !f(5) end,\n" +
-                "    comp5:ref (int)bool = new function x:int => x == 5 end\n" +
+                "    f:(ref (int)bool)bool = fun f:ref (int)bool -> !f(5) end,\n" +
+                "    comp5:ref (int)bool = new fun x:int -> x == 5 end\n" +
                 "in \n" +
                 "    f(comp5)\n" +
                 "end;;").getBytes()));
@@ -472,7 +472,7 @@ public class TestParser {
     @Test
     public void fact_10() throws Exception {
         String factorial = "let\n" +
-                "    factorial:(int)int = function x:int =>\n" +
+                "    factorial:(int)int = fun x:int ->\n" +
                 "        let\n" +
                 "            result:ref int = new 1\n" +
                 "        in\n" +

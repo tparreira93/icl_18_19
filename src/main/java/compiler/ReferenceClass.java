@@ -19,12 +19,9 @@ public class ReferenceClass extends ClassFile {
                 .addCode(".class public " + getClassName())
                 .addCode(".super Ljava/lang/Object;")
                 .addCode(".field public " + getValueName() + " " + reference.getContentClassReference())
-                .addCode("")
-                .addCode(".method public <init>()V")
-                .addCode("aload_0")
-                .addCode("invokenonvirtual java/lang/Object/<init>()V")
-                .addCode("return")
-                .addCode(".end method");
+                .addCode()
+                .addCode(generateDefaultConstructor())
+                .addCode();
     }
 
     @Override

@@ -34,4 +34,14 @@ public class BoolType implements IType {
     public String getTypeName() {
         return "bool";
     }
+
+    @Override
+    public String getReturnKeywork() {
+        return "ireturn";
+    }
+
+    @Override
+    public String getLoadKeyword() {
+        return "iload";
+    }
 }

@@ -64,14 +64,17 @@ public class ASTIfThenElse implements ASTNode {
     @Override
     public Code compile(CompilerEnvironment environment) {
         Compiler compiler = Compiler.getInstance();
-        String l1 = compiler.generateLabel();
-        String l2 = compiler.generateLabel();
+        String l1 = compiler.generateLabel() + "_ELSE";
+        String l2 = compiler.generateLabel() + "_THEN";
         return new Code()
                 .addCode("; --- BEGIN ASTIfThenElse ---")
+                .addCode("; Evaluate if condition")
                 .addCode(node_if.compile(environment))
                 .addCode("ifeq " + l1)
+                .addCode("; EVALUATE THEN")
                 .addCode(node_then.compile(environment))
                 .addCode("goto " + l2)
+                .addCode("; ELSE CASE")
                 .addCode(l1 + ": ")
                 .addCode(node_else.compile(environment))
                 .addCode(l2 + ": ")

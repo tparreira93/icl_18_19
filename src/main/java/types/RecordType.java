@@ -59,6 +59,16 @@ public class RecordType implements IType {
     }
 
     @Override
+    public String getReturnKeywork() {
+        return "areturn";
+    }
+
+    @Override
+    public String getLoadKeyword() {
+        return "aload";
+    }
+
+    @Override
     public String toString() {
         return getTypeName();
     }

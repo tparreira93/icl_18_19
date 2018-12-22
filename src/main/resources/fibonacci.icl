@@ -1,5 +1,5 @@
 let
-    fibonacci:(int)int = function x:int =>
+    fibonacci:(int)int = fun x:int ->
         let
             i:ref int = new 2,
             first:ref int = new 0,
@@ -27,7 +27,7 @@ in
 end;;
 
 
-let f:int->int = function x:int => x end
+let f:int->int = fun x:int -> x end
 in
 f(1)
 end

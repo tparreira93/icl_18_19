@@ -34,4 +34,14 @@ public class StringType implements IType {
     public String getTypeName() {
         return "string";
     }
+
+    @Override
+    public String getReturnKeywork() {
+        return "areturn";
+    }
+
+    @Override
+    public String getLoadKeyword() {
+        return "aload";
+    }
 }

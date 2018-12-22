@@ -3,6 +3,8 @@ package compiler;
 import exceptions.ASTCompileException;
 import exceptions.ASTCompilerError;
 import exceptions.ASTRuntimeException;
+import types.FunctionType;
+import types.RefType;
 
 import java.io.*;
 import java.nio.charset.StandardCharsets;
@@ -49,37 +51,12 @@ public class Compiler {
         return "LABEL" + nextLabel++;
     }
 
-    public int getNextFrameID() {
+    public int generateID() {
         return nextFrameID++;
-    }
-
-    public String getCurrentFrame() {
-        return currentFrame;
     }
 
     public int getStackSize() {
         return stackSize;
-    }
-
-    public int getSL() {
-        return SL;
-    }
-
-    public void addClassFile(IClassFile file) {
-        for (IClassFile f : files) {
-            if (f.getFileName().equals(file.getFileName()))
-                return;
-        }
-        this.files.add(file);
-    }
-
-    public void addFrame(FrameClass file) {
-        addClassFile(file);
-        currentFrame = file.getClassName();
-    }
-
-    public void addMainClass(String fileName, Code code) {
-        addClassFile(new MainClassFile(fileName, code, stackSize, SL));
     }
 
     private List<String> generateFiles(String path) throws IOException {
@@ -152,5 +129,62 @@ public class Compiler {
         }
 
         return strBuilder.toString();
+    }
+    public void addClassFile(IClassFile file) {
+        for (IClassFile f : files) {
+            if (f.getFileName().equals(file.getFileName()))
+                return;
+        }
+        this.files.add(file);
+    }
+
+    public ClosureClass newClosure(FunctionType functionType, ClosureInterfaceClass interfaceClass, FrameClass frame, Code closureBody) {
+        ClosureClass closure = new ClosureClass(generateID(), frame, interfaceClass, functionType, closureBody);
+        addClassFile(closure);
+        return closure;
+    }
+
+    public FrameClass newFrame(String name, List<FrameField> frameFields, Frame previousFrame) {
+        FrameClass frame = new FrameClass(name + generateID(), frameFields, previousFrame);
+        addClassFile(frame);
+        return frame;
+    }
+
+    public void addFrame(FrameClass file) {
+        addClassFile(file);
+        currentFrame = file.getClassName();
+    }
+
+    public void addMainClass(String fileName, Code code) {
+        addClassFile(new MainClassFile(fileName, code, stackSize, SL));
+    }
+
+    public ReferenceClass newReference(RefType value_type) {
+        ReferenceClass ref = new ReferenceClass(value_type);
+        addClassFile(ref);
+        return ref;
+    }
+
+    public ClosureInterfaceClass newClosureInterface(FunctionType functionType) {
+        boolean exists = false;
+        ClosureInterfaceClass closureInterfaceClass = new ClosureInterfaceClass(functionType);
+        for (IClassFile f : files) {
+            if (f instanceof ClosureInterfaceClass) {
+                ClosureInterfaceClass closureInterface = (ClosureInterfaceClass) f;
+                if (closureInterfaceClass.equals(closureInterface)) {
+                    closureInterfaceClass = closureInterface;
+                    exists = true;
+                    break;
+                }
+            }
+        }
+        if (!exists)
+            addClassFile(closureInterfaceClass);
+
+        return closureInterfaceClass;
+    }
+
+    public int getSL() {
+        return SL;
     }
 }

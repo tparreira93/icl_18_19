@@ -17,4 +17,9 @@ public class Frame {
 
         return "L" + getFrameName() + ";";
     }
+
+    @Override
+    public String toString() {
+        return getFrameReference();
+    }
 }
