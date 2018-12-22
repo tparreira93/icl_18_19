@@ -101,6 +101,10 @@ public class Parser implements ParserConstants {
       jj_consume_token(STRING);
                  {if (true) return StringType.getInstance();}
       break;
+    case RECORD:
+      jj_consume_token(RECORD);
+                 {if (true) return AnonymousType.getInstance();}
+      break;
     case REF:
       jj_consume_token(REF);
       t = GetType();
@@ -110,6 +114,7 @@ public class Parser implements ParserConstants {
       jj_consume_token(LPAR);
       switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
       case LPAR:
+      case RECORD:
       case INT:
       case BOOL:
       case REF:
@@ -719,33 +724,6 @@ public class Parser implements ParserConstants {
     finally { jj_save(3, xla); }
   }
 
-  private boolean jj_3R_14() {
-    if (jj_scan_token(NOT_EQUAL)) return true;
-    if (jj_3R_19()) return true;
-    return false;
-  }
-
-  private boolean jj_3R_21() {
-    if (jj_3R_24()) return true;
-    return false;
-  }
-
-  private boolean jj_3R_52() {
-    if (jj_scan_token(PRINTLN)) return true;
-    return false;
-  }
-
-  private boolean jj_3R_44() {
-    if (jj_scan_token(WHILE)) return true;
-    return false;
-  }
-
-  private boolean jj_3R_13() {
-    if (jj_scan_token(EQUAL)) return true;
-    if (jj_3R_19()) return true;
-    return false;
-  }
-
   private boolean jj_3_2() {
     Token xsp;
     xsp = jj_scanpos;
@@ -769,7 +747,7 @@ public class Parser implements ParserConstants {
   private boolean jj_3R_20() {
     Token xsp;
     xsp = jj_scanpos;
-    if (jj_scan_token(49)) {
+    if (jj_scan_token(50)) {
     jj_scanpos = xsp;
     if (jj_scan_token(15)) return true;
     }
@@ -1023,6 +1001,33 @@ public class Parser implements ParserConstants {
     return false;
   }
 
+  private boolean jj_3R_14() {
+    if (jj_scan_token(NOT_EQUAL)) return true;
+    if (jj_3R_19()) return true;
+    return false;
+  }
+
+  private boolean jj_3R_21() {
+    if (jj_3R_24()) return true;
+    return false;
+  }
+
+  private boolean jj_3R_52() {
+    if (jj_scan_token(PRINTLN)) return true;
+    return false;
+  }
+
+  private boolean jj_3R_44() {
+    if (jj_scan_token(WHILE)) return true;
+    return false;
+  }
+
+  private boolean jj_3R_13() {
+    if (jj_scan_token(EQUAL)) return true;
+    if (jj_3R_19()) return true;
+    return false;
+  }
+
   /** Generated Token Manager. */
   public ParserTokenManager token_source;
   SimpleCharStream jj_input_stream;
@@ -1045,7 +1050,7 @@ public class Parser implements ParserConstants {
       jj_la1_0 = new int[] {0x40000000,0xa064a600,0x40000000,0x0,0x40000000,0x40000,0x40000,0x40000000,0x40000000,0x0,0x0,0x0,0x0,0x0,0x9000,0x30000,0x8000,0xa064a600,0x4040800,0x4040800,0xa0642600,};
    }
    private static void jj_la1_init_1() {
-      jj_la1_1 = new int[] {0x0,0x260015,0x0,0x200000,0x0,0x1e0,0x1e0,0x0,0x0,0x2,0x18000,0x600,0x7800,0x7800,0x0,0x0,0x20000,0x260015,0x0,0x0,0x240015,};
+      jj_la1_1 = new int[] {0x0,0x4c0015,0x0,0x400000,0x0,0x3e0,0x3e0,0x0,0x0,0x2,0x30000,0xc00,0xf000,0xf000,0x0,0x0,0x40000,0x4c0015,0x0,0x0,0x480015,};
    }
   final private JJCalls[] jj_2_rtns = new JJCalls[4];
   private boolean jj_rescan = false;
@@ -1231,7 +1236,7 @@ public class Parser implements ParserConstants {
   /** Generate ParseException. */
   public ParseException generateParseException() {
     jj_expentries.clear();
-    boolean[] la1tokens = new boolean[54];
+    boolean[] la1tokens = new boolean[55];
     if (jj_kind >= 0) {
       la1tokens[jj_kind] = true;
       jj_kind = -1;
@@ -1248,7 +1253,7 @@ public class Parser implements ParserConstants {
         }
       }
     }
-    for (int i = 0; i < 54; i++) {
+    for (int i = 0; i < 55; i++) {
       if (la1tokens[i]) {
         jj_expentry = new int[1];
         jj_expentry[0] = i;

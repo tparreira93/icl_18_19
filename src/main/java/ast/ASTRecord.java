@@ -1,5 +1,6 @@
 package ast;
 
+import compiler.ClassField;
 import types.IType;
 import types.RecordType;
 import utils.Environment;
@@ -14,7 +15,7 @@ import java.util.List;
 
 public class ASTRecord implements ASTNode {
     private List<SimpleBinding<ASTNode>> bindings;
-
+    private RecordType record;
     public ASTRecord(List<SimpleBinding<ASTNode>> bindings) {
         this.bindings = bindings;
     }
@@ -34,12 +35,27 @@ public class ASTRecord implements ASTNode {
         for (SimpleBinding<ASTNode> b : bindings){
             bindingTypes.add(new SimpleBinding<>(b.id, b.expression.typecheck(environment)));
         }
-        return new RecordType(bindingTypes);
+        record = new RecordType(bindingTypes);
+        return record;
     }
 
     @Override
     public Code compile(CompilerEnvironment environment) {
-        return null;
+        Code finalCode = new Code()
+                .addCode("; BEGIN ASTRecord")
+                .addCode("new " + record.getClassName())
+                .addCode("dup")
+                .addCode("invokespecial " + record.getClassName() + "/<init>()V");
+
+        List<ClassField> classFields = record.getClassFields();
+        for (int i = 0; i < classFields.size(); i++) {
+            ClassField field = classFields.get(i);
+            finalCode.addCode("dup")
+                    .addCode(bindings.get(i).getExpression().compile(environment))
+                    .addCode("putfield " + record.getClassName() + "/" + field.getFieldName() + " " + field.getCompiledType());
+        }
+
+        return finalCode.addCode("; END ASTRecord");
     }
 
     @Override

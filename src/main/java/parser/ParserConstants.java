@@ -67,39 +67,41 @@ public interface ParserConstants {
   /** RegularExpression Id. */
   int BOOLVALUE = 36;
   /** RegularExpression Id. */
-  int INT = 37;
+  int RECORD = 37;
   /** RegularExpression Id. */
-  int BOOL = 38;
+  int INT = 38;
   /** RegularExpression Id. */
-  int REF = 39;
+  int BOOL = 39;
   /** RegularExpression Id. */
-  int STRING = 40;
+  int REF = 40;
   /** RegularExpression Id. */
-  int EQUAL = 41;
+  int STRING = 41;
   /** RegularExpression Id. */
-  int NOT_EQUAL = 42;
+  int EQUAL = 42;
   /** RegularExpression Id. */
-  int GREATER = 43;
+  int NOT_EQUAL = 43;
   /** RegularExpression Id. */
-  int GREATEROREQUAL = 44;
+  int GREATER = 44;
   /** RegularExpression Id. */
-  int SMALLER = 45;
+  int GREATEROREQUAL = 45;
   /** RegularExpression Id. */
-  int SMALLEROREQUAL = 46;
+  int SMALLER = 46;
   /** RegularExpression Id. */
-  int AND = 47;
+  int SMALLEROREQUAL = 47;
   /** RegularExpression Id. */
-  int OR = 48;
+  int AND = 48;
   /** RegularExpression Id. */
-  int NOT = 49;
+  int OR = 49;
   /** RegularExpression Id. */
-  int IF = 50;
+  int NOT = 50;
   /** RegularExpression Id. */
-  int THEN = 51;
+  int IF = 51;
   /** RegularExpression Id. */
-  int ELSE = 52;
+  int THEN = 52;
   /** RegularExpression Id. */
-  int Id = 53;
+  int ELSE = 53;
+  /** RegularExpression Id. */
+  int Id = 54;
 
   /** Lexical state. */
   int DEFAULT = 0;
@@ -145,6 +147,7 @@ public interface ParserConstants {
     "\"while\"",
     "\"do\"",
     "<BOOLVALUE>",
+    "\"record\"",
     "\"int\"",
     "\"bool\"",
     "\"ref\"",

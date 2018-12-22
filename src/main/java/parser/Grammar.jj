@@ -120,6 +120,8 @@ TOKEN :
   |
   < BOOLVALUE: ("true" | "false")>
   |
+  < RECORD: "record" >
+  |
   < INT: "int" >
   |
   < BOOL: "bool" >
@@ -193,6 +195,8 @@ IType GetType() :
     < BOOL > { return BoolType.getInstance(); }
     |
     < STRING > { return StringType.getInstance(); }
+    |
+    < RECORD > { return AnonymousType.getInstance(); }
     |
     < REF > t = GetType() { return new RefType(t); }
     |

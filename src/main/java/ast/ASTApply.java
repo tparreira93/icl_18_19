@@ -58,7 +58,7 @@ public class ASTApply implements ASTNode {
             IType expected = functionType.getArguments().get(i);
 
             if (!(argType.equals(expected)))
-                throw new ASTDifferentTypeException("Argument type does not match the expected type. Expected " + expected + " but got " + argType + ").");
+                throw new ASTDifferentTypeException("Argument type does not match the expected type. Expected " + expected + " but got " + argType + ".");
         }
         returnType = functionType.getReturnType();
         return returnType;

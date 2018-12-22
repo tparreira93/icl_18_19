@@ -3,18 +3,18 @@ package compiler;
 import java.util.List;
 
 public class FrameClass extends ClassFile {
-    private final List<FrameField> frameFields;
+    private final List<ClassField> classFields;
     private final Frame previousFrame;
     private final Frame frame;
 
-    public FrameClass(String name, List<FrameField> frameFields, Frame previousFrame) {
-        this.frameFields = frameFields;
+    public FrameClass(String name, List<ClassField> classFields, Frame previousFrame) {
+        this.classFields = classFields;
         this.previousFrame = previousFrame;
         this.frame = new Frame("frame_" + name);
     }
 
-    public List<FrameField> getFrameFields() {
-        return frameFields;
+    public List<ClassField> getClassFields() {
+        return classFields;
     }
 
     public Frame getPreviousFrameClass() {
@@ -28,7 +28,7 @@ public class FrameClass extends ClassFile {
                 .addCode(".super java/lang/Object")
                 .addCode();
 
-        getFrameFields().stream().map(frameField -> ".field public " + frameField.getFieldName() + " " + frameField.getCompiledType())
+        getClassFields().stream().map(frameField -> ".field public " + frameField.getFieldName() + " " + frameField.getCompiledType())
                 .forEach(c::addCode);
         c.addCode(".field public sl " + getPreviousFrameClass().getFrameReference())
             .addCode()

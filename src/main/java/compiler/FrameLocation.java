@@ -30,14 +30,13 @@ public class FrameLocation {
 
     public Code generatePath(int SL) {
         Code code = new Code();
-        Frame previousFrame = getFrames().get(0);
+        Frame previousFrame = getFrames().get(getFrames().size() - 1);
         Frame frame;
         code.addCode("aload " + SL);
-        for (int i = 1; i < getFrames().size(); i++) {
+        for (int i = getFrames().size() - 2; i >= 0; i--) {
             frame = getFrames().get(i);
-            code.addCode("getfield " + frame.getFrameName() + "/sl " + previousFrame.getFrameReference());
-            if (i + 1 < getFrames().size())
-                previousFrame = frame;
+            code.addCode("getfield " + previousFrame.getFrameName() + "/sl " + frame.getFrameReference());
+            previousFrame = frame;
         }
         String tmp = "";
         if (getOffset().getType() instanceof FunctionType)

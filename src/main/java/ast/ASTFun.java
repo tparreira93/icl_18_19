@@ -55,15 +55,15 @@ public class ASTFun implements ASTNode {
     @Override
     public Code compile(CompilerEnvironment environment) {
         Compiler compiler = Compiler.getInstance();
-        List<FrameField> frameFields = new ArrayList<>();
-        FrameClass argFrame = compiler.newFrame("closure", frameFields, environment.getFrame());
+        List<ClassField> classFields = new ArrayList<>();
+        FrameClass argFrame = compiler.newFrame("closure", classFields, environment.getFrame());
         CompilerEnvironment localScope = environment.beginScope(argFrame.getFrame(), params.size() + 2);
         ClosureInterfaceClass closureInterface = compiler.newClosureInterface(functionType);
 
         IntStream.range(0, params.size()).forEach(i -> {
             Parameter par = params.get(i);
-            FrameField field = new FrameField(i, par.getType());
-            frameFields.add(field);
+            ClassField field = new ClassField(i, par.getType());
+            classFields.add(field);
             localScope.assoc(par.getName(), new MemoryAddress(field.getFieldName(), par.getType()));
         });
         ClosureClass closure = compiler.newClosure(functionType, closureInterface, argFrame, expression.compile(localScope));

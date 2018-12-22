@@ -1,10 +1,13 @@
 package types;
 
 import ast.SimpleBinding;
+import compiler.ClassField;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.IntStream;
 
-public class RecordType implements IType {
+public class RecordType implements IType, IAnonymousType {
     private List<SimpleBinding<IType>> bindingTypes;
 
     public RecordType(List<SimpleBinding<IType>> bindingTypes) {
@@ -20,8 +23,33 @@ public class RecordType implements IType {
         return null;
     }
 
-    private List<SimpleBinding<IType>> getBindingTypes() {
+    public ClassField getBindingClassField(String id) {
+        ClassField field = null;
+        List<ClassField> allFields = getClassFields();
+        for (int i = 0; i < bindingTypes.size(); i++) {
+            SimpleBinding<IType> b = bindingTypes.get(i);
+            if (b.getId().equals(id)) {
+                field = allFields.get(i);
+                break;
+            }
+        }
+
+        return field;
+    }
+
+    public List<SimpleBinding<IType>> getBindingTypes() {
         return bindingTypes;
+    }
+
+    public List<ClassField> getClassFields() {
+        List<ClassField> recordFields = new ArrayList<>();
+        IntStream.range(0, getBindingTypes().size()).forEach(j -> {
+            SimpleBinding<IType> binding = getBindingTypes().get(j);
+            ClassField c = new ClassField(j, binding.getExpression());
+            recordFields.add(c);
+        });
+
+        return recordFields;
     }
 
     @Override
@@ -43,14 +71,28 @@ public class RecordType implements IType {
         return false;
     }
 
+
+    public static String getClassName(RecordType record) {
+        String className;
+        StringBuilder tmp = new StringBuilder();
+        for (SimpleBinding<IType> t : record.bindingTypes) {
+            if (!tmp.toString().equals(""))
+                tmp.append("_");
+            tmp.append(t.getExpression().getTypeName());
+        }
+        className = "anonymous_type_" + tmp.toString();
+
+        return className;
+    }
+
     @Override
     public String getClassName() {
-        return getClassReference();
+        return getClassName(this);
     }
 
     @Override
     public String getClassReference() {
-        return null;
+        return "L" + getClassName() + ";";
     }
 
     @Override

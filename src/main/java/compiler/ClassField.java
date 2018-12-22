@@ -2,11 +2,11 @@ package compiler;
 
 import types.IType;
 
-public class FrameField {
+public class ClassField {
     private int id;
     private IType type;
 
-    public FrameField(int id, IType type) {
+    public ClassField(int id, IType type) {
         this.id = id;
         this.type = type;
     }

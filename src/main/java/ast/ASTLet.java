@@ -2,7 +2,9 @@ package ast;
 
 import exceptions.ASTDifferentTypeException;
 import exceptions.ASTDuplicateNameException;
+import types.AnonymousType;
 import types.IType;
+import types.RecordType;
 import utils.Environment;
 import values.IValue;
 import compiler.*;
@@ -54,14 +56,15 @@ public class ASTLet implements ASTNode {
 
             Environment<IType> bindingScope = environment.beginScope();
             bindingScope.assoc(identifier.getId(), identifier.getType());
-
             IType v = n.typecheck(bindingScope);
-            if (!identifier.getType().equals(v))
+            if ((!(identifier.getType() instanceof AnonymousType) && !(v instanceof RecordType))
+                    && !identifier.getType().equals(v))
                 throw new ASTDifferentTypeException("Identifier type and binding type do not match. " + "Expected " + identifier.getType() + " but got " + v + "!");
+            identifier.setType(v);
 
             bindingScope.endScope();
 
-            localScope.assoc(identifier.getId(), identifier.getType());
+            localScope.assoc(identifier.getId(), v);
         }
 
         IType bodyType = body.typecheck(localScope);
@@ -74,17 +77,23 @@ public class ASTLet implements ASTNode {
     @Override
     public Code compile(CompilerEnvironment environment) {
         Compiler compiler = Compiler.getInstance();
-        List<FrameField> frameFields = new ArrayList<>();
-        FrameClass frame = compiler.newFrame("let", frameFields, environment.getFrame());
+        List<ClassField> classFields = new ArrayList<>();
+        FrameClass frame = compiler.newFrame("let", classFields, environment.getFrame());
         String loadSL = "aload " + environment.getSL();
         String storeSL = "astore " + environment.getSL();
         CompilerEnvironment localScope = environment.beginScope(frame.getFrame());
 
         IntStream.range(0, identifiers.size()).forEach(i -> {
             Binding b = identifiers.get(i);
-            FrameField field = new FrameField(i, b.getType());
+            ClassField field = new ClassField(i, b.getType());
 
-            frameFields.add(field);
+            if (field.getType() instanceof RecordType)
+            {
+                RecordType t = (RecordType) field.getType();
+                compiler.newAnonynmousType(t.getClassName(), t.getClassFields());
+            }
+
+            classFields.add(field);
             localScope.assoc(b.id, new MemoryAddress(field.getFieldName(), b.getType()));
         });
         Code finalCode = new Code().addCode("; --- ASTLet Begin ---");
@@ -99,7 +108,7 @@ public class ASTLet implements ASTNode {
                 .addCode(storeSL);
 
         finalCode.addCode("; -- Initialize fields ---");
-        for (FrameField f : frameFields) {
+        for (ClassField f : classFields) {
             finalCode.addCode(loadSL)
                     .addCode(identifiers.get(f.getId()).getExpression().compile(localScope))
                     .addCode("putfield " + frame.getClassName() + "/" + f.getFieldName() + " " + f.getCompiledType());

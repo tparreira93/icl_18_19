@@ -30,7 +30,9 @@ public class ASTId implements ASTNode {
     @Override
     public Code compile(CompilerEnvironment environment) {
         FrameLocation location = environment.find(name);
-        return location.generatePath(environment.getSL());
+        return new Code().addCode("; BEGIN ASTId")
+                .addCode(location.generatePath(environment.getSL()))
+                .addCode("; END ASTId");
     }
 
 

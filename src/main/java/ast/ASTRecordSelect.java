@@ -1,7 +1,9 @@
 package ast;
 
+import compiler.ClassField;
 import exceptions.ASTNotAMember;
 import exceptions.ASTNotARecord;
+import types.AnonymousType;
 import types.IType;
 import types.RecordType;
 import utils.Environment;
@@ -13,6 +15,7 @@ import compiler.CompilerEnvironment;
 public class ASTRecordSelect implements ASTNode {
     private final ASTNode record;
     private final String id;
+    private RecordType recordType;
 
     public ASTRecordSelect(ASTNode record, String id) {
         this.record = record;
@@ -32,7 +35,7 @@ public class ASTRecordSelect implements ASTNode {
         if (!(r instanceof RecordType))
             throw new ASTNotARecord(r + " is not a record!");
 
-        RecordType recordType = (RecordType)r;
+        recordType = (RecordType)r;
         IType t = recordType.find(id);
 
         if (t == null)
@@ -43,6 +46,11 @@ public class ASTRecordSelect implements ASTNode {
 
     @Override
     public Code compile(CompilerEnvironment environment) {
-        return null;
+        ClassField field = recordType.getBindingClassField(id);
+
+        return new Code()
+                .addCode(record.compile(environment))
+                .addCode()
+                .addCode("getfield " + recordType.getClassName() + "/" + field.getFieldName() + " " + field.getCompiledType());
     }
 }

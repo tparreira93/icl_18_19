@@ -26,9 +26,9 @@ public class ClosureClass extends ClassFile {
 
     @Override
     public Code getCode() {
-        List<FrameField> frameFields = new ArrayList<>();
+        List<ClassField> classFields = new ArrayList<>();
         List<IType> arguments = functionType.getArguments();
-        IntStream.range(0, arguments.size()).mapToObj(i -> new FrameField(i, arguments.get(i))).forEach(frameFields::add);
+        IntStream.range(0, arguments.size()).mapToObj(i -> new ClassField(i, arguments.get(i))).forEach(classFields::add);
         Code finalCode = new Code()
                 .addCode(".class " + closureName)
                 .addCode(".super java/lang/Object")
@@ -48,8 +48,8 @@ public class ClosureClass extends ClassFile {
                 .addCode("getfield " + getClassName() + "/sl " + argFrame.getPreviousFrameClass().getFrameReference())
                 .addCode("putfield " + argFrame.getClassName() + "/sl " + argFrame.getPreviousFrameClass().getFrameReference());
 
-        for (int i = 0; i < frameFields.size(); i++) {
-            FrameField field = frameFields.get(i);
+        for (int i = 0; i < classFields.size(); i++) {
+            ClassField field = classFields.get(i);
             finalCode.addCode("dup")
                     .addCode(field.getType().getLoadKeyword() + " " + (i + 1))
                     .addCode("putfield " + argFrame.getClassName() + "/" + field.getFieldName() + " " + field.getCompiledType());

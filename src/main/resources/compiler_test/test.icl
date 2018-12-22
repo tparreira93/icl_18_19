@@ -1,4 +1,34 @@
-
+let
+    x:record = [a=1],
+    f:(record)int = fun rec:record -> rec.a end
+in
+    println(f(x))
+end;;
+let
+    fact:(int)int =
+        fun x:int ->
+            let
+                min:int = 1
+            in
+                if x > min then
+                    fact(x - 1) * x
+                else
+                    x
+                end
+            end
+        end
+in
+    println(fact(12))
+end
+;
+let
+    f:(int, int)int = fun x:int, y:int -> x + y end
+in
+    let x:int = 1
+    in
+        println(x + f(1,1))
+    end
+end;
 let
     f:(int)int = fun y:int ->
         let
@@ -14,25 +44,7 @@ let
      end
 in
     println(f(-1))
-end;;
-
-let
-    fact:(int)int =
-        fun x:int ->
-            let
-                min:int = 1
-            in
-                if x > min then
-                    fact(x - 1) * x
-                else
-                    x
-                end
-            end
-        end
-in
-    fact(2)
-end
-;;
+end;
 let
     f:(int)int = fun y:int ->
         let
@@ -44,7 +56,7 @@ let
 in
     println(f(1))
 end
-;;
+;
 let
     f:(int)int = fun x:int ->
         if x > 0
@@ -57,35 +69,19 @@ let
 in
     println(f(10))
 end
-;;
+;
 let
     f:()()int = fun -> fun -> 1 end end
 in
     println((f())())
 end
-;;
+;
 let
     f:(()int)int = fun f2:()int -> f2() end
 in
     println(f(fun -> 1 end))
 end
 ;
-let
-    f:(int, int)int = fun x:int, y:int -> x + y end,
-    f2:(int)int = fun x:int -> x * 5 end
-in
-    println(
-        let
-            f3:(int)ref int = fun k:int -> new k end,
-            f4:(int)int = fun x:int -> x * 5 end,
-            f5:(int)int = fun x:int -> x * 5 end
-        in
-            f( f2(1), !(f3(2)) )
-        end
-        +
-        f2(1)
-    )
-end;
 let
     x:ref int = new 1
 in

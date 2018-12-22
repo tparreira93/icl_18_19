@@ -144,8 +144,8 @@ public class Compiler {
         return closure;
     }
 
-    public FrameClass newFrame(String name, List<FrameField> frameFields, Frame previousFrame) {
-        FrameClass frame = new FrameClass(name + generateID(), frameFields, previousFrame);
+    public FrameClass newFrame(String name, List<ClassField> classFields, Frame previousFrame) {
+        FrameClass frame = new FrameClass(name + generateID(), classFields, previousFrame);
         addClassFile(frame);
         return frame;
     }
@@ -163,6 +163,12 @@ public class Compiler {
         ReferenceClass ref = new ReferenceClass(value_type);
         addClassFile(ref);
         return ref;
+    }
+
+    public AnonymousTypeClass newAnonynmousType(String name, List<ClassField> fields) {
+        AnonymousTypeClass anom = new AnonymousTypeClass(name, fields);
+        addClassFile(anom);
+        return anom;
     }
 
     public ClosureInterfaceClass newClosureInterface(FunctionType functionType) {
