@@ -1,9 +1,9 @@
-let
+/*let
     x:record = [a=1],
     f:(record)int = fun rec:record -> rec.a end
 in
     println(f(x))
-end;;
+end;;*/
 let
     fact:(int)int =
         fun x:int ->

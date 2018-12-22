@@ -28,8 +28,7 @@ public class Compiler {
     }
 
     public static Compiler getInstance(String jasminPath) {
-        if (instance ==null)
-            reset(jasminPath);
+        reset(jasminPath);
         return instance;
     }
 

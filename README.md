@@ -9,11 +9,16 @@ To build execute the following command:
 mvn verify
 ```
 
-There is a interpreter and a file parser.
+There is a interpreter and a Compiler.
 
-To execute the interpreter run *TestInterpreter*, commands are interpreted directly from console.
+To execute the interpreter run *TestInterpreter*, commands are interpreted and typechecked directly from the console.
 
-The file parser searches for files that are in the folder *src/main/java/resources*, just add new files and they will be interpreted when the *FileParser* is executed .
+To compile files execute CompilerTest class, this class will compile and execute the files passed as argument. 
+The compiler expects:
+ - Location of the jasmin.jar file
+ - List of files.
+ 
+If files are not specified it will search for files that are located in the folder *src/main/java/resources/compiler_test*.
 
 ## Development
 Still in development.
@@ -35,6 +40,9 @@ Examples in src/main/resources.
 - Dereference (!)
 - Logical operators (||, && and ~)
 - Typechecking
+- Compiling to jasmin syntax
+- Strings
+- Records
 
 ## Example:
 - Fibonacci:
