@@ -44,22 +44,22 @@ public class IntValue extends NumericValue<Integer> {
 
     @Override
     public NumericValue<Integer> Sum(NumericValue<?> value) {
-        return new IntValue(this.value + (int)value.getValue());
+        return new IntValue(this.value + (Integer)value.getValue());
     }
 
     @Override
     public NumericValue<Integer> Subtract(NumericValue<?> value) {
-        return new IntValue(this.value - (int)value.getValue());
+        return new IntValue(this.value - (Integer)value.getValue());
     }
 
     @Override
     public NumericValue<Integer> Divide(NumericValue<?> value) {
-        return new IntValue(this.value / (int)value.getValue());
+        return new IntValue(this.value / (Integer)value.getValue());
     }
 
     @Override
     public NumericValue<Integer> Mult(NumericValue<?> value) {
-        return new IntValue(this.value * (int)value.getValue());
+        return new IntValue(this.value * (Integer)value.getValue());
     }
 
     @Override

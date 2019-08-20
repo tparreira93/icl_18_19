@@ -29,7 +29,7 @@ public class BoolValue implements IValue<Boolean> {
         if (!(v instanceof BoolValue))
             throw new ASTNonComparableException("Can't compare " + this + " with " + v + ". (" + v + " is not a boolean value).");
 
-        return value == (boolean)v.getValue();
+        return value == (Boolean)v.getValue();
     }
 
     @Override

@@ -23,7 +23,7 @@ public class ASTWhile implements ASTNode {
         IValue<?> condition_value = condition.eval(environment);
 
         Environment<IValue<?>> localScope = environment.beginScope();
-        while ((boolean)condition_value.getValue())
+        while ((Boolean)condition_value.getValue())
         {
             action.eval(localScope);
             condition_value = condition.eval(environment);
