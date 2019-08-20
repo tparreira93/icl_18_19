@@ -25,7 +25,7 @@ public class IntValue extends NumericValue<Integer> {
         if (!(v instanceof IntValue))
             throw new ASTNonComparableException("Can't compare " + this + " with " + v + ". (" + v + " is not an int value).");
 
-        int other = (int) v.getValue();
+        Integer other = (Integer) v.getValue();
 
         if (this.value < other)
             return -1;
