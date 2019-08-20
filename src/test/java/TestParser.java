@@ -465,7 +465,7 @@ public class TestParser {
         IValue<?> result = parser.Start().eval(env);
 
         Assert.assertTrue(result instanceof IntValue);
-        Assert.assertEquals((Integer)-1, (Integer)result.getValue());
+        Assert.assertEquals((Integer)(-1), (Integer)result.getValue());
     }
 
 
