@@ -13,11 +13,11 @@ public class ASTMul extends ASTArithmetic {
         super(left, right);
     }
 
-    public IValue eval(Environment<IValue> environment) throws Exception {
-        IValue v1 = left.eval(environment);
-        IValue v2 = right.eval(environment);
+    public IValue<?> eval(Environment<IValue<?>> environment) throws Exception {
+        IValue<?> v1 = left.eval(environment);
+        IValue<?> v2 = right.eval(environment);
 
-        return ((NumericValue) v1).Mult((NumericValue)v2);
+        return ((NumericValue<?>) v1).Mult((NumericValue<?>)v2);
     }
 
     @Override

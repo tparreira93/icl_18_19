@@ -16,7 +16,7 @@ public class ASTString implements ASTNode {
     }
 
     @Override
-    public IValue eval(Environment<IValue> environment) throws Exception {
+    public IValue<?> eval(Environment<IValue<?>> environment) throws Exception {
         return new StringValue(value);
     }
 

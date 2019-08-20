@@ -23,21 +23,21 @@ public class ASTIfThenElse implements ASTNode {
     }
 
     @Override
-    public IValue eval(Environment<IValue> environment) throws Exception {
-        IValue if_value = node_if.eval(environment);
-        IValue result;
+    public IValue<?> eval(Environment<IValue<?>> environment) throws Exception {
+        IValue<?> if_value = node_if.eval(environment);
+        IValue<?> result;
 
         BoolValue ifb = (BoolValue) if_value;
 
         if (ifb.getValue())
         {
-            Environment<IValue> localScope = environment.beginScope();
+            Environment<IValue<?>> localScope = environment.beginScope();
             result = node_then.eval(localScope);
             localScope.endScope();
         }
         else
         {
-            Environment<IValue> localScope = environment.beginScope();
+            Environment<IValue<?>> localScope = environment.beginScope();
             result = node_else.eval(localScope);
             localScope.endScope();
         }

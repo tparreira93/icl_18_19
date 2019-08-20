@@ -22,7 +22,7 @@ public class ASTAssignment implements ASTNode {
     }
 
     @Override
-    public IValue eval(Environment<IValue> environment) throws Exception {
+    public IValue<?> eval(Environment<IValue<?>> environment) throws Exception {
         ReferenceValue reference = (ReferenceValue) id.eval(environment);
         reference.setValue(value.eval(environment));
 

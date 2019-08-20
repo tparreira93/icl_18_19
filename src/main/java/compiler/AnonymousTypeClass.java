@@ -1,8 +1,5 @@
 package compiler;
 
-import types.FunctionType;
-import types.IType;
-
 import java.util.List;
 
 public class AnonymousTypeClass extends ClassFile {

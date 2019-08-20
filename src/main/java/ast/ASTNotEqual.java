@@ -22,9 +22,9 @@ public class ASTNotEqual implements ASTNode {
     }
 
     @Override
-    public IValue eval(Environment<IValue> environment) throws Exception {
-        IValue l = left.eval(environment);
-        IValue r = right.eval(environment);
+    public IValue<?> eval(Environment<IValue<?>> environment) throws Exception {
+        IValue<?> l = left.eval(environment);
+        IValue<?> r = right.eval(environment);
 
         return new BoolValue(!l.equals(r));
     }

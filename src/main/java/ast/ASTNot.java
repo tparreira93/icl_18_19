@@ -17,7 +17,7 @@ public class ASTNot implements ASTNode {
     }
 
     @Override
-    public IValue eval(Environment<IValue> environment) throws Exception {
+    public IValue<?> eval(Environment<IValue<?>> environment) throws Exception {
         BoolValue b = (BoolValue) node.eval(environment);
 
         return new BoolValue(!b.getValue());

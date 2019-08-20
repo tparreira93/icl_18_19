@@ -19,7 +19,7 @@ public class ASTDereference implements ASTNode {
     }
 
     @Override
-    public IValue eval(Environment<IValue> environment) throws Exception {
+    public IValue<?> eval(Environment<IValue<?>> environment) throws Exception {
         ReferenceValue ref = (ReferenceValue) reference.eval(environment);
         return ref.getValue();
     }

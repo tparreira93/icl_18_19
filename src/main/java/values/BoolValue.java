@@ -20,12 +20,12 @@ public class BoolValue implements IValue<Boolean> {
     }
 
     @Override
-    public int compareTo(IValue v) throws Exception {
+    public int compareTo(IValue<?> v) throws Exception {
         throw new ASTNonComparableException(this + " is not comparable!");
     }
 
     @Override
-    public boolean equals(IValue v) throws Exception {
+    public boolean equals(IValue<?> v) throws Exception {
         if (!(v instanceof BoolValue))
             throw new ASTNonComparableException("Can't compare " + this + " with " + v + ". (" + v + " is not a boolean value).");
 

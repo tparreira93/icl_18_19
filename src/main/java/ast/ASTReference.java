@@ -18,7 +18,7 @@ public class ASTReference implements ASTNode {
         this.value = value;
     }
     @Override
-    public IValue eval(Environment<IValue> environment) throws Exception {
+    public IValue<?> eval(Environment<IValue<?>> environment) throws Exception {
         return new ReferenceValue(value.eval(environment));
     }
 

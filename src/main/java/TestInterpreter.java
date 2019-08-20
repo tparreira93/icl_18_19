@@ -17,7 +17,7 @@ public class TestInterpreter {  /** Main entry point. */
         //noinspection InfiniteLoopStatement
         while (true) {
             try {
-                Environment<IValue> runEnv = new Environment<>();
+                Environment<IValue<?>> runEnv = new Environment<>();
                 Environment<IType> compileEnv = new Environment<>();
 
                 exp = parser.Start();

@@ -21,7 +21,7 @@ public class IntValue extends NumericValue<Integer> {
     }
 
     @Override
-    public int compareTo(IValue v) throws Exception {
+    public int compareTo(IValue<?> v) throws Exception {
         if (!(v instanceof IntValue))
             throw new ASTNonComparableException("Can't compare " + this + " with " + v + ". (" + v + " is not an int value).");
 
@@ -36,29 +36,29 @@ public class IntValue extends NumericValue<Integer> {
     }
 
     @Override
-    public boolean equals(IValue v) throws Exception {
+    public boolean equals(IValue<?> v) throws Exception {
         int c = compareTo(v);
 
         return c == 0;
     }
 
     @Override
-    public NumericValue Sum(NumericValue value) {
+    public NumericValue<Integer> Sum(NumericValue<?> value) {
         return new IntValue(this.value + (int)value.getValue());
     }
 
     @Override
-    public NumericValue Subtract(NumericValue value) {
+    public NumericValue<Integer> Subtract(NumericValue<?> value) {
         return new IntValue(this.value - (int)value.getValue());
     }
 
     @Override
-    public NumericValue Divide(NumericValue value) {
+    public NumericValue<Integer> Divide(NumericValue<?> value) {
         return new IntValue(this.value / (int)value.getValue());
     }
 
     @Override
-    public NumericValue Mult(NumericValue value) {
+    public NumericValue<Integer> Mult(NumericValue<?> value) {
         return new IntValue(this.value * (int)value.getValue());
     }
 

@@ -16,7 +16,7 @@ public class ASTBool implements ASTNode {
     }
 
     @Override
-    public IValue eval(Environment<IValue> environment) {
+    public IValue<?> eval(Environment<IValue<?>> environment) {
         return new BoolValue(value);
     }
 

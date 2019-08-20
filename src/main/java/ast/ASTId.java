@@ -1,10 +1,8 @@
 package ast;
 
 import compiler.*;
-import compiler.Compiler;
 import exceptions.ASTInvalidIdentifierException;
 import types.IType;
-import types.RefType;
 import utils.Environment;
 import values.IValue;
 
@@ -15,7 +13,7 @@ public class ASTId implements ASTNode {
         this.name = name;
     }
 
-    public IValue eval(Environment<IValue> environment) {
+    public IValue<?> eval(Environment<IValue<?>> environment) {
         return environment.find(name);
     }
 

@@ -16,7 +16,6 @@ import java.util.List;
 public class Compiler {
     private static Compiler instance = null;
     private int nextFrameID;
-    private String currentFrame;
     private int stackSize;
     private int SL;
     private int nextLabel;
@@ -39,7 +38,6 @@ public class Compiler {
 
     private Compiler(String jasminPath) {
         files = new ArrayList<>();
-        currentFrame = "";
         stackSize = 256;
         SL = 4;
         this.jasminPath = jasminPath;
@@ -151,11 +149,10 @@ public class Compiler {
 
     public void addFrame(FrameClass file) {
         addClassFile(file);
-        currentFrame = file.getClassName();
     }
 
-    public void addMainClass(String fileName, Code code) {
-        addClassFile(new MainClassFile(fileName, code, stackSize, SL));
+    public void addMainClass(Code code) {
+        addClassFile(new MainClassFile(code, stackSize, SL));
     }
 
     public ReferenceClass newReference(RefType value_type) {

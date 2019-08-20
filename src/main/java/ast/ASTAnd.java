@@ -12,7 +12,7 @@ public class ASTAnd extends ASTLogicalOperator implements ASTNode {
     }
 
     @Override
-    public IValue eval(Environment<IValue> environment) throws Exception {
+    public IValue<?> eval(Environment<IValue<?>> environment) throws Exception {
         BoolValue bl = (BoolValue)left.eval(environment);
         BoolValue br = (BoolValue)right.eval(environment);
 

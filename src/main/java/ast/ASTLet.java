@@ -23,14 +23,14 @@ public class ASTLet implements ASTNode {
         this.body = body;
     }
     @Override
-    public IValue eval(Environment<IValue> environment) throws Exception {
-        Environment<IValue> localScope = environment.beginScope();
+    public IValue<?> eval(Environment<IValue<?>> environment) throws Exception {
+        Environment<IValue<?>> localScope = environment.beginScope();
 
         for (Binding identifier : identifiers) {
             ASTNode n = identifier.getExpression();
 
-            Environment<IValue> bindingScope = environment.beginScope();
-            IValue v = n.eval(bindingScope);
+            Environment<IValue<?>> bindingScope = environment.beginScope();
+            IValue<?> v = n.eval(bindingScope);
 
             bindingScope.assoc(identifier.getId(), v);
             bindingScope.endScope();
@@ -38,7 +38,7 @@ public class ASTLet implements ASTNode {
             localScope.assoc(identifier.getId(), v);
         }
 
-        IValue bodyResult = body.eval(localScope);
+        IValue<?> bodyResult = body.eval(localScope);
 
         localScope.endScope();
         return bodyResult;

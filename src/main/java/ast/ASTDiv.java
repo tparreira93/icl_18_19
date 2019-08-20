@@ -14,11 +14,11 @@ public class ASTDiv extends ASTArithmetic {
         super(left, right);
     }
 
-    public IValue eval(Environment<IValue> environment) throws Exception {
-        IValue v1 = left.eval(environment);
-        IValue v2 = right.eval(environment);
+    public IValue<?> eval(Environment<IValue<?>> environment) throws Exception {
+        IValue<?> v1 = left.eval(environment);
+        IValue<?> v2 = right.eval(environment);
 
-        return ((NumericValue) v1).Divide((NumericValue)v2);
+        return ((NumericValue<?>) v1).Divide((NumericValue<?>)v2);
     }
 
     @Override

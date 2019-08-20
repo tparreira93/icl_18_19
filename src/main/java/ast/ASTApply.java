@@ -24,18 +24,18 @@ public class ASTApply implements ASTNode {
     }
 
     @Override
-    public IValue eval(Environment<IValue> environment) throws Exception {
-        IValue value = function.eval(environment);
+    public IValue<?> eval(Environment<IValue<?>> environment) throws Exception {
+        IValue<?> value = function.eval(environment);
 
         ClosureValue functionValue = (ClosureValue) value;
 
-        Environment<IValue> localEnvironment = functionValue.getEnvironment();
-        Environment<IValue> functionEnvironment = localEnvironment.beginScope();
+        Environment<IValue<?>> localEnvironment = functionValue.getEnvironment();
+        Environment<IValue<?>> functionEnvironment = localEnvironment.beginScope();
 
         for (int i = 0; i < arguments.size(); i++ )
             functionEnvironment.assoc(functionValue.getParams().get(i).getName(), arguments.get(i).eval(environment));
 
-        IValue returnValue = functionValue.getExpression().eval(functionEnvironment);
+        IValue<?> returnValue = functionValue.getExpression().eval(functionEnvironment);
         functionEnvironment.endScope();
 
         return returnValue;

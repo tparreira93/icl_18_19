@@ -7,12 +7,12 @@ import ast.Parameter;
 
 import java.util.List;
 
-public class ClosureValue implements IValue {
+public class ClosureValue implements IValue<ClosureValue> {
     private final List<Parameter> params;
     private final ASTNode expression;
-    private final Environment<IValue> environment;
+    private final Environment<IValue<?>> environment;
 
-    public ClosureValue(List<Parameter> params, ASTNode expression, Environment<IValue> environment) {
+    public ClosureValue(List<Parameter> params, ASTNode expression, Environment<IValue<?>> environment) {
         this.params = params;
         this.expression = expression;
         this.environment = environment;
@@ -24,17 +24,17 @@ public class ClosureValue implements IValue {
     }
 
     @Override
-    public Object getValue() {
+    public ClosureValue getValue() {
         return null;
     }
 
     @Override
-    public int compareTo(IValue v) throws Exception {
+    public int compareTo(IValue<?> v) throws Exception {
         throw new ASTNonComparableException(this + " is not comparable!");
     }
 
     @Override
-    public boolean equals(IValue v) throws Exception {
+    public boolean equals(IValue<?> v) throws Exception {
         if (!(v instanceof ClosureValue))
             throw new ASTNonComparableException("Can't compare " + this + " with " + v + ". (" + v + " is not a function).");
 
@@ -53,7 +53,7 @@ public class ClosureValue implements IValue {
         return expression;
     }
 
-    public Environment<IValue> getEnvironment() {
+    public Environment<IValue<?>> getEnvironment() {
         return environment;
     }
 

@@ -19,10 +19,10 @@ public class ASTWhile implements ASTNode {
     }
 
     @Override
-    public IValue eval(Environment<IValue> environment) throws Exception {
-        IValue condition_value = condition.eval(environment);
+    public IValue<?> eval(Environment<IValue<?>> environment) throws Exception {
+        IValue<?> condition_value = condition.eval(environment);
 
-        Environment<IValue> localScope = environment.beginScope();
+        Environment<IValue<?>> localScope = environment.beginScope();
         while ((boolean)condition_value.getValue())
         {
             action.eval(localScope);

@@ -16,7 +16,7 @@ public class ASTSequence implements ASTNode{
     }
 
     @Override
-    public IValue eval(Environment<IValue> environment) throws Exception {
+    public IValue<?> eval(Environment<IValue<?>> environment) throws Exception {
         for (int i = 0; i < sequence.size() - 1; i++) {
             sequence.get(i).eval(environment);
         }

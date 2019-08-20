@@ -25,7 +25,7 @@ public class ASTFun implements ASTNode {
         this.expression = expression;
     }
     @Override
-    public IValue eval(Environment<IValue> environment) {
+    public IValue<?> eval(Environment<IValue<?>> environment) {
         return new ClosureValue(params, expression, environment);
     }
 

@@ -1,6 +1,6 @@
 package values;
 
-public class StringValue implements IValue {
+public class StringValue implements IValue<String> {
     private final String value;
 
     public StringValue(String value) {
@@ -12,18 +12,18 @@ public class StringValue implements IValue {
     }
 
     @Override
-    public Object getValue() {
+    public String getValue() {
         return value;
     }
 
     @Override
-    public int compareTo(IValue v) {
+    public int compareTo(IValue<?> v) {
         StringValue str = (StringValue) v;
         return this.value.compareTo(str.value);
     }
 
     @Override
-    public boolean equals(IValue v) {
+    public boolean equals(IValue<?> v) {
         StringValue str = (StringValue) v;
         return this.value.equals(str.value);
     }

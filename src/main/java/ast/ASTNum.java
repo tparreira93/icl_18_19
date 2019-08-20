@@ -15,7 +15,7 @@ public class ASTNum implements ASTNode {
         this.num = new IntValue(num);
     }
 
-    public IValue eval(Environment<IValue> environment) {
+    public IValue<?> eval(Environment<IValue<?>> environment) {
         return num;
     }
 

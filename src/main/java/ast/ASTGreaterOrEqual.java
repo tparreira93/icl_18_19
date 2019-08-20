@@ -14,9 +14,9 @@ public class ASTGreaterOrEqual extends ASTCompare implements ASTNode {
     }
 
     @Override
-    public IValue eval(Environment<IValue> environment) throws Exception {
-        IValue l = left.eval(environment);
-        IValue r = right.eval(environment);
+    public IValue<?> eval(Environment<IValue<?>> environment) throws Exception {
+        IValue<?> l = left.eval(environment);
+        IValue<?> r = right.eval(environment);
 
         return new BoolValue(l.compareTo(r) >= 0);
     }

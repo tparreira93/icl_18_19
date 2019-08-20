@@ -21,8 +21,8 @@ public class ASTRecord implements ASTNode {
     }
 
     @Override
-    public IValue eval(Environment<IValue> environment) throws Exception {
-        HashMap<String, IValue> values = new HashMap<>();
+    public IValue<?> eval(Environment<IValue<?>> environment) throws Exception {
+        HashMap<String, IValue<?>> values = new HashMap<>();
         for (SimpleBinding<ASTNode> b : bindings)
             values.put(b.id, b.expression.eval(environment));
 

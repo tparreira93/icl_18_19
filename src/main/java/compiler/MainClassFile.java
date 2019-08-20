@@ -1,29 +1,14 @@
 package compiler;
 
-import java.io.IOException;
-import java.nio.charset.Charset;
-import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-
 public class MainClassFile extends ClassFile {
-    private final String templatePath;
     private final Code code;
     private final int stackSize;
     private final int SL;
 
-    public MainClassFile(String templatePath, Code code, int stackSize, int SL) {
-        this.templatePath = templatePath;
+    public MainClassFile(Code code, int stackSize, int SL) {
         this.code = code;
         this.stackSize = stackSize;
         this.SL = SL;
-    }
-
-    private Code parseTemplate() throws IOException {
-        Path path = Paths.get(templatePath);
-        Charset charset = StandardCharsets.UTF_8;
-        return new Code(Files.readAllLines(path, charset));
     }
 
     // TODO: IMPROVE STACK AND LOCALS

@@ -3,7 +3,6 @@ package ast;
 import compiler.ClassField;
 import exceptions.ASTNotAMember;
 import exceptions.ASTNotARecord;
-import types.AnonymousType;
 import types.IType;
 import types.RecordType;
 import utils.Environment;
@@ -23,7 +22,7 @@ public class ASTRecordSelect implements ASTNode {
     }
 
     @Override
-    public IValue eval(Environment<IValue> environment) throws Exception {
+    public IValue<?> eval(Environment<IValue<?>> environment) throws Exception {
         RecordValue r = (RecordValue) record.eval(environment);
         return r.find(id);
     }

@@ -46,7 +46,7 @@ public class CompilerTest {
                 Code generatedCode = exp.compile(env);
                 //String workingDirectory = "D:\\jasmin\\" + name;
                 String workingDirectory = "D:\\libs\\jasmin-2.4";
-                compiler.addMainClass("src\\templates\\base.j", generatedCode);
+                compiler.addMainClass(generatedCode);
 
                 System.out.println("Compiling generated files...");
                 System.out.println(compiler.assembleFiles(workingDirectory));
